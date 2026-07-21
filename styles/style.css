@@ -297,8 +297,8 @@ main {
     #ascii-art {
         margin: 0;
         font-family: inherit;
-        font-size: 0.7rem;
-        line-height: 0.7rem;
+        font-size: 0.9rem;
+        line-height: 0.9rem;
         letter-spacing: 0.04rem;
         color: var(--grey);
         text-shadow: 0 0 0.5rem var(--glow);
