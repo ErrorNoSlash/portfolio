@@ -198,6 +198,33 @@ nav {
 
 #nav-toggle {
     display: none;
+    position: relative;
+}
+
+/* [ menu ] <-> [ x ] swap */
+.nav-toggle-label {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+/* stacked on top of [ menu ] so the button keeps its width */
+.label-close {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transform: translateY(0.5rem);
+}
+
+nav.open #nav-toggle .label-open {
+    opacity: 0;
+    transform: translateY(-0.5rem);
+}
+
+nav.open #nav-toggle .label-close {
+    opacity: 1;
+    transform: translateY(0);
 }
 
 #logo {
@@ -372,6 +399,30 @@ main {
             padding: 0.2rem 0.5rem;
             font-size: 0.9rem;
         }
+    }
+}
+
+/* screenshot on project pages */
+.project-shot {
+    margin: 1rem 0 1.5rem 0;
+    max-width: 40rem;
+
+    img {
+        display: block;
+        width: 100%;
+        height: auto;
+        border: 0.063rem solid var(--border);
+        transition: border-color 0.3s ease;
+    }
+
+    &:hover img {
+        border-color: var(--grey);
+    }
+
+    figcaption {
+        color: var(--border);
+        font-size: 0.85rem;
+        margin-top: 0.4rem;
     }
 }
 
@@ -721,6 +772,7 @@ footer {
     }
 
     nav ul,
+    .nav-toggle-label,
     #cursor,
     .page-transition {
         transition: none;

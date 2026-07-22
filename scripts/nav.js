@@ -3,18 +3,22 @@ const nav = document.querySelector("header nav");
 const navToggle = document.getElementById("nav-toggle");
 
 if (nav && navToggle) {
-    const closeMenu = () => {
-        nav.classList.remove("open");
-        navToggle.setAttribute("aria-expanded", "false");
-        navToggle.setAttribute("aria-label", "menu openen");
-        navToggle.textContent = "[ menu ]";
-    };
+    // both labels live in the button at once so CSS can cross-fade between them.
+    // [ x ] is stacked on top of [ menu ], so the button never changes width.
+    navToggle.innerHTML =
+        '<span class="nav-toggle-label label-open">[ menu ]</span>' +
+        '<span class="nav-toggle-label label-close" aria-hidden="true">[ x ]</span>';
 
-    navToggle.addEventListener("click", () => {
-        const open = nav.classList.toggle("open");
+    const setMenu = (open) => {
+        nav.classList.toggle("open", open);
         navToggle.setAttribute("aria-expanded", String(open));
         navToggle.setAttribute("aria-label", open ? "menu sluiten" : "menu openen");
-        navToggle.textContent = open ? "[ x ]" : "[ menu ]";
+    };
+
+    const closeMenu = () => setMenu(false);
+
+    navToggle.addEventListener("click", () => {
+        setMenu(!nav.classList.contains("open"));
     });
 
     // close after tapping a link
