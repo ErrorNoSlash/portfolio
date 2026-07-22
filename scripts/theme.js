@@ -1,32 +1,31 @@
-// theme toggle, dark default — light matches blog.errornoslash.be
+// controles the theme toggle, dark is default
 const themeKey = "theme";
 const themeRoot = document.documentElement;
 
-themeRoot.dataset.theme =
-    localStorage.getItem(themeKey) === "light" ? "light" : "dark";
+themeRoot.dataset.theme = localStorage.getItem(themeKey) === "light" ? "light" : "dark";
 
 document.addEventListener("DOMContentLoaded", () => {
     const buttons = document.querySelectorAll(".theme-toggle");
-    const isLight = () => themeRoot.dataset.theme === "light";
 
-    // icon shows the theme you'd switch to
-    const render = () => {
-        buttons.forEach((btn) => {
-            btn.textContent = isLight() ? "[ \u2600 ]" : "[ \u263E ]";
-            btn.setAttribute(
-                "aria-label",
-                isLight() ? "schakel donker thema in" : "schakel licht thema in"
-            );
-        });
-    };
-
-    buttons.forEach((btn) =>
+    buttons.forEach((btn) => {
         btn.addEventListener("click", () => {
             themeRoot.dataset.theme = isLight() ? "dark" : "light";
             localStorage.setItem(themeKey, themeRoot.dataset.theme);
-            render();
-        })
-    );
+            renderThemeButtons(buttons);
+        });
+    });
 
-    render();
+    renderThemeButtons(buttons);
 });
+
+function isLight() {
+    return themeRoot.dataset.theme === "light";
+}
+
+// icon shows the theme you would switch to
+function renderThemeButtons(buttons) {
+    buttons.forEach((btn) => {
+        btn.textContent = isLight() ? "[ ☀ ]" : "[ ☾ ]";
+        btn.setAttribute("aria-label", isLight() ? "schakel donker thema in" : "schakel licht thema in");
+    });
+}

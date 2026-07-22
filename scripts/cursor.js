@@ -1,4 +1,4 @@
-// crosshair cursor, desktop / fine pointers only
+// controles the crosshair cursor, desktop only
 const cursor = document.getElementById("cursor");
 const finePointer = window.matchMedia("(hover: hover) and (pointer: fine)");
 
@@ -6,8 +6,11 @@ if (cursor && finePointer.matches) {
     let shown = false;
 
     document.addEventListener("mousemove", (e) => {
-        cursor.style.transform =
-            `translate(${e.clientX - cursor.offsetWidth / 2}px, ${e.clientY - cursor.offsetHeight / 2}px)`;
+        const posX = e.clientX - cursor.offsetWidth / 2;
+        const posY = e.clientY - cursor.offsetHeight / 2;
+
+        cursor.style.transform = `translate(${posX}px, ${posY}px)`;
+
         if (!shown) {
             cursor.classList.add("visible");
             shown = true;
@@ -18,6 +21,7 @@ if (cursor && finePointer.matches) {
     document.addEventListener("mouseover", (e) => {
         if (e.target.closest("a, button")) cursor.classList.add("on-link");
     });
+
     document.addEventListener("mouseout", (e) => {
         if (e.target.closest("a, button")) cursor.classList.remove("on-link");
     });

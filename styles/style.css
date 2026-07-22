@@ -23,7 +23,7 @@ html[data-theme="light"] {
 
 html {
     scroll-behavior: smooth;
-    /* mobile browsers paint a translucent blue box over anything tappable */
+    /* kill the blue tap highlight on mobile */
     -webkit-tap-highlight-color: transparent;
 }
 
@@ -49,7 +49,7 @@ body {
     color: var(--black);
 }
 
-/* Controles all the buttons — same clip-path hover as before */
+/* Controles all the buttons */
 .btn {
     --clr: var(--grey);
     cursor: pointer;
@@ -86,8 +86,6 @@ body {
         background: var(--clr);
         clip-path: inset(50% 50% 50% 50%);
         -webkit-clip-path: inset(50% 50% 50% 50%);
-        /* square reaches the edges at 100%, circle overshot them --
-           shorter duration matches the old perceived fill speed */
         transition: 0.55s;
         z-index: -1;
     }
@@ -109,9 +107,7 @@ body {
     }
 }
 
-/* touch screens keep :hover after a tap. the ::after fill is what supplies the
-   light background behind the inverted text, so hiding it on its own left the
-   label black-on-black. the colour flip and border/glow have to go with it. */
+/* touch screens keep :hover after a tap, undo the whole hover state */
 @media (hover: none) {
     .btn::after {
         display: none;
@@ -679,8 +675,7 @@ footer {
         }
     }
 
-    /* the [ code ] / [ terug ] row is the last thing in main on project pages,
-       so on narrow screens it ends up sitting right on the footer */
+/* space between the buttons and the footer */
     .project-detail .project-links {
         margin-bottom: 2rem;
     }
