@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="nl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>dias@stas:~/projecten/blog</title>
+    <link rel="stylesheet" href="../../styles/normalize.css" />
+    <link rel="stylesheet" href="../../styles/style.css" />
+
+    <!--Google Fonts-->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- JS scripts -->
+    <script src="../../scripts/theme.js"></script>
+    <script src="../../scripts/transition.js"></script>
+    <script src="../../scripts/nav.js" defer></script>
+    <script src="../../scripts/cursor.js" defer></script>
+  </head>
+
+  <body>
+    <div id="cursor" aria-hidden="true"></div>
+
+    <!-- page transition -->
+    <div class="page-transition" aria-hidden="true">
+      <pre id="transition-log"></pre>
+    </div>
+
+    <header>
+      <nav>
+        <a id="logo" href="../../index.html" data-path="~">dias@stas:~$</a>
+        <button
+          id="nav-toggle"
+          class="btn"
+          aria-expanded="false"
+          aria-controls="nav-menu"
+          aria-label="menu openen"
+        >
+          [ menu ]
+        </button>
+        <ul id="nav-menu">
+          <li>
+            <a
+              class="btn"
+              href="../../index.html#projecten"
+              data-path="~/projecten"
+              >./projecten</a
+            >
+          </li>
+          <li>
+            <a class="btn" href="../../index.html#over" data-path="~/over"
+              >./over</a
+            >
+          </li>
+          <li>
+            <a
+              class="btn border-btn"
+              href="../../index.html#contact"
+              data-path="~/contact"
+              >./contact</a
+            >
+          </li>
+          <li class="theme-item">
+            <button
+              class="btn theme-toggle"
+              aria-label="schakel licht thema in"
+            >
+              [ ☾ ]
+            </button>
+          </li>
+        </ul>
+      </nav>
+    </header>
+
+    <main>
+      <section class="content-section project-detail">
+        <p class="prompt">$ cat blog.md</p>
+
+        <h1>blog/</h1>
+        <p class="project-stack">zola · rust</p>
+
+        <p>
+          Mijn blog, gehost op GitHub Pages en leeft op
+          <a href="https://blog.errornoslash.be">blog.errornoslash.be</a>. Hier
+          documenteer ik de projecten die ik maak. Gebouwd met Zola: één binary,
+          geen runtime, output is gewoon statische HTML.
+        </p>
+        <p>
+          De look sluit aan op deze portfolio — bijna zwart, grijs, monospace,
+          verder niets. Het Terminus-thema zit als git submodule in de repo, met
+          daarbovenop een eigen kleurenschema in CSS-variabelen. Posts zijn
+          Markdown-bestanden met wat front matter, en een push naar main bouwt
+          en deployt de site.
+        </p>
+
+        <p class="prompt">$ ls ./features</p>
+        <ul class="project-features">
+          <li>statisch gegenereerd met Zola, geen runtime nodig</li>
+          <li>eigen licht/donker kleurenschema bovenop Terminus</li>
+          <li>tags met een eigen pagina en feed per term</li>
+          <li>nix devshell voor een reproduceerbare build</li>
+          <li>posts schrijven is één Markdown-bestand toevoegen</li>
+        </ul>
+
+        <div class="project-links">
+          <a class="btn" href="https://github.com/ErrorNoSlash/blog">[ code ]</a>
+          <a
+            class="btn border-btn"
+            href="../../index.html#projecten"
+            data-path="~/projecten"
+            >[ terug ]</a
+          >
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="footer-inner">
+        <span id="mark">&copy;2026 dias stas</span>
+        <div id="footer-links">
+          <a
+            class="btn"
+            href="https://github.com/ErrorNoSlash"
+            aria-label="github"
+          >
+            <svg
+              class="icon"
+              viewBox="0 0 256 256"
+              fill="currentColor"
+              aria-hidden="true"
+              focusable="false"
+            >
+              <path
+                d="M208.31,75.68A59.78,59.78,0,0,0,202.93,28,8,8,0,0,0,196,24a59.75,59.75,0,0,0-48,24H124A59.75,59.75,0,0,0,76,24a8,8,0,0,0-6.93,4,59.78,59.78,0,0,0-5.38,47.68A58.14,58.14,0,0,0,56,104v8a56.06,56.06,0,0,0,48.44,55.47A39.8,39.8,0,0,0,96,192v8H72a24,24,0,0,1-24-24A40,40,0,0,0,8,136a8,8,0,0,0,0,16,24,24,0,0,1,24,24,40,40,0,0,0,40,40H96v16a8,8,0,0,0,16,0V192a24,24,0,0,1,48,0v40a8,8,0,0,0,16,0V192a39.8,39.8,0,0,0-8.44-24.53A56.06,56.06,0,0,0,216,112v-8A58.14,58.14,0,0,0,208.31,75.68ZM200,112a40,40,0,0,1-40,40H112a40,40,0,0,1-40-40v-8a41.74,41.74,0,0,1,6.9-22.48A8,8,0,0,0,80,73.83a43.81,43.81,0,0,1,.79-33.58,43.88,43.88,0,0,1,32.32,20.06A8,8,0,0,0,119.82,64h32.35a8,8,0,0,0,6.74-3.69,43.87,43.87,0,0,1,32.32-20.06A43.81,43.81,0,0,1,192,73.83a8.09,8.09,0,0,0,1,7.65A41.72,41.72,0,0,1,200,104Z"
+              />
+            </svg>
+            <span class="btn-label">github</span>
+          </a>
+          <a
+            class="btn"
+            href="https://mastodon.social/@slashy"
+            aria-label="mastodon"
+          >
+            <svg
+              class="icon"
+              viewBox="0 0 256 256"
+              fill="currentColor"
+              aria-hidden="true"
+              focusable="false"
+            >
+              <path
+                d="M184,32H72A40,40,0,0,0,32,72V192a40,40,0,0,0,40,40h88a8,8,0,0,0,0-16H72a24,24,0,0,1-24-24v-8H184a40,40,0,0,0,40-40V72A40,40,0,0,0,184,32Zm24,112a24,24,0,0,1-24,24H48V72A24,24,0,0,1,72,48H184a24,24,0,0,1,24,24Zm-24-40v32a8,8,0,0,1-16,0V104a16,16,0,0,0-32,0v32a8,8,0,0,1-16,0V104a16,16,0,0,0-32,0v32a8,8,0,0,1-16,0V104a32,32,0,0,1,56-21.13A32,32,0,0,1,184,104Z"
+              />
+            </svg>
+            <span class="btn-label">mastodon</span>
+          </a>
+          <a class="btn" href="mailto:dias.stas@pm.me" aria-label="e-mail">
+            <svg
+              class="icon"
+              viewBox="0 0 256 256"
+              fill="currentColor"
+              aria-hidden="true"
+              focusable="false"
+            >
+              <path
+                d="M224,48H32a8,8,0,0,0-8,8V192a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V56A8,8,0,0,0,224,48ZM203.43,64,128,133.15,52.57,64ZM216,192H40V74.19l82.59,75.71a8,8,0,0,0,10.82,0L216,74.19V192Z"
+              />
+            </svg>
+            <span class="btn-label">e-mail</span>
+          </a>
+        </div>
+      </div>
+    </footer>
+
+    <button
+      id="theme-toggle"
+      class="btn theme-toggle"
+      aria-label="schakel licht thema in"
+    >
+      [ ☾ ]
+    </button>
+  </body>
+</html>
