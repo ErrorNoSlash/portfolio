@@ -107,10 +107,22 @@ body {
     }
 }
 
-/* touch screens keep :hover after a tap, which leaves the fill stuck on */
+/* touch screens keep :hover after a tap. the ::after fill is what supplies the
+   light background behind the inverted text, so hiding it on its own left the
+   label black-on-black. the colour flip and border/glow have to go with it. */
 @media (hover: none) {
     .btn::after {
         display: none;
+    }
+
+    .btn:hover {
+        color: var(--clr);
+        border-color: var(--border);
+    }
+
+    .btn.glow-btn:hover {
+        box-shadow: none;
+        border-color: var(--border);
     }
 }
 
@@ -407,13 +419,6 @@ main {
             font-size: 0.9rem;
         }
     }
-}
-
-/* project pages only: breathing room between the content and the footer.
-   :has() keeps it scoped to pages/projects/ without touching index.html,
-   since those are the only pages with a .project-detail section. */
-main:has(.project-detail) {
-    margin-bottom: 1.5rem;
 }
 
 /* screenshot on project pages */
