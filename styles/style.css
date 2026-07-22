@@ -468,6 +468,7 @@ footer {
     /* full-bleed line; length = footer width (100%) */
     border-top: 0.063rem solid var(--border);
     font-size: 0.9rem;
+    margin-top: 1rem;
 }
 
 .footer-inner {
