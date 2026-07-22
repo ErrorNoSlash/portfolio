@@ -222,27 +222,30 @@ nav {
     position: relative;
 }
 
-/* [ menu ] <-> [ x ] swap, instant */
+/* [ menu ] <-> [ x ] swap */
 .nav-toggle-label {
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    transition: opacity 0.25s ease, transform 0.25s ease;
 }
 
-/* stacked on top of [ menu ] so the button keeps its width.
-   visibility (not display) keeps [ menu ] holding the width while hidden */
+/* stacked on top of [ menu ] so the button keeps its width */
 .label-close {
     position: absolute;
     inset: 0;
-    visibility: hidden;
+    opacity: 0;
+    transform: translateY(0.5rem);
 }
 
 nav.open #nav-toggle .label-open {
-    visibility: hidden;
+    opacity: 0;
+    transform: translateY(-0.5rem);
 }
 
 nav.open #nav-toggle .label-close {
-    visibility: visible;
+    opacity: 1;
+    transform: translateY(0);
 }
 
 #logo {
@@ -796,6 +799,7 @@ footer {
     }
 
     nav ul,
+    .nav-toggle-label,
     #cursor,
     .page-transition {
         transition: none;
