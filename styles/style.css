@@ -220,30 +220,27 @@ nav {
     position: relative;
 }
 
-/* [ menu ] <-> [ x ] swap */
+/* [ menu ] <-> [ x ] swap, instant */
 .nav-toggle-label {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    transition: opacity 0.25s ease, transform 0.25s ease;
 }
 
-/* stacked on top of [ menu ] so the button keeps its width */
+/* stacked on top of [ menu ] so the button keeps its width.
+   visibility (not display) keeps [ menu ] holding the width while hidden */
 .label-close {
     position: absolute;
     inset: 0;
-    opacity: 0;
-    transform: translateY(0.5rem);
+    visibility: hidden;
 }
 
 nav.open #nav-toggle .label-open {
-    opacity: 0;
-    transform: translateY(-0.5rem);
+    visibility: hidden;
 }
 
 nav.open #nav-toggle .label-close {
-    opacity: 1;
-    transform: translateY(0);
+    visibility: visible;
 }
 
 #logo {
@@ -680,6 +677,12 @@ footer {
         }
     }
 
+    /* the [ code ] / [ terug ] row is the last thing in main on project pages,
+       so on narrow screens it ends up sitting right on the footer */
+    .project-detail .project-links {
+        margin-bottom: 2rem;
+    }
+
     /* footer: copyright left, icons right, one row */
     .footer-inner {
         align-items: center;
@@ -791,7 +794,6 @@ footer {
     }
 
     nav ul,
-    .nav-toggle-label,
     #cursor,
     .page-transition {
         transition: none;
