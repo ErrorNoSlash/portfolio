@@ -205,6 +205,33 @@ nav {
 
 #nav-toggle {
     display: none;
+    position: relative;
+}
+
+/* [ menu ] <-> [ x ] swap */
+.nav-toggle-label {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+/* stacked on top of [ menu ] so the button keeps its width */
+.label-close {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transform: translateY(0.5rem);
+}
+
+nav.open #nav-toggle .label-open {
+    opacity: 0;
+    transform: translateY(-0.5rem);
+}
+
+nav.open #nav-toggle .label-close {
+    opacity: 1;
+    transform: translateY(0);
 }
 
 #logo {
@@ -759,6 +786,7 @@ footer {
     }
 
     nav ul,
+    .nav-toggle-label,
     #cursor,
     .page-transition {
         transition: none;
