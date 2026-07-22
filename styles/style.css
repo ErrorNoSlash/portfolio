@@ -107,6 +107,13 @@ body {
     }
 }
 
+/* touch screens keep :hover after a tap, which leaves the fill stuck on */
+@media (hover: none) {
+    .btn::after {
+        display: none;
+    }
+}
+
 /* boot screen */
 .boot {
     position: fixed;
@@ -198,33 +205,6 @@ nav {
 
 #nav-toggle {
     display: none;
-    position: relative;
-}
-
-/* [ menu ] <-> [ x ] swap */
-.nav-toggle-label {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    transition: opacity 0.25s ease, transform 0.25s ease;
-}
-
-/* stacked on top of [ menu ] so the button keeps its width */
-.label-close {
-    position: absolute;
-    inset: 0;
-    opacity: 0;
-    transform: translateY(0.5rem);
-}
-
-nav.open #nav-toggle .label-open {
-    opacity: 0;
-    transform: translateY(-0.5rem);
-}
-
-nav.open #nav-toggle .label-close {
-    opacity: 1;
-    transform: translateY(0);
 }
 
 #logo {
@@ -400,6 +380,13 @@ main {
             font-size: 0.9rem;
         }
     }
+}
+
+/* project pages only: breathing room between the content and the footer.
+   :has() keeps it scoped to pages/projects/ without touching index.html,
+   since those are the only pages with a .project-detail section. */
+main:has(.project-detail) {
+    margin-bottom: 1.5rem;
 }
 
 /* screenshot on project pages */
@@ -772,7 +759,6 @@ footer {
     }
 
     nav ul,
-    .nav-toggle-label,
     #cursor,
     .page-transition {
         transition: none;
