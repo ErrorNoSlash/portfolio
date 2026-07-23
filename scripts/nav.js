@@ -3,10 +3,15 @@ const nav = document.querySelector("header nav");
 const navToggle = document.getElementById("nav-toggle");
 
 if (nav && navToggle) {
-    // [ x ] sits on top of [ menu ] so the button keeps its width
+    // brackets stay put, "menu" and "x" roll through the slot between them.
+    // aria-label carries the real label, so all of this is decorative
     navToggle.innerHTML =
-        '<span class="nav-toggle-label label-open">[ menu ]</span>' +
-        '<span class="nav-toggle-label label-close" aria-hidden="true">[ x ]</span>';
+        '<span aria-hidden="true">[</span>' +
+        '<span class="nav-toggle-slot" aria-hidden="true">' +
+            '<span class="nav-toggle-word word-open">menu</span>' +
+            '<span class="nav-toggle-word word-close">x</span>' +
+        '</span>' +
+        '<span aria-hidden="true">]</span>';
 
     navToggle.addEventListener("click", () => {
         setMenu(!nav.classList.contains("open"));

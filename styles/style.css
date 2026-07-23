@@ -216,29 +216,48 @@ nav {
 #nav-toggle {
     display: none;
     position: relative;
+    gap: 0.5ch;
 }
 
-/* [ menu ] <-> [ x ] swap, instant */
-.nav-toggle-label {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
+/* [ menu ] <-> [ x ]: the brackets stay, the word rolls over and the slot
+   narrows from 4ch to 1ch. monospace, so ch is exactly one character wide */
+.nav-toggle-slot {
+    position: relative;
+    display: inline-block;
+    width: 4ch;
+    height: 1.6em;
+    overflow: hidden;
+    transition: width 0.32s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* stacked on top of [ menu ] so the button keeps its width.
-   visibility (not display) keeps [ menu ] holding the width while hidden */
-.label-close {
+.nav-toggle-word {
     position: absolute;
-    inset: 0;
-    visibility: hidden;
+    top: 0;
+    left: 0;
+    line-height: 1.6em;
+    transition:
+        transform 0.32s cubic-bezier(0.4, 0, 0.2, 1),
+        opacity 0.22s ease;
 }
 
-nav.open #nav-toggle .label-open {
-    visibility: hidden;
+/* [ x ] waits just below the slot */
+.word-close {
+    transform: translateY(110%);
+    opacity: 0;
 }
 
-nav.open #nav-toggle .label-close {
-    visibility: visible;
+nav.open .nav-toggle-slot {
+    width: 1ch;
+}
+
+nav.open .word-open {
+    transform: translateY(-110%);
+    opacity: 0;
+}
+
+nav.open .word-close {
+    transform: none;
+    opacity: 1;
 }
 
 #logo {
@@ -791,6 +810,8 @@ footer {
     }
 
     nav ul,
+    .nav-toggle-slot,
+    .nav-toggle-word,
     #cursor,
     .page-transition {
         transition: none;
