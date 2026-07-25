@@ -937,3 +937,53 @@ footer {
     }
 }
 
+
+/* ask phones in landscape to rotate back to portrait */
+.rotate-note {
+    display: none;
+}
+
+@media (orientation: landscape) and (max-height: 30rem) and (pointer: coarse) {
+    .rotate-note {
+        display: flex;
+        position: fixed;
+        inset: 0;
+        z-index: 300;
+        background: var(--black);
+        color: var(--grey);
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 1.5rem;
+    }
+
+    .rotate-inner {
+        max-width: 22rem;
+    }
+
+    .rotate-icon {
+        width: 3rem;
+        height: 3rem;
+        color: var(--bright);
+        margin-bottom: 1rem;
+        transform-origin: center;
+        animation: rotate-hint 2s ease-in-out infinite;
+    }
+
+    .rotate-note p {
+        margin: 0;
+        font-size: 1rem;
+        line-height: 1.5;
+    }
+
+    @keyframes rotate-hint {
+        0%, 25%   { transform: rotate(-90deg); }
+        60%, 100% { transform: rotate(0deg); }
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .rotate-icon {
+        animation: none !important;
+    }
+}
