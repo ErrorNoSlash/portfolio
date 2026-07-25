@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /nojs.html
+
+Sitemap: https://hello.errornoslash.be/sitemap.xml
