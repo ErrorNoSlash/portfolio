@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="nl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>dias@stas:~ — 404</title>
+    <meta name="robots" content="noindex">
+    <meta name="theme-color" content="#040507">
+    <link rel="icon" href="/assets/favicon-32.png" sizes="32x32" type="image/png">
+    <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --black: #040507;
+            --grey: #AEB5B8;
+            --bright: #e3e3e3;
+            --border: #525252;
+            --mute: #6e767a;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            height: 100%;
+            margin: 0;
+        }
+
+        body {
+            background: var(--black);
+            color: var(--grey);
+            font-family: "JetBrains Mono", ui-monospace, monospace;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+            line-height: 1.6;
+        }
+
+        .box {
+            width: 100%;
+            max-width: 40rem;
+            border: 0.063rem solid var(--border);
+            border-radius: 0.5rem;
+            padding: 2rem 2.25rem;
+            background: linear-gradient(160deg, #101215, #040507);
+        }
+
+        .code {
+            font-size: 4.5rem;
+            font-weight: 700;
+            color: var(--bright);
+            margin: 0 0 0.5rem;
+            letter-spacing: 0.05em;
+        }
+
+        pre {
+            margin: 0 0 1.5rem;
+            font-size: 0.9rem;
+            color: var(--mute);
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+
+        pre .cmd {
+            color: var(--grey);
+        }
+
+        pre .err {
+            color: var(--bright);
+        }
+
+        h1 {
+            margin: 0 0 0.75rem;
+            font-size: 1.3rem;
+            color: var(--bright);
+            font-weight: 700;
+        }
+
+        p {
+            margin: 0 0 1.75rem;
+            font-size: 0.95rem;
+        }
+
+        .links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.6rem;
+        }
+
+        a.btn {
+            display: inline-block;
+            text-decoration: none;
+            color: var(--bright);
+            border: 0.063rem solid var(--border);
+            border-radius: 0.3rem;
+            padding: 0.6rem 1.1rem;
+            font-size: 0.9rem;
+            transition: border-color 0.15s ease, box-shadow 0.15s ease;
+        }
+
+        a.btn:hover,
+        a.btn:focus-visible {
+            border-color: var(--bright);
+            box-shadow: 0 0 0.75rem rgba(174, 181, 184, 0.25);
+        }
+
+        .cursor {
+            display: inline-block;
+            width: 0.55rem;
+            height: 1rem;
+            background: var(--bright);
+            vertical-align: text-bottom;
+            margin-left: 0.15rem;
+            animation: blink 1s steps(1) infinite;
+        }
+
+        @keyframes blink {
+            50% {
+                opacity: 0;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .cursor {
+                animation: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <main class="box">
+        <p class="code">404</p>
+        <pre><span class="cmd">dias@stas:~$ cd</span> <span id="path">./deze-pagina</span>
+<span class="err">bash: cd: geen bestand of map</span><span class="cursor"></span></pre>
+        <h1>Pagina niet gevonden</h1>
+        <p>Deze pagina bestaat niet (meer). Misschien is de link verouderd of
+            verkeerd getypt.</p>
+        <div class="links">
+            <a class="btn" href="/">~ home</a>
+            <a class="btn" href="/#projecten">./projecten</a>
+        </div>
+    </main>
+
+    <script>
+        // show the path the visitor actually tried, for a bit of terminal flavour
+        var p = document.getElementById("path");
+        if (p && location.pathname && location.pathname !== "/") {
+            p.textContent = "." + location.pathname;
+        }
+    </script>
+</body>
+
+</html>
