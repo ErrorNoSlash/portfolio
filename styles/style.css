@@ -765,6 +765,12 @@ footer {
         opacity: 1;
     }
 
+    /* wrapped around a button: animate the size + move, keep corners crisp */
+    #cursor.framing {
+        transition: opacity 0.15s ease, filter 0.25s ease,
+            transform 0.18s ease, width 0.18s ease, height 0.18s ease;
+    }
+
     /* hover: bars open into the corner reticle + glow */
     #cursor.on-link {
         filter: drop-shadow(0 0 0.45rem var(--glow));
@@ -859,8 +865,19 @@ footer {
     transition: opacity 0.15s ease, transform 0.15s ease;
 }
 
-.nav-socials:hover .nav-social-menu,
-.nav-socials:focus-within .nav-social-menu {
+.nav-social-menu .nav-social {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 0.5rem;
+    white-space: nowrap;
+}
+
+.nav-social-menu .btn-label {
+    font-size: 0.85rem;
+}
+
+.nav-socials.open .nav-social-menu {
     opacity: 1;
     transform: none;
     pointer-events: auto;
@@ -902,6 +919,15 @@ footer {
         opacity: 1;
         transform: none;
         pointer-events: auto;
+    }
+
+    .nav-social-menu .nav-social {
+        justify-content: center;
+        gap: 0;
+    }
+
+    .nav-social-menu .btn-label {
+        display: none;
     }
 
     .theme-item {

@@ -66,3 +66,34 @@ if (header) {
         ticking = false;
     }
 }
+
+// social links dropdown (desktop): click the trigger to open/close
+document.querySelectorAll(".nav-socials").forEach((box) => {
+    const toggle = box.querySelector(".nav-social-toggle");
+    const menu = box.querySelector(".nav-social-menu");
+    if (!toggle || !menu) return;
+
+    toggle.setAttribute("aria-expanded", "false");
+
+    const close = () => {
+        box.classList.remove("open");
+        toggle.setAttribute("aria-expanded", "false");
+    };
+
+    toggle.addEventListener("click", (e) => {
+        e.stopPropagation();
+        const open = box.classList.toggle("open");
+        toggle.setAttribute("aria-expanded", String(open));
+    });
+
+    // choosing a link closes the dropdown
+    menu.querySelectorAll("a").forEach((a) => a.addEventListener("click", close));
+
+    // click outside or press Escape closes it
+    document.addEventListener("click", (e) => {
+        if (!box.contains(e.target)) close();
+    });
+    document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") close();
+    });
+});
