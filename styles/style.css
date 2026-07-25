@@ -21,7 +21,7 @@ html[data-theme="light"] {
     --bright: #040507;
     --header-bg: rgba(174, 181, 184, 0.85);
     --glow: rgba(4, 5, 7, 0.2);
-    --panel: linear-gradient(160deg, #C2C8CA, #AEB5B8);
+    --panel: linear-gradient(160deg, #D2D7D9, #C3C9CB);
 }
 
 html {
