@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="260" viewBox="0 0 1200 260">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#040507"/>
+      <stop offset="0.5" stop-color="#101215"/>
+      <stop offset="1" stop-color="#040507"/>
+    </linearGradient>
+    <linearGradient id="txt" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#c7ced2"/>
+      <stop offset="0.5" stop-color="#AEB5B8"/>
+      <stop offset="1" stop-color="#c7ced2"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1200" height="260" rx="16" fill="url(#bg)"/>
+  <rect x="1.5" y="1.5" width="1197" height="257" rx="15" fill="none" stroke="#525252" stroke-width="1"/>
+
+  <!-- terminal window buttons -->
+  <g>
+    <circle cx="34" cy="30" r="7" fill="none" stroke="#525252" stroke-width="1.5"/>
+    <circle cx="58" cy="30" r="7" fill="none" stroke="#525252" stroke-width="1.5"/>
+    <circle cx="82" cy="30" r="7" fill="none" stroke="#525252" stroke-width="1.5"/>
+  </g>
+
+  <!-- scattered glyphs instead of stars -->
+  <g fill="#AEB5B8" font-family="JetBrains Mono, Courier New, monospace" font-size="14">
+    <text x="150" y="55" opacity="0.35">*</text>
+    <text x="240" y="150" opacity="0.2">.</text>
+    <text x="320" y="75" opacity="0.3">;</text>
+    <text x="400" y="215" opacity="0.2">~</text>
+    <text x="480" y="45" opacity="0.35">:</text>
+    <text x="560" y="225" opacity="0.2">.</text>
+    <text x="660" y="40" opacity="0.3">=</text>
+    <text x="740" y="215" opacity="0.25">*</text>
+    <text x="820" y="60" opacity="0.3">-</text>
+    <text x="900" y="175" opacity="0.35">;</text>
+    <text x="1000" y="50" opacity="0.2">.</text>
+    <text x="1080" y="150" opacity="0.3">~</text>
+    <text x="190" y="230" opacity="0.25">:</text>
+    <text x="720" y="120" opacity="0.15">.</text>
+    <text x="1130" y="225" opacity="0.25">*</text>
+    <text x="95" y="135" opacity="0.2">=</text>
+  </g>
+
+  <!-- ascii donut nod, left -->
+  <g fill="#AEB5B8" opacity="0.35" font-family="JetBrains Mono, Courier New, monospace" font-size="13" text-anchor="middle">
+    <text x="140" y="105">@@$$$</text>
+    <text x="140" y="119">#$$@$$##*!</text>
+    <text x="140" y="133">!*###*!=~.,~:</text>
+    <text x="140" y="147">;==!!!!*!!==;</text>
+    <text x="140" y="161">~:;;=====;;:~</text>
+    <text x="140" y="175">,~~-----~~,</text>
+  </g>
+
+  <!-- ascii donut nod, right -->
+  <g fill="#AEB5B8" opacity="0.35" font-family="JetBrains Mono, Courier New, monospace" font-size="13" text-anchor="middle">
+    <text x="1060" y="105">@@$$$</text>
+    <text x="1060" y="119">#$$@$$##*!</text>
+    <text x="1060" y="133">!*###*!=~.,~:</text>
+    <text x="1060" y="147">;==!!!!*!!==;</text>
+    <text x="1060" y="161">~:;;=====;;:~</text>
+    <text x="1060" y="175">,~~-----~~,</text>
+  </g>
+
+  <text x="576" y="132" text-anchor="middle"
+        font-family="JetBrains Mono, Courier New, monospace"
+        font-size="72" font-weight="700" fill="url(#txt)"
+        letter-spacing="1">dias@stas:~$</text>
+
+  <!-- blinking cursor block -->
+  <rect x="862" y="76" width="34" height="62" fill="#AEB5B8">
+    <animate attributeName="opacity" values="1;1;0;0" dur="1.2s" repeatCount="indefinite"/>
+  </rect>
+
+  <text x="600" y="188" text-anchor="middle"
+        font-family="JetBrains Mono, Courier New, monospace"
+        font-size="20" fill="#8a9093">a minimal terminal-style portfolio — vanilla html · css · js</text>
+</svg>
