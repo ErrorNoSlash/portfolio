@@ -3,51 +3,24 @@ const cursor = document.getElementById("cursor");
 const finePointer = window.matchMedia("(hover: hover) and (pointer: fine)");
 
 if (cursor && finePointer.matches) {
-    const POINTER_KEY = "cursorPosition";
-    const PAD = 6;
-
     let shown = false;
-    let framed = null;
-    let lastX = null;
-    let lastY = null;
+    let framed = null; // the .btn the cursor is currently wrapped around
+    const PAD = 6;     // px the frame sits outside the button
 
-    function moveTo(x, y) {
-        if (!Number.isFinite(x) || !Number.isFinite(y)) return;
+    document.addEventListener("mousemove", (e) => {
+        if (!shown) {
+            cursor.classList.add("visible");
+            shown = true;
+        }
+        // while wrapped around a button, stay locked to it instead of following
+        if (framed) return;
 
-        const posX = x - cursor.offsetWidth / 2;
-        const posY = y - cursor.offsetHeight / 2;
+        const posX = e.clientX - cursor.offsetWidth / 2;
+        const posY = e.clientY - cursor.offsetHeight / 2;
         cursor.style.transform = `translate(${posX}px, ${posY}px)`;
-    }
-
-    function show() {
-        if (shown) return;
-        cursor.classList.add("visible");
-        shown = true;
-    }
-
-    function hide() {
-        cursor.classList.remove("visible");
-        shown = false;
-        framed = null;
-        cursor.style.width = "";
-        cursor.style.height = "";
-        cursor.classList.remove("framing", "on-link");
-    }
-
-    function setPointer(x, y) {
-        if (!Number.isFinite(x) || !Number.isFinite(y)) return;
-        lastX = x;
-        lastY = y;
-        moveTo(x, y);
-        show();
-    }
+    });
 
     function frame(el) {
-        if (!el || !el.isConnected) {
-            unframe();
-            return;
-        }
-
         const r = el.getBoundingClientRect();
         cursor.style.width = r.width + PAD * 2 + "px";
         cursor.style.height = r.height + PAD * 2 + "px";
@@ -61,126 +34,36 @@ if (cursor && finePointer.matches) {
         cursor.style.height = "";
         cursor.classList.remove("framing", "on-link");
         framed = null;
-
-        if (lastX !== null && lastY !== null) {
-            moveTo(lastX, lastY);
-        }
     }
 
-    // Determine the actual element under the pointer instead of depending on
-    // mouseover/mouseout bubbling. This also works after a full page transition.
-    function syncHover() {
-        if (lastX === null || lastY === null) return;
-
-        const target = document.elementFromPoint(lastX, lastY);
-        const btn = target && target.closest ? target.closest(".btn") : null;
-        const link = target && target.closest ? target.closest("a, button") : null;
-
+    document.addEventListener("mouseover", (e) => {
+        const btn = e.target.closest(".btn");
         if (btn) {
             frame(btn);
-        } else {
-            unframe();
-            cursor.classList.toggle("on-link", !!link);
+            return;
         }
-    }
-
-    // A browser navigation creates a new document, so the new cursor instance
-    // cannot receive the old page's mousemove event. Save the pointer location
-    // before navigation and restore it immediately on the next page.
-    function savePointer() {
-        if (lastX === null || lastY === null) return;
-
-        try {
-            sessionStorage.setItem(POINTER_KEY, JSON.stringify({
-                x: lastX,
-                y: lastY,
-                time: Date.now()
-            }));
-        } catch (_) {
-            // sessionStorage can be unavailable in restricted browsing modes.
-        }
-    }
-
-    function restorePointer() {
-        try {
-            const raw = sessionStorage.getItem(POINTER_KEY);
-            if (!raw) return false;
-
-            const point = JSON.parse(raw);
-            sessionStorage.removeItem(POINTER_KEY);
-
-            if (!Number.isFinite(point.x) || !Number.isFinite(point.y)) return false;
-
-            // Only restore a position that came from the immediately preceding
-            // navigation. Never resurrect an old cursor position on a later visit.
-            if (!Number.isFinite(point.time) || Date.now() - point.time > 5000) return false;
-
-            lastX = Math.max(0, Math.min(window.innerWidth, point.x));
-            lastY = Math.max(0, Math.min(window.innerHeight, point.y));
-            moveTo(lastX, lastY);
-            show();
-            return true;
-        } catch (_) {
-            return false;
-        }
-    }
-
-    // Track real pointer movement continuously, including while the transition
-    // overlay is visible. Do not gate this on the transition state.
-    document.addEventListener("pointermove", (e) => {
-        if (e.pointerType !== "mouse") return;
-
-        setPointer(e.clientX, e.clientY);
-
-        if (!framed) {
-            syncHover();
-        }
+        // other links/buttons keep the small reticle that follows the pointer
+        if (e.target.closest("a, button")) cursor.classList.add("on-link");
     });
 
-    // The pointer can already be sitting over a link when the new document lands.
-    // Re-run hit testing whenever the transition class is removed.
-    const transitionObserver = new MutationObserver(() => {
-        if (!document.documentElement.classList.contains("transitioning")) {
-            requestAnimationFrame(() => syncHover());
+    document.addEventListener("mouseout", (e) => {
+        const btn = e.target.closest(".btn");
+        if (btn) {
+            // ignore moves that stay inside the same button
+            if (!e.relatedTarget || !btn.contains(e.relatedTarget)) unframe();
+            return;
         }
+        if (e.target.closest("a, button")) cursor.classList.remove("on-link");
     });
 
-    transitionObserver.observe(document.documentElement, {
-        attributes: true,
-        attributeFilter: ["class"]
-    });
-
-    // Save the exact pointer position before the transition's navigation happens.
-    document.addEventListener("pointerdown", (e) => {
-        if (e.pointerType === "mouse") {
-            lastX = e.clientX;
-            lastY = e.clientY;
-            savePointer();
-        }
-    }, true);
-
+    // keep the frame aligned if the page scrolls while hovering a button
     window.addEventListener("scroll", () => {
-        if (framed) {
-            frame(framed);
-        } else if (lastX !== null && lastY !== null) {
-            moveTo(lastX, lastY);
-        }
+        if (framed) frame(framed);
     }, { passive: true });
 
-    document.addEventListener("mouseleave", hide);
-    window.addEventListener("blur", hide);
-
-    // Restore the pointer immediately after this document loads. This is the
-    // critical hand-off that keeps the cursor alive across page transitions even
-    // when the browser emits no mousemove event on the new document.
-    restorePointer();
-
-    // If there was no navigation hand-off, let the normal first pointermove
-    // initialize the cursor. Also sync once after DOM/layout is ready.
-    window.addEventListener("pageshow", () => {
-        if (lastX !== null && lastY !== null) {
-            moveTo(lastX, lastY);
-            syncHover();
-        }
+    // hide when the pointer leaves the window
+    document.addEventListener("mouseleave", () => {
+        cursor.classList.remove("visible");
+        shown = false;
     });
 }
