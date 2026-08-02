@@ -18,6 +18,13 @@ if (cursor && finePointer.matches) {
         lastX = e.clientX;
         lastY = e.clientY;
 
+        // the first mousemove after a fresh page load can fire with zero movement
+        // (a "settle" event reflecting wherever the pointer already was, e.g. right
+        // after the terminal page transition lands on a new page). Real mouse motion
+        // essentially never has an exact 0,0 delta, so ignore that one until genuine
+        // movement happens — otherwise the cursor snaps onto stale, unrelated content.
+        if (!shown && e.movementX === 0 && e.movementY === 0) return;
+
         if (!shown) {
             cursor.classList.add("visible");
             shown = true;
