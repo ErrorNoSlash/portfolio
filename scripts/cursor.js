@@ -5,9 +5,19 @@ const finePointer = window.matchMedia("(hover: hover) and (pointer: fine)");
 if (cursor && finePointer.matches) {
     let shown = false;
     let framed = null; // the .btn the cursor is currently wrapped around
+    let lastX = 0, lastY = 0; // last known pointer position, kept up to date even while framed
     const PAD = 6;     // px the frame sits outside the button
 
+    function moveTo(x, y) {
+        const posX = x - cursor.offsetWidth / 2;
+        const posY = y - cursor.offsetHeight / 2;
+        cursor.style.transform = `translate(${posX}px, ${posY}px)`;
+    }
+
     document.addEventListener("mousemove", (e) => {
+        lastX = e.clientX;
+        lastY = e.clientY;
+
         if (!shown) {
             cursor.classList.add("visible");
             shown = true;
@@ -15,9 +25,7 @@ if (cursor && finePointer.matches) {
         // while wrapped around a button, stay locked to it instead of following
         if (framed) return;
 
-        const posX = e.clientX - cursor.offsetWidth / 2;
-        const posY = e.clientY - cursor.offsetHeight / 2;
-        cursor.style.transform = `translate(${posX}px, ${posY}px)`;
+        moveTo(lastX, lastY);
     });
 
     function frame(el) {
@@ -34,6 +42,8 @@ if (cursor && finePointer.matches) {
         cursor.style.height = "";
         cursor.classList.remove("framing", "on-link");
         framed = null;
+        // snap back to the real pointer position instead of waiting on the next mousemove
+        moveTo(lastX, lastY);
     }
 
     document.addEventListener("mouseover", (e) => {
