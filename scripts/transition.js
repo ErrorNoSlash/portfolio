@@ -44,6 +44,14 @@ function showLandingCommand(log) {
 function leaveTo(link, url, overlay, log) {
     const command = "$ cd " + (link.dataset.path || url.pathname);
 
+    // carry the theme forward via URL param — localStorage alone doesn't
+    // reliably share across separate pages under some origins (e.g. file://)
+    if (document.documentElement.dataset.theme === "light") {
+        url.searchParams.set("theme", "light");
+    } else {
+        url.searchParams.delete("theme");
+    }
+
     sessionStorage.setItem("transitionCmd", command);
     overlay.classList.add("active");
 
