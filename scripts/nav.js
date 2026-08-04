@@ -3,6 +3,8 @@ const nav = document.querySelector("header nav");
 const navToggle = document.getElementById("nav-toggle");
 
 if (nav && navToggle) {
+    // brackets stay put, "menu" and "x" roll through the slot between them.
+    // aria-label carries the real label, so all of this is decorative
     navToggle.innerHTML =
         '<span aria-hidden="true">[</span>' +
         '<span class="nav-toggle-slot" aria-hidden="true">' +

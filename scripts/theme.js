@@ -1,3 +1,9 @@
+// controls the theme toggle. dark is the default (no "auto"/system-preference
+// mode — this site deliberately always starts dark unless the visitor has
+// chosen light before). structured after the standard render-blocking
+// pattern for avoiding a flash of unthemed content: this script is placed
+// in <head> without `defer`, right after the stylesheets, so data-theme is
+// set on <html> before the browser paints anything.
 const THEME_KEY = "theme";
 const THEME_OWNER = document.documentElement;
 
