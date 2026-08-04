@@ -6,6 +6,7 @@ if (cursor && finePointer.matches) {
     let shown = false;
     let framed = null; // the .btn the cursor is currently wrapped around
     let lastX = 0, lastY = 0; // last known pointer position, kept up to date even while framed
+    let firstMove = true; // see note in the mousemove handler below
     const PAD = 6;     // px the frame sits outside the button
 
     function moveTo(x, y) {
@@ -15,6 +16,18 @@ if (cursor && finePointer.matches) {
     }
 
     document.addEventListener("mousemove", (e) => {
+        // the very first mousemove a fresh page receives can be a one-off
+        // "settle" event carrying a stale position left over from wherever
+        // the pointer was on the *previous* page (e.g. right after clicking
+        // a link that triggers the terminal-style page transition). real
+        // mouse movement is never just one event — it's always a continuous
+        // stream — so distrust the first one and start tracking from the
+        // second, regardless of timing.
+        if (firstMove) {
+            firstMove = false;
+            return;
+        }
+
         lastX = e.clientX;
         lastY = e.clientY;
 
@@ -47,6 +60,11 @@ if (cursor && finePointer.matches) {
     }
 
     document.addEventListener("mouseover", (e) => {
+        // don't let a synthetic hover (paired with the settle event above)
+        // frame or highlight anything before we've confirmed the pointer
+        // has genuinely moved on this page
+        if (!shown) return;
+
         const btn = e.target.closest(".btn");
         if (btn) {
             frame(btn);
