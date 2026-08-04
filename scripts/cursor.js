@@ -1,13 +1,13 @@
-// controls the crosshair cursor, desktop only
+/*
 const cursor = document.getElementById("cursor");
 const finePointer = window.matchMedia("(hover: hover) and (pointer: fine)");
 
 if (cursor && finePointer.matches) {
     let shown = false;
-    let framed = null; // the .btn the cursor is currently wrapped around
-    let lastX = 0, lastY = 0; // last known pointer position, kept up to date even while framed
-    let firstMove = true; // see note in the mousemove handler below
-    const PAD = 6;     // px the frame sits outside the button
+    let framed = null;
+    let lastX = 0, lastY = 0;
+    let firstMove = true;
+    const PAD = 6;
 
     function moveTo(x, y) {
         const posX = x - cursor.offsetWidth / 2;
@@ -16,13 +16,6 @@ if (cursor && finePointer.matches) {
     }
 
     document.addEventListener("mousemove", (e) => {
-        // the very first mousemove a fresh page receives can be a one-off
-        // "settle" event carrying a stale position left over from wherever
-        // the pointer was on the *previous* page (e.g. right after clicking
-        // a link that triggers the terminal-style page transition). real
-        // mouse movement is never just one event — it's always a continuous
-        // stream — so distrust the first one and start tracking from the
-        // second, regardless of timing.
         if (firstMove) {
             firstMove = false;
             return;
@@ -35,7 +28,7 @@ if (cursor && finePointer.matches) {
             cursor.classList.add("visible");
             shown = true;
         }
-        // while wrapped around a button, stay locked to it instead of following
+        
         if (framed) return;
 
         moveTo(lastX, lastY);
@@ -55,14 +48,10 @@ if (cursor && finePointer.matches) {
         cursor.style.height = "";
         cursor.classList.remove("framing", "on-link");
         framed = null;
-        // snap back to the real pointer position instead of waiting on the next mousemove
         moveTo(lastX, lastY);
     }
 
     document.addEventListener("mouseover", (e) => {
-        // don't let a synthetic hover (paired with the settle event above)
-        // frame or highlight anything before we've confirmed the pointer
-        // has genuinely moved on this page
         if (!shown) return;
 
         const btn = e.target.closest(".btn");
@@ -70,28 +59,45 @@ if (cursor && finePointer.matches) {
             frame(btn);
             return;
         }
-        // other links/buttons keep the small reticle that follows the pointer
         if (e.target.closest("a, button")) cursor.classList.add("on-link");
     });
 
     document.addEventListener("mouseout", (e) => {
         const btn = e.target.closest(".btn");
         if (btn) {
-            // ignore moves that stay inside the same button
             if (!e.relatedTarget || !btn.contains(e.relatedTarget)) unframe();
             return;
         }
         if (e.target.closest("a, button")) cursor.classList.remove("on-link");
     });
 
-    // keep the frame aligned if the page scrolls while hovering a button
     window.addEventListener("scroll", () => {
         if (framed) frame(framed);
     }, { passive: true });
 
-    // hide when the pointer leaves the window
     document.addEventListener("mouseleave", () => {
         cursor.classList.remove("visible");
         shown = false;
     });
 }
+*/
+
+/*controles custom cursor*/
+const cursorDot = document.querySelector("[data-cursor-dot]");
+const cursorOutline = document.querySelector("[data-cursor-outline]");
+
+window.addEventListener("mousemove", function (e) {
+    const posX = e.clientX;
+    const posY = e.clientY;
+
+    cursorDot.style.left = `${posX}px`;
+    cursorDot.style.top = `${posY}px`;
+
+    cursorOutline.style.left = `${posY}px`;
+    cursorOutline.style.top = `${posY}px`;
+
+    cursorOutline.animate({
+        left: `${posX}px`,
+        top: `${posY}px`
+    }, { duration: 500, fill: "forwards" })
+})
