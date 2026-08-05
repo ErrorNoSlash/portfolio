@@ -4,30 +4,9 @@ document.addEventListener("DOMContentLoaded", () => {
     const log = document.getElementById("boot-log");
     if (!boot || !log) return;
 
-    // sessionStorage throws a SecurityError under file:// in Firefox and
-    // Safari (it's a valid origin restriction, not a bug) — guard it so a
-    // thrown error here can't leave the boot screen stuck over the site
-    // forever. worst case without storage: the boot animation just plays
-    // on every load instead of only the first.
-    function readVisited() {
-        try {
-            return sessionStorage.getItem("hasVisited");
-        } catch {
-            return null;
-        }
-    }
-
-    function writeVisited() {
-        try {
-            sessionStorage.setItem("hasVisited", "true");
-        } catch {
-            // ignore — see note above
-        }
-    }
-
     const navEntry = performance.getEntriesByType("navigation")[0];
     const isReload = navEntry && navEntry.type === "reload";
-    const hasVisited = readVisited();
+    const hasVisited = sessionStorage.getItem("hasVisited");
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
     const finish = () => {
@@ -40,7 +19,7 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
     }
 
-    writeVisited();
+    sessionStorage.setItem("hasVisited", "true");
 
     const lines = [
         "booting dias@stas ...",

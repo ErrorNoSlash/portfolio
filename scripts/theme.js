@@ -2,11 +2,12 @@
 const themeKey = "theme";
 const themeRoot = document.documentElement;
 
-// localStorage throws a SecurityError under file:// in Firefox and Safari
-// (a valid origin restriction, not a bug). guard it — without this, the
-// line below would throw and abort the whole script before it ever
-// reaches the code that attaches the toggle button's click listener,
-// leaving the toggle completely non-functional.
+// localStorage can throw (SecurityError under file:// in Firefox/Safari,
+// storage/cookies blocked by the user, private-browsing quota limits in
+// older Safari, etc.) — guard every access so a thrown error can't abort
+// the script before it reaches the code that attaches the toggle button's
+// click listener. worst case without storage: the toggle still works for
+// the current page, it just won't be remembered on the next visit.
 function readStoredTheme() {
     try {
         return localStorage.getItem(themeKey);
@@ -19,8 +20,7 @@ function writeStoredTheme(value) {
     try {
         localStorage.setItem(themeKey, value);
     } catch {
-        // storage unavailable — the toggle still works for this page,
-        // it just won't be remembered on the next visit
+        // ignore — see note above
     }
 }
 
