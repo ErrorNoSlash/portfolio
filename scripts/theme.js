@@ -2,7 +2,29 @@
 const themeKey = "theme";
 const themeRoot = document.documentElement;
 
-themeRoot.dataset.theme = localStorage.getItem(themeKey) === "light" ? "light" : "dark";
+// localStorage throws a SecurityError under file:// in Firefox and Safari
+// (a valid origin restriction, not a bug). guard it — without this, the
+// line below would throw and abort the whole script before it ever
+// reaches the code that attaches the toggle button's click listener,
+// leaving the toggle completely non-functional.
+function readStoredTheme() {
+    try {
+        return localStorage.getItem(themeKey);
+    } catch {
+        return null;
+    }
+}
+
+function writeStoredTheme(value) {
+    try {
+        localStorage.setItem(themeKey, value);
+    } catch {
+        // storage unavailable — the toggle still works for this page,
+        // it just won't be remembered on the next visit
+    }
+}
+
+themeRoot.dataset.theme = readStoredTheme() === "light" ? "light" : "dark";
 
 document.addEventListener("DOMContentLoaded", () => {
     const buttons = document.querySelectorAll(".theme-toggle");
@@ -10,7 +32,7 @@ document.addEventListener("DOMContentLoaded", () => {
     buttons.forEach((btn) => {
         btn.addEventListener("click", () => {
             themeRoot.dataset.theme = isLight() ? "dark" : "light";
-            localStorage.setItem(themeKey, themeRoot.dataset.theme);
+            writeStoredTheme(themeRoot.dataset.theme);
             renderThemeButtons(buttons);
         });
     });

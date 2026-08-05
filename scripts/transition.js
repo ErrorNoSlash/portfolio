@@ -1,8 +1,38 @@
 // controles the terminal page transition between internal pages
 const transitionReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
+// sessionStorage throws a SecurityError under file:// in Firefox and
+// Safari (a valid origin restriction, not a bug). guard every access —
+// without it, this script's first line would throw and abort before ever
+// reaching the code below that attaches link click handlers, breaking the
+// whole transition system. worst case without storage: internal links
+// just navigate normally, without the typed-command animation.
+function readTransitionCmd() {
+    try {
+        return sessionStorage.getItem("transitionCmd");
+    } catch {
+        return null;
+    }
+}
+
+function writeTransitionCmd(value) {
+    try {
+        sessionStorage.setItem("transitionCmd", value);
+    } catch {
+        // ignore — see note above
+    }
+}
+
+function clearTransitionCmd() {
+    try {
+        sessionStorage.removeItem("transitionCmd");
+    } catch {
+        // ignore — see note above
+    }
+}
+
 // overlay is up before first paint, fades out once the page is ready
-if (sessionStorage.getItem("transitionCmd") !== null) {
+if (readTransitionCmd() !== null) {
     document.documentElement.classList.add("transitioning");
 }
 
@@ -29,10 +59,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
 // shows the command that was typed on the previous page
 function showLandingCommand(log) {
-    const cmd = sessionStorage.getItem("transitionCmd");
+    const cmd = readTransitionCmd();
     if (cmd === null) return;
 
-    sessionStorage.removeItem("transitionCmd");
+    clearTransitionCmd();
     log.textContent = cmd + "\nok.";
 
     setTimeout(() => {
@@ -44,7 +74,7 @@ function showLandingCommand(log) {
 function leaveTo(link, url, overlay, log) {
     const command = "$ cd " + (link.dataset.path || url.pathname);
 
-    sessionStorage.setItem("transitionCmd", command);
+    writeTransitionCmd(command);
     overlay.classList.add("active");
 
     if (transitionReduced) {
