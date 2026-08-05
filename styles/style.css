@@ -302,7 +302,6 @@ main {
 
 /* hero */
 .hero {
-    position: relative;
     min-height: calc(100vh - 60px);
     display: flex;
     align-items: center;
@@ -350,45 +349,6 @@ main {
     }
 }
 
-/* scroll hint, hero section */
-.scroll-hint {
-    position: absolute;
-    left: 50%;
-    bottom: 1.5rem;
-    transform: translateX(-50%);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.4rem;
-    color: var(--border);
-    text-decoration: none;
-    font-size: 0.85rem;
-    letter-spacing: 0.03rem;
-    transition: color 0.2s ease;
-
-    &:hover {
-        color: var(--grey);
-    }
-
-    .scroll-chevron {
-        animation: scroll-bounce 1.6s ease-in-out infinite;
-    }
-}
-
-@keyframes scroll-bounce {
-
-    0%,
-    100% {
-        transform: translateY(0);
-        opacity: 0.4;
-    }
-
-    50% {
-        transform: translateY(0.3rem);
-        opacity: 1;
-    }
-}
-
 /* ASCII art */
 .ascii-box {
     display: flex;
@@ -423,52 +383,16 @@ main {
 }
 
 .project-entry {
-    position: relative;
-    padding: 1.5rem 0 1.5rem 1.15rem;
+    padding: 1.5rem 0;
     border-top: 0.063rem solid var(--border);
-
-    &:first-child {
-        border-top-style: dashed;
-    }
+    transition: 0.75s;
 
     &:last-child {
         border-bottom: 0.063rem solid var(--border);
     }
 
-    /* subtle underline reveal, drawn left-to-right on hover — no shift, no white */
-    &::after {
-        content: "";
-        position: absolute;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        height: 0.063rem;
-        background: var(--grey);
-        transform: scaleX(0);
-        transform-origin: left;
-        transition: transform 0.4s ease;
-    }
-
-    /* "$ " prompt sits in permanently-reserved space, so nothing shifts on hover */
-    &::before {
-        content: "$";
-        position: absolute;
-        left: 0;
-        top: 1.6rem;
-        color: var(--grey);
-        font-weight: 700;
-        opacity: 0;
-        transition: opacity 0.3s ease;
-    }
-
     &:hover {
-        &::after {
-            transform: scaleX(1);
-        }
-
-        &::before {
-            opacity: 1;
-        }
+        padding-left: 0.75rem;
 
         .project-name {
             color: var(--bright);
@@ -848,20 +772,13 @@ footer {
             transform 0.18s ease, width 0.18s ease, height 0.18s ease;
     }
 
-    /* hover: bars turn bright + glow, but keep the open crosshair shape at
-       the default small size (brackets are reserved for framing, below) */
+    /* hover: bars open into the corner reticle + glow */
     #cursor.on-link {
         filter: drop-shadow(0 0 0.45rem var(--glow));
     }
 
     #cursor.on-link::before {
         --c: var(--bright);
-    }
-
-    /* only switch to corner brackets once wrapped around a button, where the
-       box is big enough for 8 separate small segments to actually read as
-       brackets instead of merging into a solid blob */
-    #cursor.framing.on-link::before {
         background:
             linear-gradient(var(--c), var(--c)) top left / 0.45rem 0.125rem,
             linear-gradient(var(--c), var(--c)) top left / 0.125rem 0.45rem,
@@ -879,20 +796,6 @@ footer {
     button:hover {
         text-shadow: 0 0 0.5rem var(--glow);
     }
-
-    /* until cursor.js confirms real pointer motion, suppress .btn's hover
-       fill/color-invert entirely. otherwise a stale native :hover state
-       left over from the previous page (the mouse hasn't actually moved
-       here yet) can land on whatever button happens to sit at that
-       position, making it appear as a solid, textless fill. */
-    html:not(.real-pointer) .btn:hover {
-        color: var(--clr);
-    }
-
-    html:not(.real-pointer) .btn:hover::after {
-        clip-path: inset(50% 50% 50% 50%);
-        -webkit-clip-path: inset(50% 50% 50% 50%);
-    }
 }
 
 /* respect reduced motion */
@@ -904,18 +807,12 @@ footer {
     .btn,
     .btn::after,
     .project-entry,
-    .project-entry::before,
-    .project-entry::after,
     .project-name,
     header {
         transition: none;
     }
 
     .cursor-block {
-        animation: none;
-    }
-
-    .scroll-chevron {
         animation: none;
     }
 
