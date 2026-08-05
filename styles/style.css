@@ -879,6 +879,20 @@ footer {
     button:hover {
         text-shadow: 0 0 0.5rem var(--glow);
     }
+
+    /* until cursor.js confirms real pointer motion, suppress .btn's hover
+       fill/color-invert entirely. otherwise a stale native :hover state
+       left over from the previous page (the mouse hasn't actually moved
+       here yet) can land on whatever button happens to sit at that
+       position, making it appear as a solid, textless fill. */
+    html:not(.real-pointer) .btn:hover {
+        color: var(--clr);
+    }
+
+    html:not(.real-pointer) .btn:hover::after {
+        clip-path: inset(50% 50% 50% 50%);
+        -webkit-clip-path: inset(50% 50% 50% 50%);
+    }
 }
 
 /* respect reduced motion */
