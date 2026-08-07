@@ -1,6 +1,4 @@
-// Controls the theme toggle and persists the choice across page navigation.
-// Dark is the default theme.
-
+// Controls the theme toggle. Dark is the default.
 const themeKey = "theme";
 const themeRoot = document.documentElement;
 
@@ -10,72 +8,41 @@ function readCookieTheme() {
 }
 
 function readStoredTheme() {
-    // localStorage is the primary store. Some Firefox/privacy configurations
-    // can deny storage access, so keep a cookie as a same-origin fallback.
-    try {
-        const value = localStorage.getItem(themeKey);
-        if (value === "light" || value === "dark") return value;
-    } catch {
-        // Fall through to the cookie.
-    }
+    // Cookie is a same-origin fallback for browsers/privacy modes where
+    // localStorage is unavailable or unreliable.
+    const cookieTheme = readCookieTheme();
+    if (cookieTheme) return cookieTheme;
 
-    return readCookieTheme();
+    try {
+        const stored = localStorage.getItem(themeKey);
+        return stored === "light" || stored === "dark" ? stored : null;
+    } catch {
+        return null;
+    }
 }
 
 function writeStoredTheme(value) {
     try {
         localStorage.setItem(themeKey, value);
     } catch {
-        // The cookie below is the fallback when localStorage is unavailable.
+        // Cookie below remains available when localStorage is blocked.
     }
 
-    // Explicitly set Path=/ so the theme is shared by index.html and pages/*
-    // on the same origin. Max-Age keeps it across browser sessions.
     try {
         document.cookie = `${themeKey}=${value}; Max-Age=31536000; Path=/; SameSite=Lax`;
     } catch {
-        // If both storage mechanisms are blocked, the current page still works.
+        // The theme still applies to the current page.
     }
 }
 
 function applyStoredTheme() {
-    const stored = readStoredTheme();
-    themeRoot.dataset.theme = stored === "light" ? "light" : "dark";
+    themeRoot.dataset.theme = readStoredTheme() === "light" ? "light" : "dark";
 }
 
 function isLight() {
     return themeRoot.dataset.theme === "light";
 }
 
-// Apply before the rest of the page is rendered so every page starts with
-// exactly the same theme as the previous page.
-applyStoredTheme();
-
-document.addEventListener("DOMContentLoaded", () => {
-    const buttons = document.querySelectorAll(".theme-toggle");
-
-    buttons.forEach((btn) => {
-        btn.addEventListener("click", () => {
-            const nextTheme = isLight() ? "dark" : "light";
-
-            // Update the DOM first for immediate visual feedback, then persist.
-            themeRoot.dataset.theme = nextTheme;
-            writeStoredTheme(nextTheme);
-            renderThemeButtons(buttons);
-        });
-    });
-
-    renderThemeButtons(buttons);
-});
-
-// If a page is restored from Firefox's back/forward cache, re-apply the
-// persisted value instead of relying on the cached DOM state.
-window.addEventListener("pageshow", () => {
-    applyStoredTheme();
-    renderThemeButtons(document.querySelectorAll(".theme-toggle"));
-});
-
-// Icon shows the theme you would switch to.
 function renderThemeButtons(buttons) {
     buttons.forEach((btn) => {
         btn.textContent = isLight() ? "[ ☀ ]" : "[ ☾ ]";
@@ -85,3 +52,28 @@ function renderThemeButtons(buttons) {
         );
     });
 }
+
+// Apply before the first paint on every page.
+applyStoredTheme();
+
+document.addEventListener("DOMContentLoaded", () => {
+    const buttons = document.querySelectorAll(".theme-toggle");
+
+    buttons.forEach((btn) => {
+        btn.addEventListener("click", () => {
+            const nextTheme = isLight() ? "dark" : "light";
+            themeRoot.dataset.theme = nextTheme;
+            writeStoredTheme(nextTheme);
+            renderThemeButtons(buttons);
+        });
+    });
+
+    renderThemeButtons(buttons);
+});
+
+// Firefox can restore a page from its back/forward cache without executing
+// the head scripts again. Re-apply the persisted theme when that happens.
+window.addEventListener("pageshow", () => {
+    applyStoredTheme();
+    renderThemeButtons(document.querySelectorAll(".theme-toggle"));
+});
