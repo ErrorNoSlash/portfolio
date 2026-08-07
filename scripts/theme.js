@@ -1,4 +1,6 @@
-// Controls the theme toggle. Dark is the default.
+// Controls the theme toggle and persists the choice across page navigation.
+// Dark is the default theme.
+
 const themeKey = "theme";
 const themeRoot = document.documentElement;
 
@@ -8,52 +10,45 @@ function readCookieTheme() {
 }
 
 function readStoredTheme() {
-    // Cookie is a same-origin fallback for browsers/privacy modes where
-    // localStorage is unavailable or unreliable.
-    const cookieTheme = readCookieTheme();
-    if (cookieTheme) return cookieTheme;
-
+    // localStorage is the primary store. Some Firefox/privacy configurations
+    // can deny storage access, so keep a cookie as a same-origin fallback.
     try {
-        const stored = localStorage.getItem(themeKey);
-        return stored === "light" || stored === "dark" ? stored : null;
+        const value = localStorage.getItem(themeKey);
+        if (value === "light" || value === "dark") return value;
     } catch {
-        return null;
+        // Fall through to the cookie.
     }
+
+    return readCookieTheme();
 }
 
 function writeStoredTheme(value) {
     try {
         localStorage.setItem(themeKey, value);
     } catch {
-        // Cookie below remains available when localStorage is blocked.
+        // The cookie below is the fallback when localStorage is unavailable.
     }
 
+    // Explicitly set Path=/ so the theme is shared by index.html and pages/*
+    // on the same origin. Max-Age keeps it across browser sessions.
     try {
         document.cookie = `${themeKey}=${value}; Max-Age=31536000; Path=/; SameSite=Lax`;
     } catch {
-        // The theme still applies to the current page.
+        // If both storage mechanisms are blocked, the current page still works.
     }
 }
 
 function applyStoredTheme() {
-    themeRoot.dataset.theme = readStoredTheme() === "light" ? "light" : "dark";
+    const stored = readStoredTheme();
+    themeRoot.dataset.theme = stored === "light" ? "light" : "dark";
 }
 
 function isLight() {
     return themeRoot.dataset.theme === "light";
 }
 
-function renderThemeButtons(buttons) {
-    buttons.forEach((btn) => {
-        btn.textContent = isLight() ? "[ ☀ ]" : "[ ☾ ]";
-        btn.setAttribute(
-            "aria-label",
-            isLight() ? "schakel donker thema in" : "schakel licht thema in"
-        );
-    });
-}
-
-// Apply before the first paint on every page.
+// Apply before the rest of the page is rendered so every page starts with
+// exactly the same theme as the previous page.
 applyStoredTheme();
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -62,6 +57,8 @@ document.addEventListener("DOMContentLoaded", () => {
     buttons.forEach((btn) => {
         btn.addEventListener("click", () => {
             const nextTheme = isLight() ? "dark" : "light";
+
+            // Update the DOM first for immediate visual feedback, then persist.
             themeRoot.dataset.theme = nextTheme;
             writeStoredTheme(nextTheme);
             renderThemeButtons(buttons);
@@ -71,9 +68,20 @@ document.addEventListener("DOMContentLoaded", () => {
     renderThemeButtons(buttons);
 });
 
-// Firefox can restore a page from its back/forward cache without executing
-// the head scripts again. Re-apply the persisted theme when that happens.
+// If a page is restored from Firefox's back/forward cache, re-apply the
+// persisted value instead of relying on the cached DOM state.
 window.addEventListener("pageshow", () => {
     applyStoredTheme();
     renderThemeButtons(document.querySelectorAll(".theme-toggle"));
 });
+
+// Icon shows the theme you would switch to.
+function renderThemeButtons(buttons) {
+    buttons.forEach((btn) => {
+        btn.textContent = isLight() ? "[ ☀ ]" : "[ ☾ ]";
+        btn.setAttribute(
+            "aria-label",
+            isLight() ? "schakel donker thema in" : "schakel licht thema in"
+        );
+    });
+}
