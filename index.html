@@ -73,11 +73,9 @@
     <script src="scripts/tabTitle.js" defer></script>
     <script src="scripts/title.js" defer></script>
     <script src="scripts/reveal.js" defer></script>
-    <script src="scripts/dotMatrix.js" defer></script>
     <script src="scripts/marquee.js" defer></script>
     <script src="scripts/typedIntro.js" defer></script>
     <script src="scripts/asciiDonut.js" defer></script>
-    <script src="scripts/uptime.js" defer></script>
     <script src="scripts/navOnScroll.js" defer></script>
     <script src="scripts/projectPreview.js" defer></script>
     <script src="scripts/cardSpotlight.js" defer></script>
@@ -143,24 +141,26 @@
                 <div class="echo echo-far" aria-hidden="true">PORTFOLIO</div>
                 <div class="echo echo-near" aria-hidden="true">PORTFOLIO</div>
                 <h1>PORTFOLIO</h1>
-                <div class="dot-matrix" id="dot-matrix" aria-hidden="true">
-                    <span class="caption tag">dot-matrix / typ iets, beweeg &amp; klik</span>
-                    <canvas></canvas>
-                </div>
             </div>
-            <!-- intro / ascii donut / the three doors to the other screens -->
-            <div class="row lead stage">
-                <div class="cell lead-text">
+            <!-- intro: who I am on the left, the ascii donut on a tilted card on the right -->
+            <div class="row intro">
+                <div class="cell intro-text">
                     <small class="stage-label">{ whoami }</small>
                     <p class="typed-line" id="typed-line" data-text="hey, ik ben dias stas" aria-label="hey, ik ben dias stas"><span class="caret"></span></p>
-                    <p>front-end developer — websites,<br>mobiel &amp; software.</p>
-                    <em>/driven by curiosity/</em>
+                    <p class="intro-statement">front-end developer — ik bouw <mark>websites</mark>, mobiele apps &amp; software.</p>
+                    <ul class="chips" aria-label="Stack"><li>html</li><li>css</li><li>javascript</li></ul>
                 </div>
-                <div class="cell ascii" aria-hidden="true">
-                    <span class="caption tag">ASCII</span>
-                    <pre id="ascii-art"></pre>
+                <div class="cell intro-visual" aria-hidden="true">
+                    <div class="donut-card">
+                        <span class="caption donut-card-label">asciiDonut.js</span>
+                        <div class="ascii"><pre id="ascii-art"></pre></div>
+                        <span class="sticker">/driven by curiosity/</span>
+                    </div>
                 </div>
-                <nav class="link-list doors" aria-label="Secties">
+            </div>
+
+            <!-- the three doors to the other screens: big cards that press in -->
+            <nav class="row doors" aria-label="Secties">
                 <a class="link-row" href="#projecten">
                     <span class="link-number">01</span><span><b class="link-name">Projecten</b><small class="link-url">ls ./projecten — 03 stuks</small></span><span class="link-go">GO &nearr;</span>
                 </a>
@@ -170,18 +170,9 @@
                 <a class="link-row" href="#contact">
                     <span class="link-number">03</span><span><b class="link-name">Contact</b><small class="link-url">dias.stas@pm.me</small></span><span class="link-go">GO &nearr;</span>
                 </a>
-                </nav>
-            </div>
+            </nav>
 
             <div class="row marquee" aria-hidden="true"><span>FRONT-END DEVELOPER * DRIVEN BY CURIOSITY * </span></div>
-
-            <!-- status bar, the uptime counts up (uptime.js) -->
-            <div class="row status" aria-label="Status">
-                <div class="status-item"><span class="caption">rol</span><span class="status-value">front-end dev</span></div>
-                <div class="status-item"><span class="caption">stack</span><span class="status-value">html · css · js</span></div>
-                <div class="status-item"><span class="caption">projecten</span><span class="status-value">03</span></div>
-                <div class="status-item"><span class="caption">uptime</span><span class="status-value" id="uptime">00:00:00</span></div>
-            </div>
 
         </section>
 

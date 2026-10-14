@@ -6,7 +6,7 @@ const revealTargets = [
     ".doors .link-row",
     ".marquee",
     ".status-item",
-    ".dot-matrix",
+    ".intro > *",
     ".project-list .link-row",
     ".preview-pane",
     ".profile",
@@ -22,7 +22,6 @@ const revealTargets = [
     ".feature-list li",
     ".project-links .link-row",
     ".project-visual",
-    ".sitemap-item",
     ".site-footer"
 ].join(", ");
 

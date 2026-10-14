@@ -8,16 +8,15 @@ My portfolio, live at [hello.errornoslash.be](https://hello.errornoslash.be). Re
 
 - 🧱 Brutalist sheet layout — every part of the page is a bordered row, with a sticky nav row on top
 - 📜 One page of full screens — you land on the intro, scroll on to the projects, the about screen and finally contact
-- 🚪 Landing screen — typed intro, the donut and three "doors" (projecten, over, contact), with a status bar underneath
+- 🚪 Neo-brutalist landing screen — the big title, a typed intro with one marked word, the ascii donut on a tilted card with a hard shadow and a sticker, on graph paper, and three "doors" (projecten, over, contact) as cards that press into their shadow
 - 💻 Nav that follows you — the prompt types the command of the screen you are on (`./portfolio`, `ls ./projecten`, `cat over.txt`), that pill lights up and a line under the nav fills while you scroll
 - 🗂️ Project browser — point at (or tab to) a project and a preview with its stack and features appears next to the list
-- 📐 Tall screens get more, not emptier — the big title at the top with a field of dots below it that waves, lights up around your mouse and ripples where you click, working as an LED sign in the middle that spells words, scrolls the long ones and shows whatever you type, the full project story with screenshot and links in the preview, and the socials as big link rows on the over screen
+- 📐 Tall screens get more, not emptier — a bigger intro and donut card on the landing, the full project story with screenshot and links in the preview, and the socials as big link rows on the over screen
 - ✉️ Contact screen — a giant `ZEG HALLO` mail link, a small mail composer (subject + message) that builds the `$ mail -s "…"` command as you type and opens your own mail app, a button that copies the address, and the socials as a big labelled row above the copyright bar
 - 🎬 Everything animates in — rows, cells, tiles and links fade and rise in one after the other as they come into view, and it all replays on every load (also reloads and back / forward)
 - 🔠 Huge title with sliced echoes, letters spread across the row (any word length fits), rising in one letter after the other when they scroll into view
 - ⌨️ Typed hero line with a blinking terminal caret
 - 🍩 Spinning ASCII donut rendered live in JavaScript (no images, no canvas) that tilts towards your mouse
-- ⏱️ Uptime counter in the status bar — how long you have been on the page, like a terminal
 - 🎨 Project rows with a circular clip-path fill on hover
 - 👾 Possessed portrait — moving over the photo turns the cells under the pointer into flickering terminal symbols that fade back into the picture
 - ✨ Profile card that lifts with a hard shadow on hover (or when pressed on a phone) while a spotlight follows the cursor or finger and the asterisk spins
@@ -82,8 +81,6 @@ My portfolio, live at [hello.errornoslash.be](https://hello.errornoslash.be). Re
     ├── marquee.js      # endless scrolling text (every marquee on the page)
     ├── typedIntro.js   # typed line on the landing page
     ├── asciiDonut.js   # spinning ascii donut that follows the mouse
-    ├── uptime.js       # uptime counter in the status bar
-    ├── dotMatrix.js    # dot field / led sign under the title (only when it fits)
     ├── navOnScroll.js  # nav prompt, active pill and progress line while scrolling
     ├── projectPreview.js # preview next to the project list
     ├── copyMail.js     # copy button next to the mail address
@@ -115,10 +112,10 @@ Served with GitHub Pages on a subdomain:
 
 ## Customize
 
-- **Projects** — the `<a class="link-row">` blocks and their `<article class="preview">` in the `#projecten` screen of `index.html`, a page in `pages/projects/` (copy one of the others), and the count in the status bar
+- **Projects** — the `<a class="link-row">` blocks and their `<article class="preview">` in the `#projecten` screen of `index.html`, a page in `pages/projects/` (copy one of the others)
 - **About / skills** — the `.about` block in the `#over` screen of `index.html`
 - **Typed line** — the `data-text` on `#typed-line` in `index.html`
-- **Status bar** — the `.status-item` blocks in `index.html`
+- **Landing intro** — the `.intro` block in the `#home` screen of `index.html`
 - **Tab title** — the `tabCommands` list at the top of `scripts/tabTitle.js`
 - **Donut speed / size** — the constants at the top of `scripts/asciiDonut.js`
 - **Link preview** — edit the Open Graph tags in the `<head>` of every page; to change the image, edit `assets/og-image.svg` and export it as `images/og-image.png` (1200×630, PNG)

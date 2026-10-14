@@ -397,85 +397,192 @@ a {
     }
 }
 
-/* landing: the title takes whatever height is left, so the whole landing page fits the screen */
+/* landing: the big word keeps the height of a normal title, the intro under it takes whatever is left */
 .title.hero {
+    flex: 0 0 clamp(11rem, 30vh, 21rem);
+}
+
+/* landing intro: who I am on the left, the donut card on the right */
+.intro {
     flex: 1 1 0;
-    min-height: 9rem;
-}
-
-/* landing: the word sits at the top, right under the label. On tall screens the space below it holds
-   a field of dots with the ds mark, only when the row is tall enough (dotMatrix.js checks) */
-.title.hero {
-    grid-template-rows: auto auto auto auto minmax(0, 1fr);
-}
-
-/* the dot matrix under the big word: a canvas that dotMatrix.js draws on, separated from the word by a line */
-.dot-matrix {
-    position: relative;
-    display: none;
-    min-height: 0;
-    /* a line from edge to edge between the word and the field, like the rows of the sheet */
-    margin: clamp(0.75rem, 2cqh, 1.5rem) calc(-1 * clamp(0.875rem, 2vw, 1.75rem)) -0.6rem;
-    border-top: var(--line-width) solid var(--line-color);
-    color: var(--foreground);
-    cursor: crosshair;
-    touch-action: pan-y;
-
-    canvas {
-        position: absolute;
-        inset: 0;
-        width: 100%;
-        height: 100%;
-    }
-
-    .tag {
-        top: 0.625rem;
-        left: clamp(0.875rem, 2vw, 1.75rem);
-    }
-}
-
-/* dotMatrix.js adds has-room when there is enough height under the word */
-.title.hero.has-room .dot-matrix {
-    display: block;
-}
-
-/* landing stage: intro / donut / the three doors to the other pages */
-.lead.stage {
-    flex: 0 0 clamp(17rem, 40vh, 28rem);
-    min-height: 0;
-    grid-template-columns: minmax(0, 5fr) minmax(0, 3fr) minmax(0, 4fr);
+    min-height: clamp(14rem, 30vh, 20rem);
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
     grid-template-rows: minmax(0, 1fr);
+
+    &>*+* {
+        border-left: var(--line-width) solid var(--line-color);
+    }
 
     /* small lowercase label above the typed line, like on the name card */
     .stage-label {
         font-size: 0.75rem;
         opacity: 0.7;
     }
+}
+
+/* the text: label, typed line, one statement with a marked word and the stack, in the middle of the cell */
+.intro-text {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    gap: clamp(0.5rem, 1.6vh, 1.125rem);
+    padding: clamp(1rem, 3vh, 2.25rem) clamp(0.875rem, 2vw, 1.75rem);
+
+    p {
+        margin: 0;
+    }
 
     /* one line, sized to the column, so the caret never drops to a new line */
-    .lead-text .typed-line {
-        font-size: clamp(1.75rem, min(3.1vw, 5.5vh), 3.25rem);
+    .typed-line {
+        min-height: 1.2em;
+        font: 800 clamp(1.75rem, min(4.4vw, 6.5vh), 5rem) / 1.1 var(--font-display);
+        letter-spacing: -0.03em;
         white-space: nowrap;
+    }
+
+    .intro-statement {
+        max-width: 34ch;
+        font: 600 clamp(1.125rem, min(2.3vw, 3.4vh), 2.5rem) / 1.25 var(--font-display);
+        letter-spacing: -0.01em;
+    }
+
+    /* the marked word: an inverted block that sits a bit crooked, like a marker stroke */
+    mark {
+        display: inline-block;
+        padding: 0 0.3em;
+        background: var(--foreground);
+        color: var(--background);
+        transform: rotate(-2deg);
     }
 }
 
-/* the doors: three link rows that share the height of the stage */
-.doors .link-row {
-    flex: 1 1 0;
-    min-height: 0;
-    padding-block: 0.25rem;
+/* the right cell: graph paper with the donut card on top of it */
+.intro-visual {
+    position: relative;
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+    padding: clamp(1.25rem, 3.5vh, 2.5rem) clamp(1.25rem, 2.5vw, 2.5rem);
+    background-image:
+        linear-gradient(var(--line-color) var(--line-width), transparent var(--line-width)),
+        linear-gradient(90deg, var(--line-color) var(--line-width), transparent var(--line-width));
+    background-size: 1.5rem 1.5rem;
+    background-position: -1px -1px;
+    background-color: var(--background);
 
-    .link-name {
-        font-size: clamp(1.375rem, min(2.7vw, 5.5vh), 3.25rem);
+    /* the paper lines stay faint, the card is the thing to look at */
+    &::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: var(--background);
+        opacity: 0.75;
+    }
+}
+
+/* the donut card: a square card with a thick border and a hard shadow, turned a little */
+.donut-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    max-height: 34rem;
+    aspect-ratio: 1;
+    max-width: 100%;
+    border: 0.125rem solid var(--foreground);
+    border-radius: 1rem;
+    background: var(--card-background);
+    box-shadow: 0.5rem 0.5rem 0 var(--foreground);
+    transform: rotate(-3deg);
+    transition: transform 0.3s;
+
+    &:hover {
+        transform: rotate(0deg);
     }
 
-    .link-go {
-        padding-inline: 1.125rem;
+    /* the file name in a strip on top, like the title bar of a window */
+    .donut-card-label {
+        flex: none;
+        padding: 0.5rem 0.75rem;
+        border-bottom: 0.125rem solid var(--foreground);
+        font-weight: 700;
     }
 
-    .link-url {
-        display: block;
-        margin: 0.375rem 0 0;
+    .ascii {
+        flex: 1 1 0;
+        min-height: 0;
+
+        /* a bit smaller than in a plain cell, so the donut keeps some room from the edges of the card */
+        pre {
+            font-size: min(calc(100cqw / 23), calc(100cqh / 21));
+        }
+    }
+}
+
+/* the sticker stuck over the bottom corner of the card: an inverted pill, turned the other way */
+.sticker {
+    position: absolute;
+    right: -1.5rem;
+    bottom: -1.25rem;
+    padding: 0.5rem 0.875rem;
+    border: 0.125rem solid var(--foreground);
+    border-radius: 999px;
+    background: var(--foreground);
+    color: var(--background);
+    font: 700 clamp(0.75rem, 1vw, 0.9375rem) var(--font-mono);
+    transform: rotate(8deg);
+    pointer-events: none;
+}
+
+/* the doors: three cards side by side with a hard shadow, pressed in when you point at them */
+.doors {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(0.875rem, 2vw, 1.75rem);
+    padding: clamp(0.875rem, 2.2vh, 1.5rem) calc(clamp(0.875rem, 2vw, 1.75rem) + 0.375rem) calc(clamp(0.875rem, 2.2vh, 1.5rem) + 0.375rem) clamp(0.875rem, 2vw, 1.75rem);
+
+    .link-row {
+        grid-template-columns: minmax(0, 1fr) auto;
+        grid-template-rows: auto 1fr;
+        align-items: end;
+        min-height: clamp(6.5rem, 15vh, 10rem);
+        border: 0.125rem solid var(--foreground);
+        border-radius: 1rem;
+        box-shadow: 0.375rem 0.375rem 0 var(--foreground);
+        transition: color 0.6s, transform 0.2s, box-shadow 0.2s;
+
+        &:last-child {
+            border-bottom: 0.125rem solid var(--foreground);
+        }
+
+        /* pressed: the card moves onto its shadow */
+        &:hover,
+        &:focus-visible {
+            transform: translate(0.375rem, 0.375rem);
+            box-shadow: 0 0 0 var(--foreground);
+        }
+
+        /* the number on top, the name and the GO button at the bottom */
+        .link-number {
+            grid-column: 1 / -1;
+            align-self: start;
+            margin: 0;
+        }
+
+        .link-name {
+            display: block;
+            font-size: clamp(1.375rem, min(2.5vw, 4.5vh), 2.75rem);
+        }
+
+        /* the address on one line under the name */
+        .link-url {
+            display: block;
+            margin: 0.25rem 0 0;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
     }
 }
 
@@ -2383,8 +2490,9 @@ a {
 /* SHORT SCREENS (landing page)   */
 /* ------------------------------ */
 @media (max-height: 760px) and (min-width: 761px) {
-    .lead.stage {
-        flex-basis: 15rem;
+    .doors .link-row {
+        min-height: 5.25rem;
+        padding-block: 0.5rem;
     }
 
     .marquee {
@@ -2403,23 +2511,28 @@ a {
 
 /* tablets and small laptops: the stage columns share the width more evenly and the door numbers step aside */
 @media (min-width: 761px) and (max-width: 1100px) {
-    .lead.stage {
-        grid-template-columns: minmax(0, 4.5fr) minmax(0, 3fr) minmax(0, 4.5fr);
-
-        .lead-text .typed-line {
-            font-size: clamp(1.25rem, 2.6vw, 2rem);
-        }
+    .intro {
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     }
 
-    .doors .link-row {
-        grid-template-columns: 1fr auto;
+    .intro-text .typed-line {
+        font-size: clamp(1.5rem, 3.6vw, 2.5rem);
+    }
 
-        .link-number {
+    /* the cards are narrow here: the name and the GO button stack */
+    .doors .link-row {
+        grid-template-columns: minmax(0, 1fr);
+
+        .link-name {
+            font-size: clamp(1.25rem, 2.4vw, 1.75rem);
+        }
+
+        .link-url {
             display: none;
         }
 
-        .link-name {
-            font-size: clamp(1.25rem, 2.2vw, 1.75rem);
+        .link-go {
+            justify-self: start;
         }
     }
 }
@@ -2471,9 +2584,55 @@ a {
     .status {
         display: none;
     }
+}
 
-    .lead.stage {
-        flex-basis: 12.5rem;
+/* low desktop windows (a 1080p screen at 150% or more): the intro gets lower and the doors become one line each */
+@media (max-height: 680px) and (min-width: 761px) {
+    /* the intro may get lower and the sticker would cover the card */
+    .intro {
+        min-height: 9rem;
+
+        .sticker {
+            display: none;
+        }
+    }
+
+    /* the doors become one line each: name and GO button */
+    .doors .link-row {
+        grid-template-columns: minmax(0, 1fr) auto;
+        grid-template-rows: none;
+        align-items: center;
+        min-height: 0;
+
+        .link-number,
+        .link-url {
+            display: none;
+        }
+    }
+}
+
+/* the lowest desktop windows (a 1080p screen at 200%): the intro text tightens up */
+@media (max-height: 520px) and (min-width: 761px) {
+    .intro {
+        min-height: 7rem;
+    }
+
+    .intro-text {
+        gap: 0.375rem;
+        padding-block: 0.625rem;
+
+        .stage-label,
+        .chips {
+            display: none;
+        }
+    }
+
+    .doors {
+        padding-block: 0.5rem 0.875rem;
+
+        .link-row {
+            padding-block: 0.375rem;
+        }
     }
 }
 
@@ -3060,15 +3219,41 @@ a {
     }
 
 
-    .lead.stage {
+    /* the intro stacks: the text, then the donut card on its paper */
+    .intro {
         flex: none;
         grid-template-columns: 1fr;
-        grid-template-rows: none;
+
+        &>*+* {
+            border-left: none;
+            border-top: var(--line-width) solid var(--line-color);
+        }
     }
 
-    .doors .link-row {
-        flex: none;
-        padding-block: 0.875rem;
+    .intro-text .typed-line {
+        font-size: clamp(1.5rem, 8vw, 2.25rem);
+    }
+
+    .intro-visual {
+        height: 18rem;
+    }
+
+    /* the doors stack too, each card one line */
+    .doors {
+        grid-template-columns: 1fr;
+
+        .link-row {
+            grid-template-columns: auto minmax(0, 1fr) auto;
+            grid-template-rows: none;
+            align-items: center;
+            min-height: 0;
+            padding-block: 0.875rem;
+
+            .link-number {
+                grid-column: auto;
+                align-self: center;
+            }
+        }
     }
 
     .lead>*+* {
