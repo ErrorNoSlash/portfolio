@@ -1468,6 +1468,507 @@ a {
     }
 }
 
+/* project page: the whole page is one screen, nothing scrolls */
+.sheet.project-page {
+    height: calc(100dvh - 2 * var(--page-gap));
+    overflow: hidden;
+
+    .title.compact {
+        flex: 0 0 clamp(7rem, 24vh, 15rem);
+    }
+}
+
+/* the body of a project: story + links / features / a visual of its own, sharing the height that is left */
+.project-body {
+    flex: 1 1 0;
+    min-height: 0;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    grid-template-rows: minmax(0, 1fr);
+
+    &>*+* {
+        border-left: var(--line-width) solid var(--line-color);
+    }
+}
+
+
+
+/* slashyos: the screenshot column gets the same shape as the screenshot (1.5 times as wide as it is high),
+   but never more than about two thirds of the page, so the whole picture shows without being cut */
+@media (min-width: 761px) {
+    .project-body.project-slashyos {
+        container-type: size;
+        display: flex;
+
+        /* only this story column is narrow, so only it gets the narrow layout (@container story) */
+        .project-story {
+            flex: 1 1 0;
+            container: story / inline-size;
+        }
+
+        .shot-frame {
+            flex: 0 0 min(100cqh * 1.5, 66cqw);
+        }
+    }
+
+    /* tall screens: the body is never higher than the screenshot needs, the title row takes the rest */
+    .sheet.project-page:has(.project-slashyos) .title.compact {
+        flex-grow: 1;
+    }
+
+    .project-body.project-slashyos {
+        flex: 0 1 calc((100vw - 2 * var(--page-gap)) * 0.44);
+    }
+}
+
+/* left: the text on top, the links at the bottom */
+.project-story {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    min-height: 0;
+
+    .project-text {
+        flex: none;
+        display: flex;
+        flex-direction: column;
+        gap: clamp(0.5rem, 1.6vh, 1rem);
+        min-height: 0;
+        overflow: hidden;
+        padding: clamp(0.875rem, 2.5vh, 1.75rem) clamp(0.875rem, 2vw, 1.75rem);
+
+        p {
+            margin: 0;
+            font: 600 clamp(1.0625rem, min(1.6vw, 2.6vh), 1.75rem) / 1.25 var(--font-display);
+            letter-spacing: -0.01em;
+        }
+
+        .lead-body {
+            font: 400 clamp(0.75rem, min(0.95vw, 1.6vh), 0.9375rem) / 1.6 var(--font-mono);
+            opacity: 0.8;
+        }
+
+        a {
+            text-decoration: underline;
+            text-underline-offset: 0.1875rem;
+        }
+    }
+
+    /* the links as a strip of cells along the bottom */
+    .project-links {
+        flex: none;
+        display: grid;
+        grid-auto-flow: column;
+        grid-auto-columns: minmax(0, 1fr);
+        border-top: var(--line-width) solid var(--line-color);
+
+        .link-row {
+            border-bottom: none;
+            grid-template-columns: minmax(0, 1fr) auto;
+            gap: 0.75rem;
+
+            & + .link-row {
+                border-left: var(--line-width) solid var(--line-color);
+            }
+            padding-block: clamp(0.375rem, 1.3vh, 0.875rem);
+        }
+
+        .link-name {
+            font-size: clamp(1.25rem, min(2.2vw, 3.6vh), 2.5rem);
+        }
+
+        /* long addresses end in ... so the GO button always fits */
+        .link-url {
+            display: block;
+            margin: 0.25rem 0 0;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .link-go {
+            padding: 0.25rem 1rem;
+            font-size: 1.0625rem;
+        }
+    }
+}
+
+/* the features: tiles in two columns that share the height between the text and the links */
+.project-features {
+    flex: 1 1 0;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    min-height: 0;
+    border-top: var(--line-width) solid var(--line-color);
+
+    .project-features-head {
+        padding: 0.625rem clamp(0.875rem, 2vw, 1.75rem);
+        border-bottom: var(--line-width) solid var(--line-color);
+    }
+
+    .feature-list {
+        flex: 1 1 auto;
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        grid-auto-rows: minmax(0, 1fr);
+        min-height: 0;
+
+        li {
+            min-height: 0;
+            border-bottom: none;
+            grid-template-columns: 3.25rem 1fr;
+
+            &:nth-child(even) {
+                border-left: var(--line-width) solid var(--line-color);
+            }
+
+            &:nth-child(n + 3) {
+                border-top: var(--line-width) solid var(--line-color);
+            }
+
+            /* an odd one out at the end takes the whole width */
+            &:last-child:nth-child(odd) {
+                grid-column: span 2;
+            }
+
+            align-items: center;
+            transition: background 0.3s, color 0.3s;
+
+            &:hover {
+                background: var(--foreground);
+                color: var(--background);
+            }
+        }
+
+        .feature-number {
+            padding: 0.5rem;
+            font: 900 clamp(1rem, 1.6vw, 1.5rem) / 1 var(--font-display);
+            opacity: 0.4;
+        }
+
+        .feature-text {
+            align-self: stretch;
+            display: flex;
+            align-items: center;
+            padding: 0.5rem clamp(0.75rem, 1.4vw, 1.25rem);
+            font-size: clamp(0.9375rem, min(1.35vw, 2.3vh), 1.375rem);
+        }
+    }
+}
+
+/* right: the visual, different on every project */
+.project-visual {
+    position: relative;
+    min-width: 0;
+    min-height: 0;
+    overflow: hidden;
+}
+
+/* personal-website: a small map of the home page, every screen drawn as lines, pointing at one inverts it, clicking goes there */
+.sitemap {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: repeat(2, minmax(0, 1fr));
+
+    .sitemap-item {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+        min-height: 0;
+        padding: clamp(2rem, 5vh, 2.75rem) clamp(0.875rem, 1.6vw, 1.5rem) clamp(0.75rem, 2vh, 1.25rem);
+        transition: background 0.3s, color 0.3s;
+
+        &:nth-child(odd) {
+            border-left: var(--line-width) solid var(--line-color);
+        }
+
+        &:nth-child(n + 4) {
+            border-top: var(--line-width) solid var(--line-color);
+        }
+
+        &:hover,
+        &:focus-visible {
+            background: var(--foreground);
+            color: var(--background);
+        }
+    }
+
+    .sitemap-label {
+        display: flex;
+        align-items: baseline;
+        gap: 0.625rem;
+
+        b {
+            font: 800 clamp(1.125rem, min(1.8vw, 3vh), 1.875rem) / 1 var(--font-display);
+            text-transform: uppercase;
+            letter-spacing: -0.02em;
+        }
+    }
+}
+
+/* one drawing: a grid of outlined boxes, the filled ones are the inverted parts of that screen */
+.sketch {
+    flex: 1 1 0;
+    min-height: 0;
+    display: grid;
+    gap: 0.1875rem;
+
+    i {
+        border: var(--line-width) solid currentColor;
+        opacity: 0.55;
+        transition: opacity 0.3s;
+    }
+
+    i.fill {
+        background: currentColor;
+    }
+
+    i.w2 {
+        grid-column: span 2;
+    }
+
+    i.w3 {
+        grid-column: span 3;
+    }
+
+    i.h3 {
+        grid-row: span 3;
+    }
+}
+
+.sitemap-item:hover .sketch i {
+    opacity: 1;
+}
+
+.sketch-landing {
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: 0.4fr 1.6fr 1.6fr 0.3fr 0.4fr;
+}
+
+.sketch-projects {
+    grid-template-columns: 7fr 5fr;
+    grid-template-rows: 0.4fr 1fr 3fr 0.3fr;
+}
+
+.sketch-about {
+    grid-template-columns: 4fr 8fr;
+    grid-template-rows: 0.4fr 1.4fr 1fr 1.6fr;
+}
+
+.sketch-contact {
+    grid-template-columns: 8fr 4fr;
+    grid-template-rows: 0.4fr 1.4fr 1.8fr 0.35fr 0.35fr;
+}
+
+/* slashyos: the screenshot fills the whole right half, with the possessed symbols on top */
+.shot-frame {
+    display: flex;
+}
+
+.project-shot {
+    position: relative;
+    flex: 1;
+    margin: 0;
+    overflow: hidden;
+
+    img {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        filter: grayscale(1) contrast(1.15);
+        transition: filter 0.6s;
+    }
+
+    &:hover img {
+        filter: none;
+    }
+
+    .tag {
+        z-index: 2;
+    }
+}
+
+/* blog: a markdown file on top, the page zola makes from it below */
+.build {
+    display: flex;
+    flex-direction: column;
+    padding-top: 2rem;
+
+    .build-source {
+        flex: 1 1 0;
+        min-height: 0;
+        overflow: hidden;
+        margin: 0;
+        padding: 0.75rem clamp(0.875rem, 2vw, 1.75rem);
+        font: 400 clamp(0.6875rem, min(0.95vw, 1.55vh), 0.9375rem) / 1.45 var(--font-mono);
+        opacity: 0.8;
+    }
+
+    .build-step {
+        display: flex;
+        align-items: center;
+        gap: 0.25rem;
+        padding: 0.5rem clamp(0.875rem, 2vw, 1.75rem);
+        border-block: var(--line-width) solid var(--line-color);
+        font-weight: 700;
+
+        .build-arrow {
+            margin-left: auto;
+            font: 900 1.25rem / 1 var(--font-display);
+        }
+    }
+
+    /* the page that comes out: the inverted block, it rises in like the panels */
+    .build-result {
+        flex: 1 1 0;
+        min-height: 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 0.625rem;
+        overflow: hidden;
+        padding: 0.875rem clamp(0.875rem, 2vw, 1.75rem);
+        background: var(--foreground);
+        color: var(--background);
+        animation: rise 0.6s 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+
+        .chips li {
+            border-color: var(--background);
+        }
+
+        p {
+            margin: 0;
+            font-size: clamp(0.75rem, 1vw, 0.9375rem);
+        }
+    }
+
+    .build-title {
+        font: 900 clamp(1.5rem, min(3vw, 5vh), 3.25rem) / 0.95 var(--font-display);
+        letter-spacing: -0.03em;
+    }
+}
+
+/* short screens (laptops): a lower title and tighter rows, so the whole project still fits without scrolling */
+@media (max-height: 940px) and (min-width: 761px) {
+    .sheet.project-page .title.compact {
+        flex-basis: 17vh;
+    }
+
+    .project-story {
+        .project-text {
+            gap: 0.5rem;
+            padding-block: 0.75rem;
+
+            p {
+                font-size: clamp(1rem, 2.4vh, 1.25rem);
+            }
+
+            .lead-body {
+                font-size: 0.6875rem;
+                line-height: 1.5;
+            }
+        }
+
+        .project-links {
+            .link-row {
+                padding-block: 0.25rem;
+            }
+
+            .link-name {
+                font-size: 1.25rem;
+            }
+        }
+    }
+
+    .project-features .feature-list .feature-text {
+        font-size: clamp(0.8125rem, 1.8vh, 1rem);
+    }
+
+    .build {
+        .build-source {
+            flex-grow: 1.3;
+            padding-block: 0.5rem;
+            font-size: 0.6875rem;
+            line-height: 1.35;
+        }
+
+        .build-result {
+            flex: none;
+            gap: 0.375rem;
+        }
+    }
+}
+
+/* very short screens (768p laptops): a bit smaller still */
+@media (max-height: 800px) and (min-width: 761px) {
+    .project-story .project-text {
+        gap: 0.375rem;
+
+        p {
+            font-size: 1rem;
+        }
+
+        .lead-body {
+            line-height: 1.4;
+        }
+    }
+
+    .build .build-source {
+        font-size: 0.625rem;
+    }
+}
+
+/* a narrow story column (slashyos next to its big screenshot): the links stack as rows instead of a strip */
+@container story (max-width: 46rem) {
+    /* stacked links need height, so short screens keep the strip */
+    @media (min-height: 821px) {
+    .project-story .project-links {
+        grid-auto-flow: row;
+
+        .link-row {
+            padding-block: 0.375rem;
+        }
+
+        .link-row + .link-row {
+            border-left: none;
+            border-top: var(--line-width) solid var(--line-color);
+        }
+
+        .link-name {
+            font-size: clamp(1.125rem, 4cqi, 1.75rem);
+        }
+    }
+    }
+
+    .project-story .project-links .link-go {
+        padding-inline: 0.75rem;
+    }
+
+    /* the features in one column, each one a row */
+    .project-features .feature-list {
+        grid-template-columns: minmax(0, 1fr);
+
+        li:nth-child(n),
+        li:last-child:nth-child(odd) {
+            grid-column: auto;
+            border-left: none;
+        }
+
+        li:nth-child(n + 2) {
+            border-top: var(--line-width) solid var(--line-color);
+        }
+
+        .feature-text {
+            font-size: clamp(0.875rem, 3cqi, 1.25rem);
+        }
+    }
+
+    .project-story .project-text p {
+        font-size: clamp(1rem, 4.2cqi, 1.75rem);
+    }
+}
+
 /* overlay: blurred veil + panel (the menu on phones) */
 .veil {
     position: fixed;
@@ -1792,6 +2293,19 @@ a {
 
 .title .echo-far span {
     animation-delay: calc(var(--start, 0.9s) + 0.2s + var(--i, 0) * 0.045s);
+}
+
+/* reveal: an element waits hidden a bit lower, then fades and rises in when it comes into view (reveal.js) */
+.will-reveal {
+    opacity: 0;
+    transform: translateY(1.25rem);
+}
+
+.will-reveal.is-revealed {
+    opacity: 1;
+    transform: none;
+    transition: opacity 0.7s cubic-bezier(0.2, 0.8, 0.2, 1), transform 0.7s cubic-bezier(0.2, 0.8, 0.2, 1);
+    transition-delay: calc(var(--reveal-i, 0) * 70ms);
 }
 
 /* blink: fades the caret in and out */
@@ -2166,6 +2680,72 @@ a {
 
     .content .profile-card {
         min-height: 0;
+    }
+
+    .sheet.project-page {
+        height: auto;
+        overflow: visible;
+    }
+
+    .project-body,
+    .project-body.project-slashyos,
+    .project-body.project-blog {
+        grid-template-columns: 1fr;
+        grid-template-rows: none;
+        flex: none;
+
+        &>*+* {
+            border-left: none;
+            border-top: var(--line-width) solid var(--line-color);
+        }
+    }
+
+    .project-story .project-text,
+    .project-features,
+    .project-features .feature-list {
+        flex: none;
+        overflow: visible;
+    }
+
+    .project-features .feature-list {
+        grid-template-columns: 1fr;
+
+        li:nth-child(n),
+        li:last-child:nth-child(odd) {
+            border-left: none;
+            grid-column: auto;
+        }
+
+        li:nth-child(n + 2) {
+            border-top: var(--line-width) solid var(--line-color);
+        }
+    }
+
+    .project-story .project-links {
+        grid-auto-flow: row;
+
+        .link-row + .link-row {
+            border-left: none;
+            border-top: var(--line-width) solid var(--line-color);
+        }
+    }
+
+    .project-features .feature-list li {
+        flex: none;
+        padding-block: 0.25rem;
+    }
+
+    .project-visual.sitemap {
+        height: 24rem;
+    }
+
+    .shot-frame {
+        height: 16rem;
+    }
+
+    .build .build-source,
+    .build .build-result {
+        flex: none;
     }
 
     .compose {

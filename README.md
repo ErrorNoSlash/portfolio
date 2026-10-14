@@ -13,6 +13,7 @@ My portfolio, live at [hello.errornoslash.be](https://hello.errornoslash.be). Re
 - 🗂️ Project browser — point at (or tab to) a project and a preview with its stack and features appears next to the list
 - 📐 Tall screens get more, not emptier — the big title at the top with a field of dots below it that waves, lights up around your mouse and ripples where you click, working as an LED sign in the middle that spells words, scrolls the long ones and shows whatever you type, the full project story with screenshot and links in the preview, and the socials as big link rows on the over screen
 - ✉️ Contact screen — a giant `ZEG HALLO` mail link, a small mail composer (subject + message) that builds the `$ mail -s "…"` command as you type and opens your own mail app, a button that copies the address, and the socials as a big labelled row above the copyright bar
+- 🎬 Everything animates in — rows, cells, tiles and links fade and rise in one after the other as they come into view, and it all replays on every load (also reloads and back / forward)
 - 🔠 Huge title with sliced echoes, letters spread across the row (any word length fits), rising in one letter after the other when they scroll into view
 - ⌨️ Typed hero line with a blinking terminal caret
 - 🍩 Spinning ASCII donut rendered live in JavaScript (no images, no canvas) that tilts towards your mouse
@@ -20,7 +21,7 @@ My portfolio, live at [hello.errornoslash.be](https://hello.errornoslash.be). Re
 - 🎨 Project rows with a circular clip-path fill on hover
 - 👾 Possessed portrait — moving over the photo turns the cells under the pointer into flickering terminal symbols that fade back into the picture
 - ✨ Profile card that lifts with a hard shadow on hover (or when pressed on a phone) while a spotlight follows the cursor or finger and the asterisk spins
-- 📂 A page per project with the stack, numbered features and links
+- 📂 A page per project that fits one screen: the story and links, the numbered features and a visual of its own (a clickable map of the home page, the possessed SlashyOS screenshot, a markdown-to-page example for the blog)
 - 📱 Mobile menu — a `menu` pill opens a terminal-style panel with every page and the socials as an icon row
 - 🎞️ Clean page transition — a curtain wipes up between the pages
 - ⏳ Quick terminal-style preloader with a progress bar
@@ -76,6 +77,7 @@ My portfolio, live at [hello.errornoslash.be](https://hello.errornoslash.be). Re
     ├── getYear.js      # dynamic footer year
     ├── tabTitle.js     # typing and deleting text in the browser tab
     ├── title.js        # spreads the big title letters and times their rise
+    ├── reveal.js       # rows, tiles and links fade and rise in when they come into view, on every load
     ├── marquee.js      # endless scrolling text (every marquee on the page)
     ├── typeLine.js     # typed line on the landing page
     ├── ascii.js        # spinning ascii donut that follows the mouse
@@ -87,7 +89,7 @@ My portfolio, live at [hello.errornoslash.be](https://hello.errornoslash.be). Re
     ├── compose.js      # mail composer on the contact screen
     ├── menu.js         # menu panel on phones
     ├── cardSpotlight.js # spotlight on the profile card
-    ├── pfpSymbols.js   # possessed portrait: symbols flicker over the photo where you move
+    ├── pfpSymbols.js   # possessed pictures (portrait, slashyos screenshot): symbols flicker where you move
     └── notFound.js     # shows the missing path on the 404 page
 ```
 

@@ -45,3 +45,18 @@ const titleObserver = new IntersectionObserver(function (entries) {
 titles.forEach(function (title) {
     titleObserver.observe(title);
 });
+
+/* back / forward can bring the page back from the browser cache: let the titles rise again */
+window.addEventListener("pageshow", function (e) {
+    if (!e.persisted) return;
+
+    titles.forEach(function (title) {
+        title.classList.remove("is-visible");
+        title.querySelectorAll("span").forEach(function (span) {
+            span.style.animation = "none";
+            span.getBoundingClientRect();
+            span.style.animation = "";
+        });
+        titleObserver.observe(title);
+    });
+});

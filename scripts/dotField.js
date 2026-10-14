@@ -73,9 +73,11 @@ const rippleSpeed = 0.45;
 const rippleWidth = 70;
 const rippleLife = 2200;
 const signStartDelay = 1400;
-const signWipeIn = 700;
-const signHold = 2200;
-const signWipeOut = 450;
+const signWipeIn = 900;
+const signHold = 2400;
+const signWipeOut = 700;
+const signPopTime = 260;
+const signScanTime = 1100;
 const signScrollSpeed = 14;
 const signTypedHold = 5000;
 const signTypedMax = 24;
@@ -89,7 +91,7 @@ let ripples = [];
 let isFieldVisible = false;
 let isFieldDrawing = false;
 let messageIndex = 0;
-let messageStart = 0;
+let messageStart = performance.now() + signStartDelay;
 let signTypedText = "";
 let signLastTyped = 0;
 const fieldStartTime = performance.now();
@@ -160,30 +162,55 @@ function signLights(time) {
     }
 
     const message = textDots(signMessages[messageIndex]);
-    const elapsed = isFieldStill ? signWipeIn : time - messageStart;
-    const fits = message.width <= dotColumns - 4;
-    let left;
-    let fade = 1;
-    let reveal = 1;
+    const elapsed = isFieldStill ? signWipeIn + signPopTime : time - messageStart;
+    if (elapsed < 0) return lights;
 
-    if (fits) {
-        // short words: wipe in from the left, wait, fade out
-        left = Math.floor((dotColumns - message.width) / 2);
-        reveal = Math.min(elapsed / signWipeIn, 1);
-        fade = 1 - Math.min(Math.max((elapsed - signWipeIn - signHold) / signWipeOut, 0), 1);
-        if (!isFieldStill && elapsed > signWipeIn + signHold + signWipeOut) nextMessage(time);
-    } else {
-        // long ones scroll by from right to left, like an led sign
-        left = dotColumns - Math.floor(elapsed / 1000 * signScrollSpeed);
-        if (!isFieldStill && left < -message.width) nextMessage(time);
-    }
+    const fits = message.width <= dotColumns - 4;
+    const left = fits
+        ? Math.floor((dotColumns - message.width) / 2)
+        : dotColumns - Math.floor(elapsed / 1000 * signScrollSpeed);
+
+    // a bright scan line sweeps over the word while it is held
+    const holdTime = elapsed - signWipeIn - signPopTime;
+    const scanColumn = (holdTime % signScanTime) / signScanTime * (message.width + 8) - 4;
 
     message.dots.forEach(function (dot) {
         const column = left + dot.column;
         if (column < 0 || column >= dotColumns) return;
-        if ((dot.column + 1) / message.width > reveal) return;
-        lights.set((top + dot.row) * dotColumns + column, fade);
+
+        let light = 1;
+        if (fits) {
+            // in: column by column every dot pops up, a bit too big first, then settles
+            const popStart = (dot.column / message.width) * signWipeIn;
+            const pop = Math.min(Math.max((elapsed - popStart) / signPopTime, 0), 1);
+            if (pop === 0) return;
+            light = pop < 1 ? Math.sin(pop * Math.PI * 0.75) * 1.25 : 1;
+
+            // while it pops it flickers, like a display switching on
+            if (pop < 1 && Math.random() < 0.25) light *= 0.35;
+
+            // out: column by column the dots shrink away
+            const outStart = signWipeIn + signPopTime + signHold + (dot.column / message.width) * signWipeOut;
+            const out = Math.min(Math.max((elapsed - outStart) / signPopTime, 0), 1);
+            light *= 1 - out;
+        }
+
+        // the scan line makes the dots under it a little bigger
+        if (holdTime > 0 || !fits) {
+            const scanDistance = Math.abs(dot.column - (fits ? scanColumn : (elapsed / 70) % (message.width + 16) - 8));
+            if (scanDistance < 2.5) light *= 1 + (1 - scanDistance / 2.5) * 0.4;
+        }
+
+        if (light > 0.01) lights.set((top + dot.row) * dotColumns + column, light);
     });
+
+    // the next word starts when this one has gone, or scrolled out
+    if (!isFieldStill) {
+        const isDone = fits
+            ? elapsed > signWipeIn + signPopTime * 2 + signHold + signWipeOut
+            : left < -message.width;
+        if (isDone) nextMessage(time);
+    }
     return lights;
 }
 
@@ -239,7 +266,7 @@ function drawField(time) {
             const light = lights.get(row * dotColumns + column) || 0;
             if (light > 0) {
                 radius = radius + (signRadius - radius) * light + ring * 2;
-                alpha = Math.max(alpha, light);
+                alpha = Math.max(alpha, Math.min(light, 1));
             }
 
             dotContext.globalAlpha = Math.min(alpha, 1);
