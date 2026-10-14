@@ -2,7 +2,8 @@
   of cells, moving the mouse (or a finger) over it wakes the cells under the pointer, they flicker through terminal symbols
   for a moment and then fade back into the picture*/
 const pfpSymbolSet = "!@#$%&*+=?/\\<>{}[]~^:;|01ds";
-const pfpCellSize = 26;
+// the cell size grows with the page on very wide screens (26 pixels at 100%)
+const pfpCellSize = 26 * parseFloat(getComputedStyle(document.documentElement).fontSize) / 16;
 const pfpReach = 2;
 const pfpChance = 0.55;
 const pfpInvertChance = 0.3;

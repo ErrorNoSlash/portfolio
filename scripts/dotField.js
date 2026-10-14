@@ -65,12 +65,14 @@ const signFont = {
     "_": "00000|00000|00000|00000|00000|00000|11111"
 };
 
-const dotSpacing = 22;
-const dotRadius = 1.8;
-const signRadius = 8.5;
-const pointerReach = 150;
-const rippleSpeed = 0.45;
-const rippleWidth = 70;
+// sizes in rem (x 16 pixels), so the field grows with the page on very wide screens
+const fieldRem = parseFloat(getComputedStyle(document.documentElement).fontSize) / 16;
+const dotSpacing = 22 * fieldRem;
+const dotRadius = 1.8 * fieldRem;
+const signRadius = 8.5 * fieldRem;
+const pointerReach = 150 * fieldRem;
+const rippleSpeed = 0.45 * fieldRem;
+const rippleWidth = 70 * fieldRem;
 const rippleLife = 2200;
 const signStartDelay = 1400;
 const signWipeIn = 900;
@@ -81,7 +83,7 @@ const signScanTime = 1100;
 const signScrollSpeed = 14;
 const signTypedHold = 5000;
 const signTypedMax = 24;
-const minimumFieldHeight = 190;
+const minimumFieldHeight = 190 * fieldRem;
 
 let dotColumns = 0;
 let dotRows = 0;
