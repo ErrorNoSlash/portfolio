@@ -181,6 +181,13 @@ a {
         overflow: hidden;
     }
 
+    /* a command too long for the row ends in ... (the caret stays visible) */
+    .nav-line {
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
     /* scroll progress: a line under the nav that fills while you scroll down (scrollSpy.js sets --progress) */
     &::after {
         content: "";
@@ -2840,6 +2847,94 @@ a {
     }
 }
 
+/* phones: the nav prompt drops the user name, so the command itself has room */
+@media (max-width: 480px) {
+    .nav .nav-user {
+        display: none;
+    }
+}
+
+/* touch screens: 16px text in the message box so the phone does not zoom in when you tap it */
+@media (hover: none) {
+    .compose textarea {
+        font-size: 1rem;
+    }
+}
+
+/* ------------------------------ */
+/* TABLETS HELD UPRIGHT           */
+/* ------------------------------ */
+/* an ipad standing up is too narrow for things side by side: the project list loses its preview (the rows show
+   their own text), and the project pages stack and scroll, like on a phone */
+@media (min-width: 761px) and (max-width: 1100px) and (orientation: portrait) {
+    .browser {
+        grid-template-columns: 1fr;
+
+        .preview-pane {
+            display: none;
+        }
+
+        .project-list .link-row .link-about {
+            display: block;
+        }
+    }
+
+    .project-list .link-row.is-current {
+        box-shadow: none;
+    }
+
+    .sheet.project-page {
+        height: auto;
+        overflow: visible;
+
+        .title.compact {
+            flex: 0 0 clamp(9rem, 18vh, 14rem);
+        }
+    }
+
+    .project-body,
+    .project-body.project-slashyos {
+        flex: none;
+        display: grid;
+        grid-template-columns: 1fr;
+        grid-template-rows: none;
+        container-type: normal;
+
+        &>*+* {
+            border-left: none;
+            border-top: var(--line-width) solid var(--line-color);
+        }
+    }
+
+    .project-story .project-text,
+    .project-features,
+    .project-features .feature-list {
+        flex: none;
+        overflow: visible;
+    }
+
+    .project-features .feature-list {
+        grid-auto-rows: auto;
+
+        li {
+            padding-block: 0.5rem;
+        }
+    }
+
+    .project-visual.sitemap {
+        height: 34rem;
+    }
+
+    .shot-frame {
+        aspect-ratio: 1600 / 1066;
+    }
+
+    .build .build-source,
+    .build .build-result {
+        flex: none;
+    }
+}
+
 /* ------------------------------ */
 /* MOBILE (up to ~760px width)    */
 /* ------------------------------ */
@@ -3117,15 +3212,15 @@ a {
         border-top: var(--line-width) solid var(--line-color);
     }
 
+    /* the card decides the height, the photo follows it */
     .profile {
         flex-direction: row;
-        height: 22dvh;
-        min-height: 10rem;
+        min-height: max(10rem, 22dvh);
 
         .profile-photo {
             flex: none;
             width: 38%;
-            height: 100%;
+            height: auto;
             min-height: 0;
             border-bottom: none;
             border-right: var(--line-width) solid var(--line-color);

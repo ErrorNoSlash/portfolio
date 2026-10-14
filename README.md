@@ -35,6 +35,7 @@ My portfolio, live at [hello.errornoslash.be](https://hello.errornoslash.be). Re
 - 🔗 Link preview — Open Graph and Twitter tags with a 1200×630 image, so shared links show a card
 - 📅 Footer year updates automatically via JavaScript
 - 🖥️ Tested on 4K, 1440p and 1080p screens at every Windows scale from 25% to 200% — very wide windows scale the whole page up, very short ones tighten every screen so it still fits
+- 📱 Tested on phones from 320px (iPhone SE) to 430px (Pro Max), Android sizes and iPads — the nav prompt shortens, cards grow with their text, and upright tablets stack the project pages
 - 📱 Fully responsive
 
 ## Projects
