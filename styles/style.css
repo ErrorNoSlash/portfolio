@@ -1592,102 +1592,122 @@ a {
     overflow: hidden;
 }
 
-/* personal-website: a small map of the home page, every screen drawn as lines, pointing at one inverts it, clicking goes there */
-.sitemap {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    grid-template-rows: repeat(2, minmax(0, 1fr));
+/* personal-website: the real home page in a small browser window, the pills on top jump it to a screen */
+.site-preview {
+    display: flex;
+    flex-direction: column;
 
-    .sitemap-item {
+    .site-preview-bar {
         display: flex;
-        flex-direction: column;
-        gap: 0.75rem;
-        min-height: 0;
-        padding: clamp(2rem, 5vh, 2.75rem) clamp(0.875rem, 1.6vw, 1.5rem) clamp(0.75rem, 2vh, 1.25rem);
-        transition: background 0.3s, color 0.3s;
-
-        &:nth-child(odd) {
-            border-left: var(--line-width) solid var(--line-color);
-        }
-
-        &:nth-child(n + 4) {
-            border-top: var(--line-width) solid var(--line-color);
-        }
-
-        &:hover,
-        &:focus-visible {
-            background: var(--foreground);
-            color: var(--background);
-        }
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.5rem 1rem;
+        padding: 0.625rem clamp(0.875rem, 2vw, 1.75rem);
+        border-bottom: var(--line-width) solid var(--line-color);
     }
 
-    .sitemap-label {
+    .site-preview-tabs {
         display: flex;
-        align-items: baseline;
-        gap: 0.625rem;
+        flex-wrap: wrap;
+        gap: 0.375rem;
 
-        b {
-            font: 800 clamp(1.125rem, min(1.8vw, 3vh), 1.875rem) / 1 var(--font-display);
-            text-transform: uppercase;
-            letter-spacing: -0.02em;
+        .pill {
+            height: 1.75rem;
+            font-size: 0.8125rem;
         }
     }
 }
 
-/* one drawing: a grid of outlined boxes, the filled ones are the inverted parts of that screen */
-.sketch {
+/* the window: the page inside is drawn at laptop size and scaled down (sitePreview.js), it can not be clicked.
+   a framed window with some room around it, so it does not melt into the page around it */
+.site-preview-window {
+    --frame-gap: clamp(0.875rem, 2vw, 1.75rem);
+    position: relative;
     flex: 1 1 0;
     min-height: 0;
-    display: grid;
-    gap: 0.1875rem;
+    overflow: hidden;
+    margin: var(--frame-gap);
+    border: var(--line-width) solid var(--line-color);
+    border-radius: 1rem;
 
-    i {
-        border: var(--line-width) solid currentColor;
-        opacity: 0.55;
+    iframe {
+        position: absolute;
+        top: 0;
+        left: 0;
+        border: 0;
+        transform-origin: 0 0;
+        pointer-events: none;
         transition: opacity 0.3s;
     }
 
-    i.fill {
-        background: currentColor;
-    }
-
-    i.w2 {
-        grid-column: span 2;
-    }
-
-    i.w3 {
-        grid-column: span 3;
-    }
-
-    i.h3 {
-        grid-row: span 3;
+    /* while it jumps to another screen the page is faded out (sitePreview.js) */
+    &.is-switching iframe {
+        opacity: 0;
     }
 }
 
-/* pointing at a screen makes its drawing darker */
-.sitemap-item:hover .sketch i {
-    opacity: 1;
+/* personal-website: the numbers about the site, the same bar as on the landing page */
+.project-stats {
+    display: grid;
+    flex: none;
+    border-top: var(--line-width) solid var(--line-color);
+
+    &>*+* {
+        border-left: var(--line-width) solid var(--line-color);
+    }
 }
 
-/* the shapes of the four screens: columns and rows like the real ones */
-.sketch-landing {
-    grid-template-columns: repeat(3, 1fr);
-    grid-template-rows: 0.4fr 1.6fr 1.6fr 0.3fr 0.4fr;
+/* personal-website: every feature tile shows its number big at the top and the text at the bottom */
+.project-personal-website .project-features .feature-list li {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr;
+    align-items: stretch;
+
+    .feature-number {
+        padding: 0.875rem clamp(0.875rem, 1.6vw, 1.5rem) 0;
+        text-align: left;
+        font-size: clamp(1.75rem, 3vw, 3.5rem);
+        opacity: 0.25;
+    }
+
+    .feature-text {
+        align-items: flex-end;
+        padding: 0.5rem clamp(0.875rem, 1.6vw, 1.5rem) 0.875rem;
+        border-left: none;
+        font-size: clamp(1rem, min(1.5vw, 2.4vh), 1.5rem);
+    }
+
+    &:hover .feature-number {
+        opacity: 0.6;
+    }
 }
 
-.sketch-projects {
-    grid-template-columns: 7fr 5fr;
-    grid-template-rows: 0.4fr 1fr 3fr 0.3fr;
-}
+/* shorter windows: the numbers go back next to the text, so the tiles fit */
+@media (max-height: 940px) {
+    .project-personal-website .project-features .feature-list li {
+        grid-template-columns: 3.25rem 1fr;
+        grid-template-rows: none;
+        align-items: center;
 
-.sketch-about {
-    grid-template-columns: 4fr 8fr;
-    grid-template-rows: 0.4fr 1.4fr 1fr 1.6fr;
-}
+        .feature-number {
+            padding: 0.25rem;
+            text-align: center;
+            font-size: 1rem;
+            opacity: 0.4;
+        }
 
-.sketch-contact {
-    grid-template-columns: 8fr 4fr;
-    grid-template-rows: 0.4fr 1.4fr 1.8fr 0.35fr 0.35fr;
+        .feature-text {
+            align-items: center;
+            padding-block: 0.25rem;
+            border-left: var(--line-width) solid var(--line-color);
+            font-size: clamp(0.8125rem, 1.8vh, 1rem);
+        }
+    }
+
+    .project-stats .status-item {
+        padding-block: 0.375rem;
+    }
 }
 
 /* slashyos: the screenshot fills the whole right half, with the possessed symbols on top */
@@ -2812,8 +2832,8 @@ a {
         }
     }
 
-    .project-visual.sitemap {
-        height: 34rem;
+    .project-visual.site-preview {
+        height: 40rem;
     }
 
     .screenshot-frame {
@@ -3004,8 +3024,8 @@ a {
         padding-block: 0.25rem;
     }
 
-    .project-visual.sitemap {
-        height: 24rem;
+    .project-visual.site-preview {
+        height: 26rem;
     }
 
     .screenshot-frame {

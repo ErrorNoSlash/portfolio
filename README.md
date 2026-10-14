@@ -21,7 +21,7 @@ My portfolio, live at [hello.errornoslash.be](https://hello.errornoslash.be). Re
 - 🎨 Project rows with a circular clip-path fill on hover
 - 👾 Possessed portrait — moving over the photo turns the cells under the pointer into flickering terminal symbols that fade back into the picture
 - ✨ Profile card that lifts with a hard shadow on hover (or when pressed on a phone) while a spotlight follows the cursor or finger and the asterisk spins
-- 📂 A page per project that fits one screen: the story and links, the numbered features and a visual of its own (a clickable map of the home page, the possessed SlashyOS screenshot, a markdown-to-page example for the blog)
+- 📂 A page per project that fits one screen: the story and links, the numbered features and a visual of its own (a live, scaled-down preview of the home page that tours its screens, the possessed SlashyOS screenshot, a markdown-to-page example for the blog)
 - 📱 Mobile menu — a `menu` pill opens a terminal-style panel with every page and the socials as an icon row
 - 🎞️ Clean page transition — a curtain wipes up between the pages
 - ⏳ Quick terminal-style preloader with a progress bar
@@ -90,6 +90,7 @@ My portfolio, live at [hello.errornoslash.be](https://hello.errornoslash.be). Re
     ├── mailComposer.js # mail composer on the contact screen
     ├── menu.js         # menu panel on phones
     ├── cardSpotlight.js # spotlight on the profile card
+    ├── sitePreview.js  # live preview of the home page on the personal-website page
     ├── pictureSymbols.js # possessed pictures (portrait, slashyos screenshot): symbols flicker where you move
     └── notFound.js     # shows the missing path on the 404 page
 ```

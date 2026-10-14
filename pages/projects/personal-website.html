@@ -74,6 +74,7 @@
     <script src="../../scripts/reveal.js" defer></script>
     <script src="../../scripts/pictureSymbols.js" defer></script>
     <script src="../../scripts/menu.js" defer></script>
+    <script src="../../scripts/sitePreview.js" defer></script>
 </head>
 
 <body>
@@ -140,6 +141,12 @@
                     <p class="lead-body">Herbouwd in dezelfde stijl als mijn contactpagina: één groot raster van lijnen, twee lettertypes en verder alleen zwart en wit. De ASCII-donut op de homepage wordt nog altijd live gerenderd.</p>
                     <ul class="chips" aria-label="Stack"><li>html</li><li>css</li><li>js</li></ul>
                 </div>
+                <div class="status project-stats" aria-label="De site in cijfers">
+                    <div class="status-item"><span class="caption">frameworks</span><span class="status-value">0</span></div>
+                    <div class="status-item"><span class="caption">build-stappen</span><span class="status-value">0</span></div>
+                    <div class="status-item"><span class="caption">scripts</span><span class="status-value">21</span></div>
+                    <div class="status-item"><span class="caption">schermen</span><span class="status-value">04</span></div>
+                </div>
                 <div class="project-features">
                     <span class="caption project-features-head">ls ./features — 06</span>
                     <ol class="feature-list">
@@ -160,24 +167,20 @@
                 </a>
                 </nav>
             </div>
-            <div class="project-visual sitemap">
-                <span class="caption tag">sitemap / wijs aan &amp; klik</span>
-                <a class="sitemap-item" href="../../index.html#home">
-                    <span class="sketch sketch-landing" aria-hidden="true"><i class="w3"></i><i class="w3"></i><i class=""></i><i class=""></i><i class="fill"></i><i class="w3 fill"></i><i class="w3"></i></span>
-                    <span class="sitemap-label"><span class="caption">01</span><b>landing</b></span>
-                </a>
-                <a class="sitemap-item" href="../../index.html#projecten">
-                    <span class="sketch sketch-projects" aria-hidden="true"><i class="w2"></i><i class="w2"></i><i class=""></i><i class=""></i><i class="w2 fill"></i></span>
-                    <span class="sitemap-label"><span class="caption">02</span><b>projecten</b></span>
-                </a>
-                <a class="sitemap-item" href="../../index.html#over">
-                    <span class="sketch sketch-about" aria-hidden="true"><i class="w2"></i><i class="h3"></i><i class=""></i><i class=""></i><i class=""></i></span>
-                    <span class="sitemap-label"><span class="caption">03</span><b>over</b></span>
-                </a>
-                <a class="sitemap-item" href="../../index.html#contact">
-                    <span class="sketch sketch-contact" aria-hidden="true"><i class="w2"></i><i class="w2"></i><i class=""></i><i class="fill"></i><i class="w2"></i><i class="w2"></i></span>
-                    <span class="sitemap-label"><span class="caption">04</span><b>contact</b></span>
-                </a>
+            <!-- the real home page, scaled down, in a small browser window (sitePreview.js) -->
+            <div class="project-visual site-preview">
+                <div class="site-preview-bar">
+                    <span class="caption">live / hello.errornoslash.be</span>
+                    <nav class="site-preview-tabs" aria-label="Schermen van de site">
+                        <button class="pill" type="button" data-screen="home">01 landing</button>
+                        <button class="pill" type="button" data-screen="projecten">02 projecten</button>
+                        <button class="pill" type="button" data-screen="over">03 over</button>
+                        <button class="pill" type="button" data-screen="contact">04 contact</button>
+                    </nav>
+                </div>
+                <div class="site-preview-window">
+                    <iframe src="../../index.html?via=curtain#home" title="De homepage, verkleind" tabindex="-1"></iframe>
+                </div>
             </div>
         </div>
 
