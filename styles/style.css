@@ -2314,22 +2314,6 @@ a {
     }
 }
 
-/* big screens: the page gently snaps to the start of each screen */
-@media (min-width: 761px) and (min-height: 600px) {
-    html {
-        scroll-snap-type: y proximity;
-    }
-
-    .screen {
-        scroll-snap-align: start;
-    }
-
-    /* the top of the page is already a stop, snapping the landing would hide the gap above the sheet */
-    .screen.landing {
-        scroll-snap-align: none;
-    }
-}
-
 /* tall screens: the projects and over screens fill their extra height with more of the real content */
 @media (min-height: 1000px) and (min-width: 761px) {
     .project-browser .project-list .link-row {

@@ -7,7 +7,7 @@ My portfolio, live at [hello.errornoslash.be](https://hello.errornoslash.be). Re
 ## Features
 
 - 🧱 Brutalist sheet layout — every part of the page is a bordered row, with a sticky nav row on top
-- 📜 One page of full screens — you land on the intro, scroll on to the projects, the about screen and finally contact. Big screens gently snap to each one
+- 📜 One page of full screens — you land on the intro, scroll on to the projects, the about screen and finally contact
 - 🚪 Landing screen — typed intro, the donut and three "doors" (projecten, over, contact), with a status bar underneath
 - 💻 Nav that follows you — the prompt types the command of the screen you are on (`./portfolio`, `ls ./projecten`, `cat over.txt`), that pill lights up and a line under the nav fills while you scroll
 - 🗂️ Project browser — point at (or tab to) a project and a preview with its stack and features appears next to the list
