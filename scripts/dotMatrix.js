@@ -97,7 +97,6 @@ let messageStart = performance.now() + signStartDelay;
 let signTypedText = "";
 let signLastTyped = 0;
 const matrixStartTime = performance.now();
-const isMatrixStill = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 /* the field only shows when there is room under the word (otherwise the title just keeps the word) */
 function checkMatrixRoom() {
@@ -120,7 +119,6 @@ function sizeMatrix() {
     dotRows = Math.floor(height / dotSpacing);
 
     readDotColor();
-    if (isMatrixStill) drawMatrix(performance.now());
 }
 
 // the dots take the text color of the page (light or dark theme)
@@ -149,7 +147,7 @@ function litSignDots(time) {
     const age = time - matrixStartTime;
     const isTyping = signTypedText && time - signLastTyped < signTypedHold;
 
-    if (!isTyping && age < signStartDelay && !isMatrixStill) return lights;
+    if (!isTyping && age < signStartDelay) return lights;
 
     if (isTyping) {
         // what you type: centred, or the end of it when it gets too long, with a blinking caret
@@ -165,7 +163,7 @@ function litSignDots(time) {
     }
 
     const message = lettersToDots(signMessages[messageIndex]);
-    const elapsed = isMatrixStill ? signWipeIn + signPopTime : time - messageStart;
+    const elapsed = time - messageStart;
     if (elapsed < 0) return lights;
 
     const fits = message.width <= dotColumns - 4;
@@ -208,12 +206,10 @@ function litSignDots(time) {
     });
 
     // the next word starts when this one has gone, or scrolled out
-    if (!isMatrixStill) {
-        const isDone = fits
-            ? elapsed > signWipeIn + signPopTime * 2 + signHold + signWipeOut
-            : left < -message.width;
-        if (isDone) nextMessage(time);
-    }
+    const isDone = fits
+        ? elapsed > signWipeIn + signPopTime * 2 + signHold + signWipeOut
+        : left < -message.width;
+    if (isDone) nextMessage(time);
     return lights;
 }
 
@@ -246,7 +242,7 @@ function drawMatrix(time) {
             const y = offsetY + row * dotSpacing;
 
             // a slow wave runs over the field
-            const wave = isMatrixStill ? 0.5 : (Math.sin(column * 0.32 + row * 0.18 - age * 0.0016) + 1) / 2;
+            const wave = (Math.sin(column * 0.32 + row * 0.18 - age * 0.0016) + 1) / 2;
 
             // dots close to the pointer grow and light up
             let glow = 0;
@@ -295,7 +291,7 @@ function drawEveryFrame(time) {
 
 // starts the drawing loop (once, it keeps itself going)
 function startDrawing() {
-    if (isMatrixStill || isMatrixDrawing) return;
+    if (isMatrixDrawing) return;
     isMatrixDrawing = true;
     requestAnimationFrame(drawEveryFrame);
 }
@@ -315,7 +311,6 @@ dotMatrix.addEventListener("pointerleave", function () {
 dotMatrix.addEventListener("pointerdown", function (e) {
     const box = dotMatrix.getBoundingClientRect();
     ripples.push({ x: e.clientX - box.left, y: e.clientY - box.top, start: performance.now() });
-    if (isMatrixStill) drawMatrix(performance.now());
 });
 
 /* typing anywhere on the page (not in a field, no shortcuts) writes on the sign while it is on screen */
@@ -342,7 +337,6 @@ window.addEventListener("keydown", function (e) {
     signLastTyped = now;
     // when you stop typing, the sign picks up its own words again
     messageStart = now + signTypedHold;
-    if (isMatrixStill) drawMatrix(now);
 });
 
 /* only draw while the field is on screen */

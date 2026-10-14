@@ -76,20 +76,18 @@ function hideForReveal() {
     });
 }
 
-/* reduced motion: everything is just there */
-if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+/* hide everything, then start revealing */
+hideForReveal();
+
+// wait for the preloader, or only for the curtain when coming from another page
+const html = document.documentElement;
+const skipsPreloader = html.classList.contains("is-arriving") || html.classList.contains("has-loaded");
+setTimeout(startRevealing, skipsPreloader ? revealStartAfterTransition : revealStartAfterPreloader);
+
+// back / forward can bring the page back from the browser cache: play everything again
+window.addEventListener("pageshow", function (e) {
+    if (!e.persisted) return;
+    if (revealObserver) revealObserver.disconnect();
     hideForReveal();
-
-    // wait for the preloader, or only for the curtain when coming from another page
-    const html = document.documentElement;
-    const skipsPreloader = html.classList.contains("is-arriving") || html.classList.contains("has-loaded");
-    setTimeout(startRevealing, skipsPreloader ? revealStartAfterTransition : revealStartAfterPreloader);
-
-    // back / forward can bring the page back from the browser cache: play everything again
-    window.addEventListener("pageshow", function (e) {
-        if (!e.persisted) return;
-        if (revealObserver) revealObserver.disconnect();
-        hideForReveal();
-        setTimeout(startRevealing, revealStartAfterTransition);
-    });
-}
+    setTimeout(startRevealing, revealStartAfterTransition);
+});

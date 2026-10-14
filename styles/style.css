@@ -2283,22 +2283,6 @@ a {
     }
 }
 
-/* ------------------------------ */
-/* REDUCED MOTION                 */
-/* ------------------------------ */
-@media (prefers-reduced-motion: reduce) {
-    html {
-        scroll-behavior: auto;
-    }
-
-    .caret,
-    .marquee span,
-    .rotate-notice-icon,
-    .title :is(h1, h2, .echo) span {
-        animation: none;
-    }
-}
-
 /* desktop: the social row above the copyright bar gets the names next to the icons */
 @media (min-width: 761px) {
     .screen>.icon-row {

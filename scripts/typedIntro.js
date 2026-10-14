@@ -19,10 +19,6 @@ function typeNextLetter() {
     setTimeout(typeNextLetter, typeDelay + Math.random() * typeDelayRandom);
 }
 
-/* reduced motion: the whole line at once, otherwise wait for the preloader or the curtain */
-if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-    introLine.insertBefore(document.createTextNode(introText), introCaret);
-} else {
-    const isArriving = document.documentElement.classList.contains("is-arriving") || document.documentElement.classList.contains("has-loaded");
-    setTimeout(typeNextLetter, isArriving ? startAfterTransition : startAfterPreloader);
-}
+/* start typing once the preloader or the curtain is out of the way */
+const isArriving = document.documentElement.classList.contains("is-arriving") || document.documentElement.classList.contains("has-loaded");
+setTimeout(typeNextLetter, isArriving ? startAfterTransition : startAfterPreloader);

@@ -64,30 +64,24 @@ function drawDonut() {
     donutElement.textContent = frame;
 }
 
-/* reduced motion: one still frame, otherwise spin (and rest while the tab is hidden) */
-if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-    spinAngleX = 1;
-    spinAngleZ = 0.5;
+/* draw the first frame, then keep spinning (and rest while the tab is hidden) */
+drawDonut();
+setInterval(function () {
+    if (document.hidden) return;
+
+    spinAngleX += 0.04;
+    spinAngleZ += 0.02;
+
+    // the tilt slides towards the mouse instead of jumping
+    tiltSideways += (targetTiltSideways - tiltSideways) * tiltEase;
+    tiltUpDown += (targetTiltUpDown - tiltUpDown) * tiltEase;
     drawDonut();
-} else {
-    drawDonut();
-    setInterval(function () {
-        if (document.hidden) return;
+}, donutFrameTime);
 
-        spinAngleX += 0.04;
-        spinAngleZ += 0.02;
+/* the mouse position, from -0.5 to 0.5 over the window, tilts the donut */
+window.addEventListener("pointermove", function (e) {
+    if (e.pointerType !== "mouse") return;
 
-        // the tilt slides towards the mouse instead of jumping
-        tiltSideways += (targetTiltSideways - tiltSideways) * tiltEase;
-        tiltUpDown += (targetTiltUpDown - tiltUpDown) * tiltEase;
-        drawDonut();
-    }, donutFrameTime);
-
-    /* the mouse position, from -0.5 to 0.5 over the window, tilts the donut */
-    window.addEventListener("pointermove", function (e) {
-        if (e.pointerType !== "mouse") return;
-
-        targetTiltSideways = (e.clientX / window.innerWidth - 0.5) * tiltStrength;
-        targetTiltUpDown = (e.clientY / window.innerHeight - 0.5) * tiltStrength;
-    });
-}
+    targetTiltSideways = (e.clientX / window.innerWidth - 0.5) * tiltStrength;
+    targetTiltUpDown = (e.clientY / window.innerHeight - 0.5) * tiltStrength;
+});

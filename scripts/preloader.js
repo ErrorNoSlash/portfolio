@@ -49,11 +49,10 @@ function updateProgress() {
     else hidePreloader();
 }
 
-/* skip the preloader when it already played this visit, when arriving from another page or when motion is reduced, otherwise start counting */
-const isReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+/* skip the preloader when it already played this visit or when arriving from another page, otherwise start counting */
 const hasSeenPreloader = document.documentElement.classList.contains("has-loaded");
 
-if (hasSeenPreloader || document.documentElement.classList.contains("is-arriving") || isReducedMotion) {
+if (hasSeenPreloader || document.documentElement.classList.contains("is-arriving")) {
     rememberPreloader();
     preloader.remove();
 } else {

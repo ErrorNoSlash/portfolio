@@ -86,7 +86,5 @@ function addSymbolEffect(picture) {
     new ResizeObserver(buildSymbolGrid).observe(picture);
 }
 
-/* reduced motion: the pictures stay pictures */
-if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-    document.querySelectorAll("[data-symbols]").forEach(addSymbolEffect);
-}
+/* every picture marked with data-symbols gets the effect */
+document.querySelectorAll("[data-symbols]").forEach(addSymbolEffect);

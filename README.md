@@ -31,7 +31,6 @@ My portfolio, live at [hello.errornoslash.be](https://hello.errornoslash.be). Re
 - 🔍 404 page in the same window style that shows the path you tried
 - 🌗 Light and dark theme that follows the system
 - 🖱️ Custom cursor (dot + trailing outline), disabled on touch devices
-- ♿ Respects `prefers-reduced-motion` — no preloader, a still donut, no letter animation, the typed line appears at once
 - 🔗 Link preview — Open Graph and Twitter tags with a 1200×630 image, so shared links show a card
 - 📅 Footer year updates automatically via JavaScript
 - 🖥️ Tested on 4K, 1440p and 1080p screens at every Windows scale from 25% to 200% — very wide windows scale the whole page up, very short ones tighten every screen so it still fits
