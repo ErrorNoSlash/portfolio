@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <rect x="0.5" y="0.5" width="1199" height="629" fill="#040507" stroke="#525252"/>
+  <g fill="#ffffff">
+    <circle cx="104" cy="245" r="13.4"/>
+    <circle cx="132" cy="245" r="13.4"/>
+    <circle cx="160" cy="245" r="13.4"/>
+    <circle cx="188" cy="245" r="13.4"/>
+    <circle cx="300" cy="245" r="13.4"/>
+    <circle cx="328" cy="245" r="13.4"/>
+    <circle cx="356" cy="245" r="13.4"/>
+    <circle cx="384" cy="245" r="13.4"/>
+    <circle cx="104" cy="273" r="13.4"/>
+    <circle cx="132" cy="273" r="13.4"/>
+    <circle cx="188" cy="273" r="13.4"/>
+    <circle cx="216" cy="273" r="13.4"/>
+    <circle cx="272" cy="273" r="13.4"/>
+    <circle cx="300" cy="273" r="13.4"/>
+    <circle cx="104" cy="301" r="13.4"/>
+    <circle cx="132" cy="301" r="13.4"/>
+    <circle cx="216" cy="301" r="13.4"/>
+    <circle cx="272" cy="301" r="13.4"/>
+    <circle cx="300" cy="301" r="13.4"/>
+    <circle cx="328" cy="301" r="13.4"/>
+    <circle cx="356" cy="301" r="13.4"/>
+    <circle cx="104" cy="329" r="13.4"/>
+    <circle cx="132" cy="329" r="13.4"/>
+    <circle cx="216" cy="329" r="13.4"/>
+    <circle cx="300" cy="329" r="13.4"/>
+    <circle cx="328" cy="329" r="13.4"/>
+    <circle cx="356" cy="329" r="13.4"/>
+    <circle cx="384" cy="329" r="13.4"/>
+    <circle cx="104" cy="357" r="13.4"/>
+    <circle cx="132" cy="357" r="13.4"/>
+    <circle cx="216" cy="357" r="13.4"/>
+    <circle cx="356" cy="357" r="13.4"/>
+    <circle cx="384" cy="357" r="13.4"/>
+    <circle cx="104" cy="385" r="13.4"/>
+    <circle cx="132" cy="385" r="13.4"/>
+    <circle cx="160" cy="385" r="13.4"/>
+    <circle cx="188" cy="385" r="13.4"/>
+    <circle cx="272" cy="385" r="13.4"/>
+    <circle cx="300" cy="385" r="13.4"/>
+    <circle cx="328" cy="385" r="13.4"/>
+    <circle cx="356" cy="385" r="13.4"/>
+  </g>
+  <line x1="450" y1="130" x2="450" y2="500" stroke="#525252"/>
+  <g font-family="SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace" fill="#AEB5B8">
+    <text x="500" y="240" font-size="34">dias@stas:~$ ls&#9608;</text>
+    <text x="500" y="428" font-size="34">front-end developer</text>
+    <text x="500" y="486" font-size="34">hello.errornoslash.be</text>
+  </g>
+  <text x="494" y="360" font-family="Outfit, 'Arial Black', Arial, sans-serif" font-size="118" font-weight="900" letter-spacing="-4" fill="#ffffff">Dias Stas</text>
+</svg>

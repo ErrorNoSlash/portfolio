@@ -3,214 +3,82 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>dias@stas:~ — 404</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Dias Stas - 404</title>
     <meta name="description" content="Pagina niet gevonden — Dias Stas.">
     <meta name="robots" content="noindex">
-    <meta name="theme-color" content="#040507">
 
-    <link rel="icon" href="assets/favicon-32.png" sizes="32x32" type="image/png">
-    <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+    <meta name="theme-color" content="#e4e4e4" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#040507" media="(prefers-color-scheme: dark)">
 
+    <link rel="icon" href="/favicon.ico" sizes="48x48">
+    <link rel="icon" href="/images/favicon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="/images/apple-touch-icon.png">
+
+    <link rel="stylesheet" href="/styles/normalize.css">
+    <link rel="stylesheet" href="/styles/style.css">
+    <link rel="stylesheet" href="/styles/window.css">
+
+    <!--Google Fonts-->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800;900&family=Space+Mono:wght@400;700&display=swap"
+        rel="stylesheet">
 
-    <!-- same theme switch as index / project pages -->
-    <script src="scripts/theme.js"></script>
-
-    <style>
-        :root {
-            --black: #040507;
-            --grey: #AEB5B8;
-            --bright: #e3e3e3;
-            --border: #525252;
-            --panel: linear-gradient(160deg, #101215, #040507);
-            --glow: rgba(174, 181, 184, 0.25);
-        }
-
-        /* light theme — same palette as blog.errornoslash.be */
-        html[data-theme="light"] {
-            --black: #AEB5B8;
-            --grey: #2A2F32;
-            --bright: #040507;
-            --border: #4A5054;
-            --panel: linear-gradient(160deg, #D2D7D9, #C3C9CB);
-            --glow: rgba(4, 5, 7, 0.2);
-        }
-
-        * {
-            box-sizing: border-box;
-        }
-
-        html,
-        body {
-            height: 100%;
-            margin: 0;
-        }
-
-        body {
-            background: var(--black);
-            color: var(--grey);
-            font-family: "JetBrains Mono", ui-monospace, monospace;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 1.5rem;
-            line-height: 1.6;
-            transition: background 0.3s ease, color 0.3s ease;
-        }
-
-        ::selection {
-            background: var(--grey);
-            color: var(--black);
-        }
-
-        .box {
-            width: 100%;
-            max-width: 40rem;
-            border: 0.063rem solid var(--border);
-            border-radius: 0.5rem;
-            padding: 2rem 2.25rem;
-            background: var(--panel);
-            transition: background 0.3s ease, border-color 0.3s ease;
-        }
-
-        .code {
-            font-size: clamp(3rem, 15vw, 4.5rem);
-            font-weight: 700;
-            color: var(--bright);
-            margin: 0 0 0.5rem;
-            letter-spacing: 0.05em;
-            line-height: 1.1;
-        }
-
-        pre {
-            margin: 0 0 1.5rem;
-            font-size: 0.9rem;
-            color: var(--border);
-            white-space: pre-wrap;
-            word-break: break-word;
-        }
-
-        pre .cmd {
-            color: var(--grey);
-        }
-
-        pre .err {
-            color: var(--bright);
-        }
-
-        h1 {
-            margin: 0 0 0.75rem;
-            font-size: 1.3rem;
-            color: var(--bright);
-            font-weight: 700;
-        }
-
-        p {
-            margin: 0 0 1.75rem;
-            font-size: 0.95rem;
-        }
-
-        .links {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.6rem;
-        }
-
-        a.btn {
-            display: inline-block;
-            text-decoration: none;
-            color: var(--bright);
-            border: 0.063rem solid var(--border);
-            border-radius: 0.3rem;
-            padding: 0.6rem 1.1rem;
-            font-size: 0.9rem;
-            transition: border-color 0.15s ease, box-shadow 0.15s ease, color 0.3s ease;
-        }
-
-        a.btn:hover,
-        a.btn:focus-visible {
-            border-color: var(--bright);
-            box-shadow: 0 0 0.75rem var(--glow);
-        }
-
-        .cursor {
-            display: inline-block;
-            width: 0.55rem;
-            height: 1rem;
-            background: var(--bright);
-            vertical-align: text-bottom;
-            margin-left: 0.15rem;
-            animation: blink 1s steps(1) infinite;
-        }
-
-        /* theme toggle — fixed corner, mirrors the rest of the site */
-        #theme-toggle {
-            position: fixed;
-            right: 0.9rem;
-            bottom: 0.9rem;
-            font-family: inherit;
-            font-size: 0.9rem;
-            color: var(--grey);
-            background: transparent;
-            border: none;
-            cursor: pointer;
-            padding: 0.3rem 0.55rem;
-            opacity: 0.45;
-            transition: opacity 0.3s ease, color 0.3s ease;
-        }
-
-        #theme-toggle:hover,
-        #theme-toggle:focus-visible {
-            opacity: 1;
-        }
-
-        @keyframes blink {
-            50% {
-                opacity: 0;
-            }
-        }
-
-        @media (prefers-reduced-motion: reduce) {
-            .cursor {
-                animation: none;
-            }
-
-            body,
-            .box,
-            a.btn,
-            #theme-toggle {
-                transition: none;
-            }
-        }
-    </style>
+    <!-- JS scripts -->
+    <script src="/scripts/notFound.js" defer></script>
 </head>
 
 <body>
-    <main class="box">
-        <p class="code">404</p>
-        <pre><span class="cmd">dias@stas:~$ cd</span> <span id="path">./deze-pagina</span>
-<span class="err">bash: cd: geen bestand of map</span><span class="cursor"></span></pre>
-        <h1>Pagina niet gevonden</h1>
-        <p>Deze pagina bestaat niet (meer). Misschien is de link verouderd of
-            verkeerd getypt.</p>
-        <div class="links">
-            <a class="btn" href="index.html">~ home</a>
-            <a class="btn" href="index.html#projecten">./projecten</a>
+
+    <div class="rotate-notice">
+        <div class="rotate-notice-frame">
+            <div class="rotate-notice-icon" aria-hidden="true"><span></span></div>
+            <div class="rotate-notice-text">
+                <p class="rotate-notice-prompt">dias@stas:~$ rotate<span class="caret"></span></p>
+                <p class="rotate-notice-title">draai je telefoon rechtop</p>
+                <p class="rotate-notice-hint">[ deze site is gemaakt voor staand ]</p>
+            </div>
         </div>
+    </div>
+
+    <main class="window-page">
+
+        <section class="window-window" aria-labelledby="window-title">
+
+            <header class="window-head">
+                <span class="window-prompt">dias@stas:~$ cd <span id="missing-path">./deze-pagina</span><span class="caret"></span></span>
+                <span class="window-badge">404</span>
+            </header>
+
+            <div class="window-body">
+                <p class="window-code" aria-hidden="true">404</p>
+
+                <h1 class="window-title" id="window-title">pagina <span class="window-off">weg</span></h1>
+
+                <div class="window-log">
+                    <p>$ cd <span id="missing-path-log">./deze-pagina</span></p>
+                    <p class="window-error">bash: cd: geen bestand of map</p>
+                    <p>deze pagina bestaat niet (meer). misschien is de link verouderd of verkeerd getypt.</p>
+                </div>
+
+                <a class="window-reload" href="/">~ terug naar home</a>
+
+                <p class="window-or">of ga meteen naar</p>
+                <nav class="window-links" aria-label="Links">
+                    <a class="window-chip" href="/#projecten">Projecten</a>
+                    <a class="window-chip" href="/#over">Over</a>
+                    <a class="window-chip" href="/#contact">Contact</a>
+                    <a class="window-chip" href="https://blog.errornoslash.be/" target="_blank" rel="noopener">Blog</a>
+                </nav>
+            </div>
+
+        </section>
+
+        <p class="window-footer">&copy;2026 - Dias Stas</p>
+
     </main>
 
-    <!--<button id="theme-toggle" class="theme-toggle" aria-label="schakel licht thema in">[ &#9790; ]</button>-->
-
-    <script>
-        // show the path the visitor actually tried, for a bit of terminal flavour
-        var p = document.getElementById("path");
-        if (p && location.pathname && location.pathname !== "/") {
-            p.textContent = "." + location.pathname;
-        }
-    </script>
 </body>
 
 </html>

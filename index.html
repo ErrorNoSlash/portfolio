@@ -3,225 +3,466 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <noscript><meta http-equiv="refresh" content="0; url=/pages/errors/nojs.html"></noscript>
-    <title>dias@stas:~</title>
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Dias Stas - Portfolio</title>
     <meta name="description" content="Dias Stas — front-end developer. Websites, mobiele apps en software, gedreven door nieuwsgierigheid.">
+
     <link rel="canonical" href="https://hello.errornoslash.be/">
+    <meta name="theme-color" content="#e4e4e4" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#040507" media="(prefers-color-scheme: dark)">
 
-    <!-- favicons -->
-    <link rel="icon" href="assets/favicon-32.png" sizes="32x32" type="image/png">
-    <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
-
-    <!-- Open Graph -->
+    <!-- Open Graph / Twitter (link preview) -->
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="Dias Stas">
     <meta property="og:locale" content="nl_NL">
     <meta property="og:url" content="https://hello.errornoslash.be/">
-    <meta property="og:title" content="Dias Stas — front-end developer">
+    <meta property="og:title" content="Dias Stas - front-end developer">
     <meta property="og:description" content="Dias Stas — front-end developer. Websites, mobiele apps en software, gedreven door nieuwsgierigheid.">
-    <meta property="og:image" content="https://hello.errornoslash.be/assets/og-image.png">
+    <meta property="og:image" content="https://hello.errornoslash.be/images/og-image.png">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
-    <meta property="og:image:alt" content="Dias Stas — front-end developer">
-
-    <!-- Twitter -->
+    <meta property="og:image:alt" content="Dias Stas - dot-matrix DS logo and the text: front-end developer">
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Dias Stas — front-end developer">
+    <meta name="twitter:title" content="Dias Stas - front-end developer">
     <meta name="twitter:description" content="Dias Stas — front-end developer. Websites, mobiele apps en software, gedreven door nieuwsgierigheid.">
-    <meta name="twitter:image" content="https://hello.errornoslash.be/assets/og-image.png">
+    <meta name="twitter:image" content="https://hello.errornoslash.be/images/og-image.png">
+
+    <!-- page transition and preloader: runs first.
+         ?via=curtain (added by pageTransition.js) means we came through the curtain: no preloader, and it leaves the address bar again.
+         back / forward never shows the preloader either. Storage is only a backup, some browsers keep it apart per file -->
+    <script>
+        try {
+            const html = document.documentElement;
+            const pageUrl = new URL(location.href);
+            const navigation = performance.getEntriesByType("navigation")[0];
+
+            if (pageUrl.searchParams.get("via") === "curtain") {
+                html.classList.add("is-arriving");
+                pageUrl.searchParams.delete("via");
+                history.replaceState(history.state, "", pageUrl.pathname + pageUrl.search + pageUrl.hash);
+            }
+            if (navigation && navigation.type === "back_forward") html.classList.add("has-loaded");
+            if (window.name === "preloaderSeen" || sessionStorage.getItem("preloaderSeen")) html.classList.add("has-loaded");
+            if (sessionStorage.getItem("pageTransition")) html.classList.add("is-arriving");
+        } catch (error) { }
+    </script>
+
+    <link rel="icon" href="favicon.ico" sizes="48x48">
+    <link rel="icon" href="images/favicon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+
     <link rel="stylesheet" href="styles/normalize.css">
     <link rel="stylesheet" href="styles/style.css">
 
     <!--Google Fonts-->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap"
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800;900&family=Space+Mono:wght@400;700&display=swap"
         rel="stylesheet">
 
-    <!-- JS scripts -->
-    <script src="scripts/theme.js"></script>
-    <script src="scripts/transition.js" defer></script>
-    <script src="scripts/boot.js" defer></script>
-    <script src="scripts/type.js" defer></script>
-    <script src="scripts/ascii.js" defer></script>
-    <script src="scripts/nav.js" defer></script>
-    <script src="scripts/cursor.js" defer></script>
+    <noscript>
+        <meta http-equiv="refresh" content="0; url=noscript.html">
+        <style>.preloader { display: none; }</style>
+    </noscript>
 
+    <!-- JS scripts -->
+    <script src="scripts/preloader.js" defer></script>
+    <script src="scripts/pageTransition.js" defer></script>
+    <script src="scripts/cursor.js" defer></script>
+    <script src="scripts/getYear.js" defer></script>
+    <script src="scripts/tabTitle.js" defer></script>
+    <script src="scripts/title.js" defer></script>
+    <script src="scripts/dotField.js" defer></script>
+    <script src="scripts/marquee.js" defer></script>
+    <script src="scripts/typeLine.js" defer></script>
+    <script src="scripts/ascii.js" defer></script>
+    <script src="scripts/uptime.js" defer></script>
+    <script src="scripts/scrollSpy.js" defer></script>
+    <script src="scripts/projectPreview.js" defer></script>
+    <script src="scripts/cardSpotlight.js" defer></script>
+    <script src="scripts/pfpSymbols.js" defer></script>
+    <script src="scripts/copyMail.js" defer></script>
+    <script src="scripts/compose.js" defer></script>
+    <script src="scripts/menu.js" defer></script>
 </head>
 
 <body>
 
-    <div class="rotate-note" aria-hidden="true">
-        <div class="rotate-inner">
-            <svg class="rotate-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <rect x="7" y="2" width="10" height="20" rx="2"/>
-                <line x1="10.5" y1="18.5" x2="13.5" y2="18.5"/>
-            </svg>
-            <p>Draai je telefoon rechtop voor de beste ervaring.</p>
+    <div class="preloader" id="preloader" aria-hidden="true">
+        <div class="preloader-frame">
+            <div class="preloader-box">
+                <p class="preloader-text">dias@stas:~$ loading<span class="caret"></span></p>
+                <div class="preloader-bar"><span class="preloader-fill" id="preloader-fill"></span></div>
+                <p class="preloader-count"><span id="preloader-count">0</span>%</p>
+            </div>
         </div>
     </div>
 
-
-    <div id="cursor" aria-hidden="true"></div>
-
-    <!-- page transition -->
-    <div class="page-transition" aria-hidden="true">
-        <pre id="transition-log"></pre>
+    <div class="page-transition" id="page-transition" aria-hidden="true">
+        <span class="page-transition-logo">ds/</span>
     </div>
 
-    <!-- boot screen -->
-    <div class="boot" aria-hidden="true">
-        <pre id="boot-log"></pre>
+    <div class="cursor-dot" data-cursor-dot></div>
+    <div class="cursor-outline" data-cursor-outline></div>
+
+    <div class="rotate-notice">
+        <div class="rotate-notice-frame">
+            <div class="rotate-notice-icon" aria-hidden="true"><span></span></div>
+            <div class="rotate-notice-text">
+                <p class="rotate-notice-prompt">dias@stas:~$ rotate<span class="caret"></span></p>
+                <p class="rotate-notice-title">draai je telefoon rechtop</p>
+                <p class="rotate-notice-hint">[ deze site is gemaakt voor staand ]</p>
+            </div>
+        </div>
     </div>
 
-    <header>
-        <nav>
-            <a id="logo" href="index.html">dias@stas:~$</a>
-            <button id="nav-toggle" class="btn" aria-expanded="false"
-                aria-controls="nav-menu" aria-label="menu openen">[ menu ]</button>
-            <ul id="nav-menu">
-                <li><a class="btn" href="#projecten">./projecten</a></li>
-                <li><a class="btn" href="#over">./over</a></li>
-                <li><a class="btn border-btn" href="#contact">./contact</a></li>
-                <li class="nav-socials">
-                    <button type="button" class="btn nav-social nav-social-toggle" aria-label="links" aria-haspopup="true"><svg class="icon" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M176,160a39.89,39.89,0,0,0-28.62,12.09l-46.1-29.63a39.8,39.8,0,0,0,0-28.92l46.1-29.63a40,40,0,1,0-8.66-13.45l-46.1,29.63a40,40,0,1,0,0,55.82l46.1,29.63A40,40,0,1,0,176,160Zm0-128a24,24,0,1,1-24,24A24,24,0,0,1,176,32ZM64,152a24,24,0,1,1,24-24A24,24,0,0,1,64,152Zm112,72a24,24,0,1,1,24-24A24,24,0,0,1,176,224Z"/></svg></button>
-                    <div class="nav-social-menu">
-                    <a class="btn nav-social" href="https://blog.errornoslash.be" aria-label="blog"><svg class="icon" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M184,112a8,8,0,0,1-8,8H112a8,8,0,0,1,0-16h64A8,8,0,0,1,184,112Zm-8,24H112a8,8,0,0,0,0,16h64a8,8,0,0,0,0-16Zm48-88V208a16,16,0,0,1-16,16H48a16,16,0,0,1-16-16V48A16,16,0,0,1,48,32H208A16,16,0,0,1,224,48ZM48,208H72V48H48Zm160,0V48H88V208H208Z"/></svg><span class="btn-label">blog</span></a>
-                    <a class="btn nav-social" href="https://github.com/ErrorNoSlash" aria-label="github"><svg class="icon" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M208.31,75.68A59.78,59.78,0,0,0,202.93,28,8,8,0,0,0,196,24a59.75,59.75,0,0,0-48,24H124A59.75,59.75,0,0,0,76,24a8,8,0,0,0-6.93,4,59.78,59.78,0,0,0-5.38,47.68A58.14,58.14,0,0,0,56,104v8a56.06,56.06,0,0,0,48.44,55.47A39.8,39.8,0,0,0,96,192v8H72a24,24,0,0,1-24-24A40,40,0,0,0,8,136a8,8,0,0,0,0,16,24,24,0,0,1,24,24,40,40,0,0,0,40,40H96v16a8,8,0,0,0,16,0V192a24,24,0,0,1,48,0v40a8,8,0,0,0,16,0V192a39.8,39.8,0,0,0-8.44-24.53A56.06,56.06,0,0,0,216,112v-8A58.14,58.14,0,0,0,208.31,75.68ZM200,112a40,40,0,0,1-40,40H112a40,40,0,0,1-40-40v-8a41.74,41.74,0,0,1,6.9-22.48A8,8,0,0,0,80,73.83a43.81,43.81,0,0,1,.79-33.58,43.88,43.88,0,0,1,32.32,20.06A8,8,0,0,0,119.82,64h32.35a8,8,0,0,0,6.74-3.69,43.87,43.87,0,0,1,32.32-20.06A43.81,43.81,0,0,1,192,73.83a8.09,8.09,0,0,0,1,7.65A41.72,41.72,0,0,1,200,104Z"/></svg><span class="btn-label">github</span></a>
-                    <a class="btn nav-social" href="https://mastodon.social/@slashy" aria-label="mastodon"><svg class="icon" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M184,32H72A40,40,0,0,0,32,72V192a40,40,0,0,0,40,40h88a8,8,0,0,0,0-16H72a24,24,0,0,1-24-24v-8H184a40,40,0,0,0,40-40V72A40,40,0,0,0,184,32Zm24,112a24,24,0,0,1-24,24H48V72A24,24,0,0,1,72,48H184a24,24,0,0,1,24,24Zm-24-40v32a8,8,0,0,1-16,0V104a16,16,0,0,0-32,0v32a8,8,0,0,1-16,0V104a16,16,0,0,0-32,0v32a8,8,0,0,1-16,0V104a32,32,0,0,1,56-21.13A32,32,0,0,1,184,104Z"/></svg><span class="btn-label">mastodon</span></a>
-                    <a class="btn nav-social" href="mailto:dias.stas@pm.me" aria-label="e-mail"><svg class="icon" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M224,48H32a8,8,0,0,0-8,8V192a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V56A8,8,0,0,0,224,48ZM203.43,64,128,133.15,52.57,64ZM216,192H40V74.19l82.59,75.71a8,8,0,0,0,10.82,0L216,74.19V192Z"/></svg><span class="btn-label">e-mail</span></a>
-                    </div>
-                </li>
-            </ul>
-        </nav>
-    </header>
+    <main class="sheet">
 
-    <main>
-        <section class="hero">
-            <div class="hero-info">
-                <p class="prompt">$ whoami</p>
-                <h1 id="typed-line"><span class="cursor-block">█</span></h1>
-                <p class="hero-sub">front-end developer — websites, mobiel &amp; software.<br>
-                    driven by curiosity.</p>
-                <div class="hero-links">
-                    <a class="btn" href="#projecten">bekijk projecten</a>
-                    <a class="btn border-btn" href="mailto:dias.stas@pm.me">contact</a>
+        <div class="row nav">
+            <a class="cell nav-logo" href="#home" aria-label="Naar het begin">ds/</a>
+            <div class="cell nav-prompt"><span>dias@stas:~$&nbsp;<span id="nav-command">./portfolio</span></span><span class="caret"></span></div>
+            <nav class="cell nav-tabs" aria-label="Secties">
+                <a class="pill" href="#projecten">projecten?</a>
+                <a class="pill" href="#over">over?</a>
+                <a class="pill" href="#contact">contact?</a>
+                <a class="pill nav-menu" href="#menu">menu</a>
+            </nav>
+        </div>
+
+        <!-- 01: landing -->
+        <section class="screen landing" id="home" data-command="./portfolio" aria-label="Home">
+
+            <div class="row title hero">
+                <div class="title-label"><span><span class="title-star">&#10035;</span> DIAS + STAS</span><span class="title-star">&#10035;</span></div>
+                <div class="echo echo-far" aria-hidden="true">PORTFOLIO</div>
+                <div class="echo echo-near" aria-hidden="true">PORTFOLIO</div>
+                <h1>PORTFOLIO</h1>
+                <div class="hero-field" id="dot-field" aria-hidden="true">
+                    <span class="caption tag">dot-matrix / typ iets, beweeg &amp; klik</span>
+                    <canvas></canvas>
+                </div>
+            </div>
+            <div class="row lead stage">
+                <div class="cell lead-text">
+                    <small class="stage-label">{ whoami }</small>
+                    <p class="typed-line" id="typed-line" data-text="hey, ik ben dias stas" aria-label="hey, ik ben dias stas"><span class="caret"></span></p>
+                    <p>front-end developer — websites,<br>mobiel &amp; software.</p>
+                    <em>/driven by curiosity/</em>
+                </div>
+                <div class="cell ascii" aria-hidden="true">
+                    <span class="caption tag">ASCII</span>
+                    <pre id="ascii-art"></pre>
+                </div>
+                <nav class="link-list doors" aria-label="Secties">
+                <a class="link-row" href="#projecten">
+                    <span class="link-number">01</span><span><b class="link-name">Projecten</b><small class="link-url">ls ./projecten — 03 stuks</small></span><span class="link-go">GO &nearr;</span>
+                </a>
+                <a class="link-row" href="#over">
+                    <span class="link-number">02</span><span><b class="link-name">Over</b><small class="link-url">cat over.txt — wie, wat, skills</small></span><span class="link-go">GO &nearr;</span>
+                </a>
+                <a class="link-row" href="#contact">
+                    <span class="link-number">03</span><span><b class="link-name">Contact</b><small class="link-url">dias.stas@pm.me</small></span><span class="link-go">GO &nearr;</span>
+                </a>
+                </nav>
+            </div>
+
+            <div class="row marquee" aria-hidden="true"><span>FRONT-END DEVELOPER * DRIVEN BY CURIOSITY * </span></div>
+
+            <div class="row status" aria-label="Status">
+                <div class="status-item"><span class="caption">rol</span><span class="status-value">front-end dev</span></div>
+                <div class="status-item"><span class="caption">stack</span><span class="status-value">html · css · js</span></div>
+                <div class="status-item"><span class="caption">projecten</span><span class="status-value">03</span></div>
+                <div class="status-item"><span class="caption">uptime</span><span class="status-value" id="uptime">00:00:00</span></div>
+            </div>
+
+        </section>
+
+        <!-- 02: projecten -->
+        <section class="screen" id="projecten" data-command="ls ./projecten" aria-label="Projecten">
+
+            <div class="row section-head">
+                <div class="cell section-number" aria-hidden="true">02</div>
+                <p class="cell section-prompt section-output">&gt; 3 projecten gevonden — wijs er een aan voor een voorbeeld</p>
+                <div class="cell section-caption"><span class="caption">PROJECTEN / 03</span></div>
+            </div>
+            <div class="row title compact">
+                <div class="title-label"><span><span class="title-star">&#10035;</span> WAT IK BOUW</span><span class="title-star">&#10035;</span></div>
+                <div class="echo echo-far" aria-hidden="true">PROJECTEN</div>
+                <div class="echo echo-near" aria-hidden="true">PROJECTEN</div>
+                <h2>PROJECTEN</h2>
+            </div>
+            <div class="row browser">
+                <nav class="link-list project-list" aria-label="Projecten">
+                    <a class="link-row" data-preview="personal-website" href="pages/projects/personal-website.html">
+                        <span class="link-number">01</span><span><b class="link-name">personal-website/</b><small class="link-url">html · css · js</small><span class="link-about">Deze site. Vanilla HTML, CSS en JavaScript met een live gerenderde ASCII-donut.</span></span><span class="link-go">GO &nearr;</span>
+                    </a>
+                    <a class="link-row" data-preview="slashyos" href="pages/projects/slashyos.html">
+                        <span class="link-number">02</span><span><b class="link-name">SlashyOS/</b><small class="link-url">nix · linux</small><span class="link-about">SlashyOS is een van mijn grotere projecten. Dit is het systeem dat ik gebruik op mijn laptop en desktop.</span></span><span class="link-go">GO &nearr;</span>
+                    </a>
+                    <a class="link-row" data-preview="blog" href="pages/projects/blog.html">
+                        <span class="link-number">03</span><span><b class="link-name">blog/</b><small class="link-url">zola · rust</small><span class="link-about">Mijn blog is ook een van mijn projecten. De blog maakt gebruik van zola &amp; pagescms voor een gui voor het maken van posts.</span></span><span class="link-go">GO &nearr;</span>
+                    </a>
+                </nav>
+                <div class="preview-pane" aria-live="polite">
+                    <article class="preview" id="preview-personal-website">
+                        <span class="caption tag">cat personal-website.md</span>
+                        <span class="preview-number" aria-hidden="true">01</span>
+                        <h3 class="preview-name">personal-website/</h3>
+                        <ul class="chips" aria-label="Stack"><li>html</li><li>css</li><li>js</li></ul>
+                        <p>Deze site. Vanilla HTML, CSS en JavaScript — geen frameworks, geen build-stap.</p>
+                        <p class="preview-body">Herbouwd in dezelfde stijl als mijn contactpagina: één groot raster van lijnen, twee lettertypes en verder alleen zwart en wit. De ASCII-donut op de homepage wordt nog altijd live gerenderd.</p>
+                        <ol class="preview-features">
+                            <li><span>01</span>live gerenderde ASCII-donut</li>
+                            <li><span>02</span>terminal-preloader met voortgangsbalk</li>
+                            <li><span>03</span>gordijn-overgang tussen de pagina's</li>
+                            <li class="preview-more"><span>04</span>licht en donker thema dat het systeem volgt</li>
+                            <li class="preview-more"><span>05</span>eigen cursor: een punt met een ring</li>
+                            <li class="preview-more"><span>06</span>volledig responsive, respecteert reduced motion</li>
+                        </ol>
+                        <div class="preview-links">
+                            <a class="pill" href="pages/projects/personal-website.html">open project &nearr;</a>
+                            <a class="pill" href="https://github.com/ErrorNoSlash/portfolio" target="_blank" rel="noopener">code &nearr;</a>
+                        </div>
+                        <nav class="link-list preview-rows" aria-label="Links van personal-website/">
+                            <a class="link-row" href="pages/projects/personal-website.html">
+                                <span><b class="link-name">Project</b><small class="link-url">~/projecten/personal-website</small></span><span class="link-go">GO &nearr;</span>
+                            </a>
+                            <a class="link-row" href="https://github.com/ErrorNoSlash/portfolio" target="_blank" rel="noopener">
+                                <span><b class="link-name">Code</b><small class="link-url">github.com/ErrorNoSlash/portfolio</small></span><span class="link-go">GO &nearr;</span>
+                            </a>
+                        </nav>
+                    </article>
+                    <article class="preview" id="preview-slashyos">
+                        <span class="caption tag">cat slashyos.md</span>
+                        <span class="preview-number" aria-hidden="true">02</span>
+                        <h3 class="preview-name">SlashyOS/</h3>
+                        <ul class="chips" aria-label="Stack"><li>nix</li><li>linux</li></ul>
+                        <p>Omdat alles in één flake staat, is de config van beide machines altijd hetzelfde en makkelijk terug te vinden in git.</p>
+                        <p class="preview-body">Elke rebuild maakt een nieuwe generatie, dus als er iets stuk gaat kan ik gewoon terug naar de vorige.</p>
+                        <ol class="preview-features">
+                            <li><span>01</span>multihost — laptop en desktop uit dezelfde flake</li>
+                            <li><span>02</span>modulaire opbouw, per host in of uit te schakelen</li>
+                            <li><span>03</span>rollbacks via NixOS-generaties</li>
+                        </ol>
+                        <img class="preview-shot" src="images/slashyos.jpg" alt="" loading="lazy" decoding="async">
+                        <div class="preview-links">
+                            <a class="pill" href="pages/projects/slashyos.html">open project &nearr;</a>
+                            <a class="pill" href="https://gitlab.com/nixos-projects/slashyos" target="_blank" rel="noopener">code &nearr;</a>
+                            <a class="pill" href="https://docs.errornoslash.be/slashyos/" target="_blank" rel="noopener">docs &nearr;</a>
+                        </div>
+                        <nav class="link-list preview-rows" aria-label="Links van SlashyOS/">
+                            <a class="link-row" href="pages/projects/slashyos.html">
+                                <span><b class="link-name">Project</b><small class="link-url">~/projecten/slashyos</small></span><span class="link-go">GO &nearr;</span>
+                            </a>
+                            <a class="link-row" href="https://gitlab.com/nixos-projects/slashyos" target="_blank" rel="noopener">
+                                <span><b class="link-name">Code</b><small class="link-url">gitlab.com/nixos-projects/slashyos</small></span><span class="link-go">GO &nearr;</span>
+                            </a>
+                            <a class="link-row" href="https://docs.errornoslash.be/slashyos/" target="_blank" rel="noopener">
+                                <span><b class="link-name">Docs</b><small class="link-url">docs.errornoslash.be/slashyos</small></span><span class="link-go">GO &nearr;</span>
+                            </a>
+                        </nav>
+                    </article>
+                    <article class="preview" id="preview-blog">
+                        <span class="caption tag">cat blog.md</span>
+                        <span class="preview-number" aria-hidden="true">03</span>
+                        <h3 class="preview-name">blog/</h3>
+                        <ul class="chips" aria-label="Stack"><li>zola</li><li>rust</li></ul>
+                        <p>Mijn blog, gehost op GitHub Pages en live op <a href="https://blog.errornoslash.be" target="_blank" rel="noopener">blog.errornoslash.be</a>. Hier documenteer ik de projecten die ik maak.</p>
+                        <p class="preview-body">Gebouwd met Zola: één binary, geen runtime, output is gewoon statische HTML. Het Terminus-thema zit als git submodule in de repo, met daarbovenop een eigen kleurenschema in CSS-variabelen. Posts zijn Markdown-bestanden met wat front matter, en een push naar main bouwt en deployt de site.</p>
+                        <ol class="preview-features">
+                            <li><span>01</span>statisch gegenereerd met Zola, geen runtime nodig</li>
+                            <li><span>02</span>eigen licht/donker kleurenschema bovenop Terminus</li>
+                            <li><span>03</span>tags met een eigen pagina en feed per term</li>
+                            <li class="preview-more"><span>04</span>nix devshell voor een reproduceerbare build</li>
+                            <li class="preview-more"><span>05</span>posts schrijven is één Markdown-bestand toevoegen</li>
+                        </ol>
+                        <div class="preview-links">
+                            <a class="pill" href="pages/projects/blog.html">open project &nearr;</a>
+                            <a class="pill" href="https://blog.errornoslash.be" target="_blank" rel="noopener">live &nearr;</a>
+                            <a class="pill" href="https://github.com/ErrorNoSlash/blog" target="_blank" rel="noopener">code &nearr;</a>
+                        </div>
+                        <nav class="link-list preview-rows" aria-label="Links van blog/">
+                            <a class="link-row" href="pages/projects/blog.html">
+                                <span><b class="link-name">Project</b><small class="link-url">~/projecten/blog</small></span><span class="link-go">GO &nearr;</span>
+                            </a>
+                            <a class="link-row" href="https://blog.errornoslash.be" target="_blank" rel="noopener">
+                                <span><b class="link-name">Live</b><small class="link-url">blog.errornoslash.be</small></span><span class="link-go">GO &nearr;</span>
+                            </a>
+                            <a class="link-row" href="https://github.com/ErrorNoSlash/blog" target="_blank" rel="noopener">
+                                <span><b class="link-name">Code</b><small class="link-url">github.com/ErrorNoSlash/blog</small></span><span class="link-go">GO &nearr;</span>
+                            </a>
+                        </nav>
+                    </article>
                 </div>
             </div>
 
-            <div class="hideOnMobile ascii-box">
-                <pre id="ascii-art" aria-hidden="true"></pre>
+            <div class="row marquee is-inverted" aria-hidden="true"><span>HTML · CSS · JS * NIX · LINUX * ZOLA · RUST * </span></div>
+
+        </section>
+
+        <!-- 03: over -->
+        <section class="screen" id="over" data-command="cat over.txt" aria-label="Over">
+
+            <div class="row section-head">
+                <div class="cell section-number" aria-hidden="true">03</div>
+                <p class="cell section-prompt section-output">&gt; wie ik ben, wat ik kan, en waar je me vindt</p>
+                <div class="cell section-caption"><span class="caption">OVER / DIAS</span></div>
+            </div>
+            <div class="row content">
+
+                <div class="profile">
+                    <div class="profile-photo">
+                        <img src="images/pfp.jpg" alt="Profielfoto van Dias Stas" loading="lazy">
+                        <div class="pfp-symbols" aria-hidden="true"></div>
+                    </div>
+                    <span class="caption tag">PORTRET</span>
+                    <div class="profile-info">
+                        <div class="profile-card">
+                            <small class="card-label">{ whoami }</small>
+                            <b class="card-name">Dias Stas<span class="card-asterisk">*</span></b>
+                            <small class="card-label card-role">[ front-end developer ]</small>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="about">
+                    <div class="about-text">
+                        <p>Ik bouw graag dingen voor het web: van kleine experimenten tot volledige interfaces. Ik hou van
+                            schone code, subtiele details en interfaces die snel aanvoelen.</p>
+                        <p>Momenteel verdiep ik me verder in front-end development en ben ik altijd op zoek naar nieuwe
+                            projecten om van te leren.</p>
+                    </div>
+                    <ul class="skill-grid" aria-label="Skills">
+                        <li class="skill"><span class="caption">skill / 01</span><span class="skill-name">html</span></li>
+                        <li class="skill"><span class="caption">skill / 02</span><span class="skill-name">css</span></li>
+                        <li class="skill"><span class="caption">skill / 03</span><span class="skill-name">javascript</span></li>
+                        <li class="skill"><span class="caption">skill / 04</span><span class="skill-name">gsap</span></li>
+                        <li class="skill"><span class="caption">skill / 05</span><span class="skill-name">git</span></li>
+                        <li class="skill"><span class="caption">skill / 06</span><span class="skill-name">responsive design</span></li>
+                    </ul>
+                    <nav class="link-list social-list" aria-label="Socials">
+                    <a class="link-row" href="https://blog.errornoslash.be/" target="_blank" rel="noopener">
+                        <span class="link-number">01</span><span><b class="link-name">Blog</b><small class="link-url">blog.errornoslash.be</small></span><span class="link-go">GO &nearr;</span>
+                    </a>
+                    <a class="link-row" href="https://github.com/ErrorNoSlash" target="_blank" rel="noopener">
+                        <span class="link-number">02</span><span><b class="link-name">GitHub</b><small class="link-url">github.com/ErrorNoSlash</small></span><span class="link-go">GO &nearr;</span>
+                    </a>
+                    <a class="link-row" href="https://gitlab.com/ErrorN0Slash/" target="_blank" rel="noopener">
+                        <span class="link-number">03</span><span><b class="link-name">GitLab</b><small class="link-url">gitlab.com/ErrorN0Slash</small></span><span class="link-go">GO &nearr;</span>
+                    </a>
+                    <a class="link-row" href="https://mastodon.social/@slashy" target="_blank" rel="noopener">
+                        <span class="link-number">04</span><span><b class="link-name">Mastodon</b><small class="link-url">@slashy@mastodon.social</small></span><span class="link-go">GO &nearr;</span>
+                    </a>
+                    </nav>
+                </div>
+
             </div>
 
-            <a class="scroll-hint" href="#projecten" aria-label="scroll naar projecten">
-                <span>scroll<span class="cursor-block">_</span></span>
-                <span class="scroll-chevron" aria-hidden="true">▾</span>
+        </section>
+
+        <!-- 04: contact -->
+        <section class="screen contact" id="contact" data-command='mail -s "hallo" dias.stas@pm.me' aria-label="Contact">
+
+            <div class="row section-head">
+                <div class="cell section-number" aria-hidden="true">04</div>
+                <p class="cell section-prompt section-output">&gt; 1 adres gevonden — schrijf hieronder, of mail direct</p>
+                <div class="cell section-caption"><span class="caption">CONTACT / MAIL</span></div>
+            </div>
+            <a class="row title mail-title" href="mailto:dias.stas@pm.me">
+                <div class="title-label"><span><span class="title-star">&#10035;</span> HEB JE EEN PROJECT, EEN VRAAG OF GEWOON ZIN OM TE PRATEN OVER CODE?</span><span class="title-star">&#10035;</span></div>
+                <div class="echo echo-far" aria-hidden="true">ZEG HALLO</div>
+                <div class="echo echo-near" aria-hidden="true">ZEG HALLO</div>
+                <h2>ZEG HALLO</h2>
             </a>
-        </section>
+            <form class="row compose" id="compose" data-mail="dias.stas@pm.me" aria-label="Schrijf een mail">
+                <div class="compose-fields">
+                    <label class="compose-field">
+                        <span class="caption">onderwerp</span>
+                        <input class="compose-subject" name="subject" type="text" placeholder="hallo!" autocomplete="off" maxlength="80">
+                    </label>
+                    <label class="compose-field compose-message">
+                        <span class="caption">bericht</span>
+                        <textarea name="body" rows="4" placeholder="schrijf hier je bericht ..."></textarea>
+                    </label>
+                </div>
+                <button class="cell lead-cta compose-send" type="submit">
+                    <span class="arrow">&nearr;</span>
+                    <span class="compose-command">$ mail -s "<span id="compose-preview">hallo!</span>" dias.stas@pm.me</span>
+                    <span class="caption">VERSTUUR / OPENT JE MAIL-APP</span>
+                </button>
+            </form>
 
-        <!-- projecten -->
-        <section class="content-section" id="projecten">
-            <p class="prompt">$ ls ./projecten</p>
-
-            <ul class="project-list">
-                <li class="project-entry">
-                    <div class="project-line">
-                        <a class="project-name" href="pages/projects/personal-website.html" data-path="~/projecten/personal-website">personal-website/</a>
-                        <span class="project-stack">html · css · js</span>
-                    </div>
-                    <p>Deze site. Vanilla HTML, CSS en JavaScript met een live gerenderde ASCII-donut.</p>
-                    <div class="project-links">
-                        <a class="btn" href="pages/projects/personal-website.html" data-path="~/projecten/personal-website">[ info ]</a>
-                        <a class="btn" href="https://github.com/ErrorNoSlash/portfolio">[ code ]</a>
-                    </div>
-                </li>
-
-                <li class="project-entry">
-                    <div class="project-line">
-                        <a class="project-name" href="pages/projects/slashyos.html" data-path="~/projecten/slashyos">SlashyOS/</a>
-                        <span class="project-stack">nix · linux</span>
-                    </div>
-                    <p>SlashyOS is een van mijn grotere projecten. Dit is het systeem dat ik gebruik op mijn laptop en desktop.</p>
-                    <div class="project-links">
-                        <a class="btn" href="pages/projects/slashyos.html" data-path="~/projecten/slashyos">[ info ]</a>
-                        <a class="btn" href="https://gitlab.com/nixos-projects/slashyos">[ code ]</a>
-                    </div>
-                </li>
-
-                <li class="project-entry">
-                    <div class="project-line">
-                        <a class="project-name" href="pages/projects/blog.html" data-path="~/projecten/blog">blog/</a>
-                        <span class="project-stack">zola · rust</span>
-                    </div>
-                    <p>Mijn blog is ook een van mijn projecten. De blog maakt gebruik van zola & pagescms voor een gui voor het maken van posts.</p>
-                    <div class="project-links">
-                        <a class="btn" href="pages/projects/blog.html" data-path="~/projecten/blog">[ info ]</a>
-                        <a class="btn" href="https://blog.errornoslash.be">[ live ]</a>
-                        <a class="btn" href="https://github.com/ErrorNoSlash/blog">[ code ]</a>
-                    </div>
-                </li>
-            </ul>
-        </section>
-
-        <!-- over -->
-        <section class="content-section" id="over">
-            <p class="prompt">$ cat over.txt</p>
-            <div class="about">
-                <p>Ik bouw graag dingen voor het web: van kleine experimenten tot volledige interfaces. Ik hou van
-                    schone code, subtiele details en interfaces die snel aanvoelen.</p>
-                <p>Momenteel verdiep ik me verder in front-end development en ben ik altijd op zoek naar nieuwe
-                    projecten om van te leren.</p>
-                <p class="skills-line"><span class="prompt-inline">skills:</span> [ html, css, javascript, gsap, git,
-                    responsive design ]</p>
+            <div class="row mail-bar">
+                <div class="cell mail-bar-label"><span class="caption">of direct</span></div>
+                <div class="cell mail-bar-address">dias.stas@pm.me</div>
+                <div class="cell mail-bar-copy"><button class="pill" id="copy-mail" type="button" data-mail="dias.stas@pm.me">kopieer</button></div>
             </div>
+
+            <nav class="row icon-row" aria-label="Socials">
+                <a class="icon-link" href="https://blog.errornoslash.be/" target="_blank" rel="noopener" aria-label="Blog" title="Blog">
+                    <svg viewBox="0 0 256 256" aria-hidden="true"><path d="M184,112a8,8,0,0,1-8,8H112a8,8,0,0,1,0-16h64A8,8,0,0,1,184,112Zm-8,24H112a8,8,0,0,0,0,16h64a8,8,0,0,0,0-16Zm48-88V208a16,16,0,0,1-16,16H48a16,16,0,0,1-16-16V48A16,16,0,0,1,48,32H208A16,16,0,0,1,224,48ZM48,208H72V48H48Zm160,0V48H88V208H208Z"/></svg><span class="icon-label">Blog</span>
+                </a>
+                <a class="icon-link" href="https://github.com/ErrorNoSlash" target="_blank" rel="noopener" aria-label="GitHub" title="GitHub">
+                    <svg viewBox="0 0 256 256" aria-hidden="true"><path d="M208.31,75.68A59.78,59.78,0,0,0,202.93,28,8,8,0,0,0,196,24a59.75,59.75,0,0,0-48,24H124A59.75,59.75,0,0,0,76,24a8,8,0,0,0-6.93,4,59.78,59.78,0,0,0-5.38,47.68A58.14,58.14,0,0,0,56,104v8a56.06,56.06,0,0,0,48.44,55.47A39.8,39.8,0,0,0,96,192v8H72a24,24,0,0,1-24-24A40,40,0,0,0,8,136a8,8,0,0,0,0,16,24,24,0,0,1,24,24,40,40,0,0,0,40,40H96v16a8,8,0,0,0,16,0V192a24,24,0,0,1,48,0v40a8,8,0,0,0,16,0V192a39.8,39.8,0,0,0-8.44-24.53A56.06,56.06,0,0,0,216,112v-8A58.14,58.14,0,0,0,208.31,75.68ZM200,112a40,40,0,0,1-40,40H112a40,40,0,0,1-40-40v-8a41.74,41.74,0,0,1,6.9-22.48A8,8,0,0,0,80,73.83a43.81,43.81,0,0,1,.79-33.58,43.88,43.88,0,0,1,32.32,20.06A8,8,0,0,0,119.82,64h32.35a8,8,0,0,0,6.74-3.69,43.87,43.87,0,0,1,32.32-20.06A43.81,43.81,0,0,1,192,73.83a8.09,8.09,0,0,0,1,7.65A41.72,41.72,0,0,1,200,104Z"/></svg><span class="icon-label">GitHub</span>
+                </a>
+                <a class="icon-link" href="https://gitlab.com/ErrorN0Slash/" target="_blank" rel="noopener" aria-label="GitLab" title="GitLab">
+                    <svg viewBox="0 0 256 256" aria-hidden="true"><path d="M230.15,117.1,210.25,41a11.94,11.94,0,0,0-22.79-1.11L169.78,88H86.22L68.54,39.87A11.94,11.94,0,0,0,45.75,41L25.85,117.1a57.19,57.19,0,0,0,22,61l73.27,51.76a11.91,11.91,0,0,0,13.74,0l73.27-51.76A57.19,57.19,0,0,0,230.15,117.1ZM58,57.5,73.13,98.76A8,8,0,0,0,80.64,104h94.72a8,8,0,0,0,7.51-5.24L198,57.5l13.07,50L128,166.21,44.9,107.5ZM40.68,124.11,114.13,176,93.41,190.65,57.09,165A41.06,41.06,0,0,1,40.68,124.11Zm87.32,91-20.73-14.65L128,185.8l20.73,14.64ZM198.91,165l-36.32,25.66L141.87,176l73.45-51.9A41.06,41.06,0,0,1,198.91,165Z"/></svg><span class="icon-label">GitLab</span>
+                </a>
+                <a class="icon-link" href="https://mastodon.social/@slashy" target="_blank" rel="noopener" aria-label="Mastodon" title="Mastodon">
+                    <svg viewBox="0 0 256 256" aria-hidden="true"><path d="M184,32H72A40,40,0,0,0,32,72V192a40,40,0,0,0,40,40h88a8,8,0,0,0,0-16H72a24,24,0,0,1-24-24v-8H184a40,40,0,0,0,40-40V72A40,40,0,0,0,184,32Zm24,112a24,24,0,0,1-24,24H48V72A24,24,0,0,1,72,48H184a24,24,0,0,1,24,24Zm-24-40v32a8,8,0,0,1-16,0V104a16,16,0,0,0-32,0v32a8,8,0,0,1-16,0V104a16,16,0,0,0-32,0v32a8,8,0,0,1-16,0V104a32,32,0,0,1,56-21.13A32,32,0,0,1,184,104Z"/></svg><span class="icon-label">Mastodon</span>
+                </a>
+                <a class="icon-link" href="mailto:dias.stas@pm.me" aria-label="Mail" title="Mail">
+                    <svg viewBox="0 0 256 256" aria-hidden="true"><path d="M224,48H32a8,8,0,0,0-8,8V192a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V56A8,8,0,0,0,224,48ZM203.43,64,128,133.15,52.57,64ZM216,192H40V74.19l82.59,75.71a8,8,0,0,0,10.82,0L216,74.19V192Z"/></svg><span class="icon-label">Mail</span>
+                </a>
+            </nav>
+
+            <footer class="row site-footer">
+                <div>&copy;<span id="year"></span> - Dias Stas</div>
+            </footer>
         </section>
 
-        <!-- contact -->
-        <section class="content-section" id="contact">
-            <p class="prompt">$ mail -s "hallo" dias.stas@pm.me</p>
-            <div class="contact">
-                <p>Heb je een project, een vraag of gewoon zin om te praten over code?</p>
-                <a class="btn border-btn glow-btn contact-btn"
-                    href="mailto:dias.stas@pm.me">zeg hallo</a>
-            </div>
-        </section>
     </main>
 
-    <footer>
-        <div class="footer-inner">
-        <span id="mark">&copy;2026 dias stas</span>
-        <div id="footer-links">
-            <a class="btn" href="https://blog.errornoslash.be" aria-label="blog">
-                <svg class="icon" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false">
-                    <path d="M184,112a8,8,0,0,1-8,8H112a8,8,0,0,1,0-16h64A8,8,0,0,1,184,112Zm-8,24H112a8,8,0,0,0,0,16h64a8,8,0,0,0,0-16Zm48-88V208a16,16,0,0,1-16,16H48a16,16,0,0,1-16-16V48A16,16,0,0,1,48,32H208A16,16,0,0,1,224,48ZM48,208H72V48H48Zm160,0V48H88V208H208Z" />
-                </svg>
-                <span class="btn-label">blog</span>
-            </a>
-            <a class="btn" href="https://github.com/ErrorNoSlash" aria-label="github">
-                <svg class="icon" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false">
-                    <path d="M208.31,75.68A59.78,59.78,0,0,0,202.93,28,8,8,0,0,0,196,24a59.75,59.75,0,0,0-48,24H124A59.75,59.75,0,0,0,76,24a8,8,0,0,0-6.93,4,59.78,59.78,0,0,0-5.38,47.68A58.14,58.14,0,0,0,56,104v8a56.06,56.06,0,0,0,48.44,55.47A39.8,39.8,0,0,0,96,192v8H72a24,24,0,0,1-24-24A40,40,0,0,0,8,136a8,8,0,0,0,0,16,24,24,0,0,1,24,24,40,40,0,0,0,40,40H96v16a8,8,0,0,0,16,0V192a24,24,0,0,1,48,0v40a8,8,0,0,0,16,0V192a39.8,39.8,0,0,0-8.44-24.53A56.06,56.06,0,0,0,216,112v-8A58.14,58.14,0,0,0,208.31,75.68ZM200,112a40,40,0,0,1-40,40H112a40,40,0,0,1-40-40v-8a41.74,41.74,0,0,1,6.9-22.48A8,8,0,0,0,80,73.83a43.81,43.81,0,0,1,.79-33.58,43.88,43.88,0,0,1,32.32,20.06A8,8,0,0,0,119.82,64h32.35a8,8,0,0,0,6.74-3.69,43.87,43.87,0,0,1,32.32-20.06A43.81,43.81,0,0,1,192,73.83a8.09,8.09,0,0,0,1,7.65A41.72,41.72,0,0,1,200,104Z" />
-                </svg>
-                <span class="btn-label">github</span>
-            </a>
-            <a class="btn" href="https://mastodon.social/@slashy" aria-label="mastodon">
-                <svg class="icon" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false">
-                    <path d="M184,32H72A40,40,0,0,0,32,72V192a40,40,0,0,0,40,40h88a8,8,0,0,0,0-16H72a24,24,0,0,1-24-24v-8H184a40,40,0,0,0,40-40V72A40,40,0,0,0,184,32Zm24,112a24,24,0,0,1-24,24H48V72A24,24,0,0,1,72,48H184a24,24,0,0,1,24,24Zm-24-40v32a8,8,0,0,1-16,0V104a16,16,0,0,0-32,0v32a8,8,0,0,1-16,0V104a16,16,0,0,0-32,0v32a8,8,0,0,1-16,0V104a32,32,0,0,1,56-21.13A32,32,0,0,1,184,104Z" />
-                </svg>
-                <span class="btn-label">mastodon</span>
-            </a>
-            <a class="btn" href="mailto:dias.stas@pm.me" aria-label="e-mail">
-                <svg class="icon" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false">
-                    <path d="M224,48H32a8,8,0,0,0-8,8V192a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V56A8,8,0,0,0,224,48ZM203.43,64,128,133.15,52.57,64ZM216,192H40V74.19l82.59,75.71a8,8,0,0,0,10.82,0L216,74.19V192Z" />
-                </svg>
-                <span class="btn-label">e-mail</span>
-            </a>
-        </div>
-        </div>
-    </footer>
-
-    <!--<button id="theme-toggle" class="btn theme-toggle" aria-label="schakel licht thema in">[ ☾ ]</button>-->
+    <!-- menu panel for phones (opened by menu.js) -->
+    <div class="veil" id="veil" aria-hidden="true">
+        <section class="panel" id="panel-menu" role="dialog" aria-modal="true" aria-label="Menu">
+            <div class="panel-head">
+                <span>dias@stas:~$ ls</span>
+                <button class="pill" type="button" data-close>sluit &#10005;</button>
+            </div>
+            <nav class="panel-body" aria-label="Menu">
+                <a class="link-row" href="#home">
+                    <span class="link-number">01</span><span><b class="link-name">Home</b><small class="link-url">~</small></span><span class="link-go">GO &nearr;</span>
+                </a>
+                <a class="link-row" href="#projecten">
+                    <span class="link-number">02</span><span><b class="link-name">Projecten</b><small class="link-url">~/projecten</small></span><span class="link-go">GO &nearr;</span>
+                </a>
+                <a class="link-row" href="#over">
+                    <span class="link-number">03</span><span><b class="link-name">Over</b><small class="link-url">~/over</small></span><span class="link-go">GO &nearr;</span>
+                </a>
+                <a class="link-row" href="#contact">
+                    <span class="link-number">04</span><span><b class="link-name">Contact</b><small class="link-url">dias.stas@pm.me</small></span><span class="link-go">GO &nearr;</span>
+                </a>
+            </nav>
+            <nav class="panel-icons" aria-label="Socials">
+                <a class="icon-link" href="https://blog.errornoslash.be/" target="_blank" rel="noopener" aria-label="Blog" title="Blog">
+                    <svg viewBox="0 0 256 256" aria-hidden="true"><path d="M184,112a8,8,0,0,1-8,8H112a8,8,0,0,1,0-16h64A8,8,0,0,1,184,112Zm-8,24H112a8,8,0,0,0,0,16h64a8,8,0,0,0,0-16Zm48-88V208a16,16,0,0,1-16,16H48a16,16,0,0,1-16-16V48A16,16,0,0,1,48,32H208A16,16,0,0,1,224,48ZM48,208H72V48H48Zm160,0V48H88V208H208Z"/></svg><span class="icon-label">Blog</span>
+                </a>
+                <a class="icon-link" href="https://github.com/ErrorNoSlash" target="_blank" rel="noopener" aria-label="GitHub" title="GitHub">
+                    <svg viewBox="0 0 256 256" aria-hidden="true"><path d="M208.31,75.68A59.78,59.78,0,0,0,202.93,28,8,8,0,0,0,196,24a59.75,59.75,0,0,0-48,24H124A59.75,59.75,0,0,0,76,24a8,8,0,0,0-6.93,4,59.78,59.78,0,0,0-5.38,47.68A58.14,58.14,0,0,0,56,104v8a56.06,56.06,0,0,0,48.44,55.47A39.8,39.8,0,0,0,96,192v8H72a24,24,0,0,1-24-24A40,40,0,0,0,8,136a8,8,0,0,0,0,16,24,24,0,0,1,24,24,40,40,0,0,0,40,40H96v16a8,8,0,0,0,16,0V192a24,24,0,0,1,48,0v40a8,8,0,0,0,16,0V192a39.8,39.8,0,0,0-8.44-24.53A56.06,56.06,0,0,0,216,112v-8A58.14,58.14,0,0,0,208.31,75.68ZM200,112a40,40,0,0,1-40,40H112a40,40,0,0,1-40-40v-8a41.74,41.74,0,0,1,6.9-22.48A8,8,0,0,0,80,73.83a43.81,43.81,0,0,1,.79-33.58,43.88,43.88,0,0,1,32.32,20.06A8,8,0,0,0,119.82,64h32.35a8,8,0,0,0,6.74-3.69,43.87,43.87,0,0,1,32.32-20.06A43.81,43.81,0,0,1,192,73.83a8.09,8.09,0,0,0,1,7.65A41.72,41.72,0,0,1,200,104Z"/></svg><span class="icon-label">GitHub</span>
+                </a>
+                <a class="icon-link" href="https://gitlab.com/ErrorN0Slash/" target="_blank" rel="noopener" aria-label="GitLab" title="GitLab">
+                    <svg viewBox="0 0 256 256" aria-hidden="true"><path d="M230.15,117.1,210.25,41a11.94,11.94,0,0,0-22.79-1.11L169.78,88H86.22L68.54,39.87A11.94,11.94,0,0,0,45.75,41L25.85,117.1a57.19,57.19,0,0,0,22,61l73.27,51.76a11.91,11.91,0,0,0,13.74,0l73.27-51.76A57.19,57.19,0,0,0,230.15,117.1ZM58,57.5,73.13,98.76A8,8,0,0,0,80.64,104h94.72a8,8,0,0,0,7.51-5.24L198,57.5l13.07,50L128,166.21,44.9,107.5ZM40.68,124.11,114.13,176,93.41,190.65,57.09,165A41.06,41.06,0,0,1,40.68,124.11Zm87.32,91-20.73-14.65L128,185.8l20.73,14.64ZM198.91,165l-36.32,25.66L141.87,176l73.45-51.9A41.06,41.06,0,0,1,198.91,165Z"/></svg><span class="icon-label">GitLab</span>
+                </a>
+                <a class="icon-link" href="https://mastodon.social/@slashy" target="_blank" rel="noopener" aria-label="Mastodon" title="Mastodon">
+                    <svg viewBox="0 0 256 256" aria-hidden="true"><path d="M184,32H72A40,40,0,0,0,32,72V192a40,40,0,0,0,40,40h88a8,8,0,0,0,0-16H72a24,24,0,0,1-24-24v-8H184a40,40,0,0,0,40-40V72A40,40,0,0,0,184,32Zm24,112a24,24,0,0,1-24,24H48V72A24,24,0,0,1,72,48H184a24,24,0,0,1,24,24Zm-24-40v32a8,8,0,0,1-16,0V104a16,16,0,0,0-32,0v32a8,8,0,0,1-16,0V104a16,16,0,0,0-32,0v32a8,8,0,0,1-16,0V104a32,32,0,0,1,56-21.13A32,32,0,0,1,184,104Z"/></svg><span class="icon-label">Mastodon</span>
+                </a>
+                <a class="icon-link" href="mailto:dias.stas@pm.me" aria-label="Mail" title="Mail">
+                    <svg viewBox="0 0 256 256" aria-hidden="true"><path d="M224,48H32a8,8,0,0,0-8,8V192a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V56A8,8,0,0,0,224,48ZM203.43,64,128,133.15,52.57,64ZM216,192H40V74.19l82.59,75.71a8,8,0,0,0,10.82,0L216,74.19V192Z"/></svg><span class="icon-label">Mail</span>
+                </a>
+            </nav>
+        </section>
+    </div>
 
 </body>
 

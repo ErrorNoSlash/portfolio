@@ -1,1079 +1,2329 @@
-/* COLORS */
+/* COLORS (same palette as contact.errornoslash.be) */
 :root {
-    --grey: #AEB5B8;
-    /* text */
     --black: #040507;
-    /* background */
+    --grey: #AEB5B8;
     --border: #525252;
-    --bright: #e3e3e3;
-    /* hover highlight */
-    --header-bg: rgba(4, 5, 7, 0.85);
-    --glow: rgba(174, 181, 184, 0.3);
+
+    /* light theme (default) */
+    --background: #e4e4e4;
+    --foreground: #1a1a1a;
+    --surface: #f6f6f6;
+    --card-background: #cfcfcf;
+    --line-color: #6f6f6f;
+    --glow: rgb(255 255 255 / 0.55);
+    --curtain: var(--foreground);
+    --curtain-text: var(--background);
+
+    --line-width: 0.0625rem;
+    --nav-height: 3.625rem;
+    --page-gap: clamp(0.5rem, 2vw, 1.5rem);
+    --font-display: "Outfit", "Arial Black", Arial, sans-serif;
+    --font-mono: "Space Mono", ui-monospace, Menlo, Consolas, monospace;
 }
 
-/* light theme — same palette as blog.errornoslash.be */
-html[data-theme="light"] {
-    --grey: #2A2F32;
-    --black: #AEB5B8;
-    --border: #4A5054;
-    --bright: #040507;
-    --header-bg: rgba(174, 181, 184, 0.85);
-    --glow: rgba(4, 5, 7, 0.2);
+/* dark theme: follows the system */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --background: var(--black);
+        --foreground: #ececec;
+        --surface: #1c1c1c;
+        --card-background: #2a2a2a;
+        --line-color: #8a8a8a;
+        --glow: rgb(255 255 255 / 0.13);
+        --curtain: var(--surface);
+        --curtain-text: var(--foreground);
+    }
 }
 
-html,
-body {
-    margin: 0;
+/* every element counts padding and border inside its width */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
 }
 
+/* keeps Windows settings (scrollbars, text size, high contrast) from changing the site */
 html {
     scroll-behavior: smooth;
-    /* kill the blue tap highlight on mobile */
-    -webkit-tap-highlight-color: transparent;
-    height: 100%;
+    /* jumps to a section land under the sticky nav */
+    scroll-padding-top: var(--nav-height);
+    scrollbar-width: none;
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+    forced-color-adjust: none;
 }
 
+/* hides the classic Windows scrollbar in Chrome and Edge, the page still scrolls */
+html::-webkit-scrollbar {
+    display: none;
+}
+
+/* Main body: the sheet fills the whole page, and grows when the content is longer */
 body {
-    background-color: var(--black);
-    color: var(--grey);
-    transition: background-color 0.3s ease, color 0.3s ease;
-    font-family: "JetBrains Mono", "Courier New", monospace;
-    font-size: 1rem;
-    line-height: 1.6;
+    margin: 0;
+    min-height: 100dvh;
+    display: flex;
+    padding: var(--page-gap);
+    background: var(--background);
+    color: var(--foreground);
+    font: 0.875rem/1.5 var(--font-mono);
+}
+
+/* links keep the text color and have no underline */
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+/* outline shown when moving around with the keyboard */
+:focus-visible {
+    outline: 0.19rem solid var(--foreground);
+    outline-offset: 0.19rem;
+}
+
+/* the sheet is a stack of bordered rows */
+.sheet {
+    flex: 1;
     display: flex;
     flex-direction: column;
-    min-height: 100%;
+    min-width: 0;
+    border: var(--line-width) solid var(--line-color);
 }
 
-::selection {
-    background: var(--grey);
-    color: var(--black);
+/* one bordered row of the sheet */
+.row {
+    flex: none;
+    display: grid;
+    border-bottom: var(--line-width) solid var(--line-color);
+
+    &:last-child {
+        border-bottom: none;
+    }
 }
 
-/* Controles all the buttons */
-.btn {
-    --clr: var(--grey);
-    cursor: pointer;
-    position: relative;
-    color: var(--clr);
-    border: none;
-    padding: 0.35rem 0.75rem;
-    font-size: 1rem;
-    font-family: inherit;
-    width: auto;
-    background: transparent;
-    overflow: hidden;
-    transition: 0.75s;
-    text-decoration: none;
+/* rows made of columns get a line between them */
+:is(.nav, .lead, .content, .section-head, .say-hi, .status, .browser, .mail-bar, .compose)>*+* {
+    border-left: var(--line-width) solid var(--line-color);
+}
 
+/* one box inside a row */
+.cell {
+    padding: 0.75rem 0.875rem;
+    min-width: 0;
+}
+
+/* small uppercase label */
+.caption {
+    font-size: 0.6875rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+/* small label that sits on top of a picture */
+.tag {
+    position: absolute;
+    top: 0.5rem;
+    left: 0.625rem;
+    z-index: 1;
+    display: inline-flex;
+    align-items: center;
+    padding: 0.2rem;
+    background-color: var(--surface);
+    color: var(--foreground);
+    font-size: 0.6rem;
+    line-height: 1;
+}
+
+/* blinking terminal cursor */
+.caret {
+    display: inline-block;
+    width: 0.6em;
+    height: 1.1em;
+    margin-left: 0.25rem;
+    vertical-align: text-bottom;
+    background: var(--foreground);
+    animation: blink 1.1s steps(1) infinite;
+}
+
+/* nav: stays at the top while the page scrolls */
+.nav {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    height: var(--nav-height);
+    grid-template-columns: 6rem 1fr auto;
+    align-items: stretch;
+    background: var(--background);
+    /* draws the top line again once the nav sticks */
+    box-shadow: 0 calc(-1 * var(--line-width)) 0 var(--line-color);
+
+    .nav-logo {
+        display: grid;
+        place-items: center;
+        font: 900 1.75rem var(--font-display);
+        letter-spacing: -0.04em;
+        transition: 0.3s;
+    }
+
+    a.nav-logo:hover {
+        background: var(--foreground);
+        color: var(--background);
+    }
+
+    .nav-prompt {
+        display: flex;
+        align-items: center;
+        font-weight: 700;
+        white-space: nowrap;
+        overflow: hidden;
+    }
+
+    /* scroll progress: a line under the nav that fills while you scroll down (scrollSpy.js sets --progress) */
+    &::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        bottom: calc(-1 * var(--line-width));
+        width: 100%;
+        height: 0.1875rem;
+        background: var(--foreground);
+        transform: scaleX(var(--progress, 0));
+        transform-origin: left;
+        pointer-events: none;
+    }
+}
+
+/* the buttons on the right of the nav */
+.nav-tabs {
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+    padding: 0.5rem 0.625rem;
+}
+
+/* rounded button used in the nav and the panels */
+.pill {
+    border: var(--line-width) solid var(--foreground);
+    border-radius: 3.125rem;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    text-align: center;
-    z-index: 2;
+    height: 1.9375rem;
+    padding: 0 0.875rem 0.25rem;
+    background: var(--surface);
+    color: inherit;
+    font: 700 0.875rem/1 var(--font-mono);
+    cursor: pointer;
+    transition: 0.3s;
 
-    /*---BORDER-BTN---*/
-    &.border-btn {
-        border: 0.063rem solid var(--border);
+    &:hover,
+    &.is-active {
+        background: var(--foreground);
+        color: var(--background);
+    }
+}
+
+/* the menu pill is only for phones, where the other pills are hidden */
+.nav-tabs .nav-menu {
+    display: none;
+}
+
+/* title: a huge word, letters spread over the row, with two sliced echoes on top.
+   title.js sets --letters, so any word fills the row (container units) */
+.title {
+    --letters: 9;
+    flex: 0 0 clamp(11rem, 38vh, 24rem);
+    container-type: size;
+    position: relative;
+    overflow: hidden;
+    /* label on top, the word and its echoes at the bottom, any extra height goes in between */
+    grid-template-rows: auto minmax(0, 1fr) auto auto;
+    padding: 0 clamp(0.875rem, 2vw, 1.75rem) 0.6rem;
+
+    .echo-far {
+        align-self: end;
+    }
+
+    .title-label {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        height: 2.5rem;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+
+        .title-star {
+            font-style: normal;
+            font-size: 1.5em;
+        }
+    }
+
+    .echo,
+    :is(h1, h2) {
+        display: flex;
+        justify-content: space-between;
+        margin: 0;
+        font: 900 min(calc(100cqw / (var(--letters) * 0.74)), calc((100cqh - 3.7rem) / 1.44)) var(--font-display);
+        letter-spacing: -0.045em;
+        white-space: nowrap;
+    }
+
+    .echo {
+        overflow: hidden;
+        line-height: 0.78;
+    }
+
+    .echo-far {
+        height: 0.2em;
+        opacity: 0.3;
+    }
+
+    .echo-near {
+        height: 0.34em;
+        opacity: 0.65;
+    }
+
+    :is(h1, h2) {
+        line-height: 0.9;
+    }
+
+    /* the shorter title on the project pages */
+    &.compact {
+        flex-basis: clamp(10rem, 30vh, 18rem);
+    }
+}
+
+/* lead: intro text / ascii donut (or stack) / inverted jump button */
+.lead {
+    grid-template-columns: minmax(0, 6fr) minmax(0, 3fr) minmax(0, 3fr);
+    min-height: clamp(13rem, 32vh, 20rem);
+
+    .lead-text {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 0.75rem;
+        padding: clamp(0.875rem, 2vh, 1.5rem) clamp(0.875rem, 2vw, 1.75rem);
+
+        p {
+            margin: 0;
+            font: 600 clamp(1.125rem, min(2.6vw, 3.4vh), 2rem) / 1.2 var(--font-display);
+            letter-spacing: -0.01em;
+        }
+
+        em {
+            font: normal 400 clamp(1rem, 1.8vw, 1.5rem) var(--font-display);
+            opacity: 0.55;
+        }
+
+        /* a link inside the text: underlined, inverted on hover */
+        a {
+            text-decoration: underline;
+            text-underline-offset: 0.1875rem;
+            text-decoration-thickness: 0.125rem;
+
+            &:hover {
+                background: var(--foreground);
+                color: var(--background);
+            }
+        }
+
+        /* the typed line keeps its height, so nothing jumps while it types */
+        .typed-line {
+            min-height: 1.2em;
+            font-weight: 800;
+            font-size: clamp(1.75rem, min(4.4vw, 5.5vh), 3.75rem);
+            letter-spacing: -0.03em;
+        }
+
+        /* plain text under the big line on the project pages */
+        .lead-body {
+            max-width: 46rem;
+            font: 400 0.9375rem/1.6 var(--font-mono);
+            letter-spacing: 0;
+            opacity: 0.85;
+        }
+    }
+
+    .lead-caption {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        justify-content: flex-end;
+        gap: 0.25rem;
+        text-align: right;
+
+        .lead-stack {
+            font: 800 clamp(1.25rem, 2.2vw, 2rem) / 1 var(--font-display);
+            text-transform: uppercase;
+            letter-spacing: -0.02em;
+        }
+    }
+
+    .lead-cta {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        gap: 1rem;
+        background: var(--foreground);
+        color: var(--background);
+        clip-path: polygon(0 0, 100% 0, 100% calc(100% - 1.75rem), calc(100% - 1.75rem) 100%, 0 100%);
+        transition: opacity 0.3s;
+
+        &:hover {
+            opacity: 0.85;
+        }
+
+        .arrow {
+            font: 900 clamp(2.25rem, min(8vw, 10vh), 7.5rem) / 1 var(--font-display);
+        }
+    }
+}
+
+/* the spinning ascii donut: ascii.js draws 60 x 30 characters but the donut only uses about 30 x 16 of them,
+   so the font is sized to that middle part and the empty edges are cut off */
+.ascii {
+    position: relative;
+    display: grid;
+    place-items: center;
+    container-type: size;
+    overflow: hidden;
+    padding: 0;
+
+    /* centered from the middle, so the cut off edges are the same on every side */
+    pre {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        margin: 0;
+        transform: translate(-50%, -50%);
+        font: 400 min(calc(100cqw / 19), calc(100cqh / 17)) / 1 var(--font-mono);
+        user-select: none;
+    }
+}
+
+/* landing: the title takes whatever height is left, so the whole landing page fits the screen */
+.title.hero {
+    flex: 1 1 0;
+    min-height: 9rem;
+}
+
+/* landing: the word sits at the top, right under the label. On tall screens the space below it holds
+   a field of dots with the ds mark, only when the row is tall enough (dotField.js checks) */
+.title.hero {
+    grid-template-rows: auto auto auto auto minmax(0, 1fr);
+}
+
+.hero-field {
+    position: relative;
+    display: none;
+    min-height: 0;
+    /* a line from edge to edge between the word and the field, like the rows of the sheet */
+    margin: clamp(0.75rem, 2cqh, 1.5rem) calc(-1 * clamp(0.875rem, 2vw, 1.75rem)) -0.6rem;
+    border-top: var(--line-width) solid var(--line-color);
+    color: var(--foreground);
+    cursor: crosshair;
+    touch-action: pan-y;
+
+    canvas {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+    }
+
+    .tag {
+        top: 0.625rem;
+        left: clamp(0.875rem, 2vw, 1.75rem);
+    }
+}
+
+/* dotField.js adds has-room when there is enough height under the word */
+.title.hero.has-room .hero-field {
+    display: block;
+}
+
+/* landing stage: intro / donut / the three doors to the other pages */
+.lead.stage {
+    flex: 0 0 clamp(17rem, 40vh, 28rem);
+    min-height: 0;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 3fr) minmax(0, 4fr);
+    grid-template-rows: minmax(0, 1fr);
+
+    /* small lowercase label above the typed line, like on the name card */
+    .stage-label {
+        font-size: 0.75rem;
+        opacity: 0.7;
+    }
+
+    /* one line, sized to the column, so the caret never drops to a new line */
+    .lead-text .typed-line {
+        font-size: clamp(1.75rem, min(3.1vw, 5.5vh), 3.25rem);
+        white-space: nowrap;
+    }
+}
+
+/* the doors: three link rows that share the height of the stage */
+.doors .link-row {
+    flex: 1 1 0;
+    min-height: 0;
+    padding-block: 0.25rem;
+
+    .link-name {
+        font-size: clamp(1.375rem, min(2.7vw, 5.5vh), 3.25rem);
+    }
+
+    .link-go {
+        padding-inline: 1.125rem;
+    }
+
+    .link-url {
+        display: block;
+        margin: 0.375rem 0 0;
+    }
+}
+
+/* status bar: small facts in a row, like the bottom line of a terminal */
+.status {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+
+    .status-item {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 0.125rem;
+        min-width: 0;
+        padding: 0.625rem clamp(0.875rem, 2vw, 1.75rem);
+    }
+
+    .status-value {
+        overflow: hidden;
+        font: 800 clamp(1.125rem, 1.8vw, 1.625rem) / 1.1 var(--font-display);
+        font-variant-numeric: tabular-nums;
+        letter-spacing: -0.02em;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+}
+
+/* one screen of the page: at least as tall as the window under the nav, its rows share the height */
+.screen {
+    display: flex;
+    flex-direction: column;
+    min-height: calc(100dvh - var(--nav-height));
+
+    /* the last row keeps its line, so the next screen starts with one */
+    &>.row:last-child {
+        border-bottom: var(--line-width) solid var(--line-color);
+    }
+
+    /* except the footer at the very end of the page, the sheet's own border closes it */
+    &:last-child>.site-footer:last-child {
+        border-bottom: none;
+    }
+
+    /* titles inside a screen are a bit shorter, so the content still fits */
+    .title.compact {
+        flex-basis: clamp(8rem, 22vh, 13rem);
+    }
+}
+
+/* the landing screen ends right at the bottom of the window (under the gap above the sheet and the nav) */
+.screen.landing {
+    min-height: calc(100dvh - var(--nav-height) - var(--page-gap) - 2 * var(--line-width));
+}
+
+/* projects screen: the list on the left, a preview of the project you point at on the right */
+.browser {
+    flex: 1 1 auto;
+    min-height: 0;
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+
+    /* one project: a big number, the name with its stack as a caption under it, and the GO button */
+    .project-list .link-row {
+        flex: 1 1 0;
+        min-height: 6rem;
+        align-items: center;
+        column-gap: clamp(1rem, 2.5vw, 2.5rem);
+        padding-block: 0.75rem;
+
+        .link-number {
+            align-self: center;
+            margin: 0;
+            min-width: 2ch;
+            font: 900 clamp(1.5rem, 2.6vw, 2.75rem) / 1 var(--font-display);
+            letter-spacing: -0.04em;
+            opacity: 0.35;
+            transition: opacity 0.6s;
+        }
+
+        .link-name {
+            display: block;
+            font-size: clamp(1.75rem, min(4.6vw, 7vh), 4.5rem);
+        }
+
+        .link-url {
+            display: block;
+            margin: 0.625rem 0 0;
+            font-size: 0.6875rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            opacity: 0.6;
+        }
+
+        &:hover .link-number,
+        &.is-current .link-number {
+            opacity: 1;
+        }
+
+        /* the preview already tells the story, so the short text waits for phones */
+        .link-about {
+            display: none;
+        }
+    }
+}
+
+/* the project the preview shows gets a thick line on its left */
+.project-list .link-row.is-current {
+    box-shadow: inset 0.375rem 0 0 var(--foreground);
+}
+
+/* right side of the browser: one preview at a time (projectPreview.js switches them) */
+.preview-pane {
+    position: relative;
+    display: flex;
+    min-width: 0;
+    overflow: hidden;
+}
+
+.preview {
+    position: relative;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.875rem;
+    padding: 2.25rem clamp(0.875rem, 2vw, 1.75rem) clamp(1rem, 3vh, 1.75rem);
+    animation: rise 0.45s cubic-bezier(0.2, 0.8, 0.2, 1);
+
+    &[hidden] {
+        display: none;
+    }
+
+    /* the project number, huge and faint behind everything */
+    .preview-number {
+        position: absolute;
+        right: -0.04em;
+        bottom: -0.12em;
+        z-index: -1;
+        font: 900 clamp(11rem, 30vw, 32rem) / 1 var(--font-display);
+        letter-spacing: -0.06em;
+        opacity: 0.08;
+        pointer-events: none;
+    }
+
+    .preview-name {
+        margin: 0;
+        font: 900 clamp(2rem, 3.4vw, 3.5rem) / 0.95 var(--font-display);
+        letter-spacing: -0.035em;
+        text-transform: uppercase;
+        overflow-wrap: anywhere;
+    }
+
+    p {
+        margin: 0;
+        max-width: 34rem;
+        opacity: 0.85;
+    }
+
+    .preview-features {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+
+        li {
+            display: grid;
+            grid-template-columns: 2.25rem 1fr;
+            align-items: baseline;
+            padding: 0.4375rem 0;
+            border-top: var(--line-width) solid var(--line-color);
+            font: 600 clamp(0.9375rem, 1.2vw, 1.125rem) / 1.3 var(--font-display);
+        }
+
+        span {
+            font: 400 0.6875rem var(--font-mono);
+            opacity: 0.6;
+        }
+    }
+
+    /* the second paragraph, the rest of the features and the screenshot wait for tall screens */
+    .preview-body,
+    .preview-more,
+    .preview-shot {
+        display: none;
+    }
+
+    /* the whole screenshot shows: the box keeps the shape of the image and gets as tall as the free space allows */
+    .preview-shot {
+        flex: 1 1 0;
+        align-self: flex-start;
+        min-height: 0;
+        width: auto;
+        max-width: 100%;
+        aspect-ratio: 1600 / 1066;
+        object-fit: contain;
+        border: var(--line-width) solid var(--line-color);
+        filter: grayscale(1) contrast(1.15);
+        transition: filter 0.6s;
+
+        &:hover {
+            filter: none;
+        }
+    }
+
+    /* tall screens: the links as rows, from edge to edge at the bottom of the preview */
+    .preview-rows {
+        display: none;
+        margin: auto calc(-1 * clamp(0.875rem, 2vw, 1.75rem)) calc(-1 * clamp(1rem, 3vh, 1.75rem));
+        border-top: var(--line-width) solid var(--line-color);
+
+        .link-row {
+            grid-template-columns: 1fr auto;
+            padding-block: clamp(0.75rem, 1.6vh, 1.25rem);
+
+            .link-name {
+                font-size: clamp(1.5rem, 2.6vw, 2.5rem);
+            }
+        }
+    }
+
+    /* open the project, or go straight to its code, site or docs */
+    .preview-links {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.375rem;
+        margin-top: auto;
+    }
+}
+
+/* the giant mail link: a title you can click, filled with a circle on hover like the link rows */
+.mail-title {
+    /* tall enough for the word at full width, the composer below takes the rest of the screen */
+    flex: 0 1 clamp(9rem, 34vh, 28rem);
+    min-height: 9rem;
+    z-index: 0;
+    transition: color 0.6s;
+
+    &::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        z-index: -1;
+        background: var(--foreground);
+        clip-path: circle(0% at 50% 50%);
+        -webkit-clip-path: circle(0% at 50% 50%);
+        transition: 0.6s;
+    }
+
+    &:hover,
+    &:focus-visible {
+        color: var(--background);
+    }
+
+    &:hover::after,
+    &:focus-visible::after {
+        clip-path: circle(100% at 50% 50%);
+        -webkit-clip-path: circle(100% at 50% 50%);
+    }
+}
+
+/* contact: a small mail composer, the fields on the left and the big send button on the right */
+.compose {
+    flex: 1 1 auto;
+    min-height: 12rem;
+    grid-template-columns: minmax(0, 8fr) minmax(0, 4fr);
+
+    .compose-fields {
+        display: flex;
+        flex-direction: column;
+        min-width: 0;
+    }
+
+    .compose-field {
+        display: grid;
+        grid-template-columns: 8rem 1fr;
+        align-items: baseline;
+        gap: 1rem;
+        padding: clamp(0.75rem, 2vh, 1.25rem) clamp(0.875rem, 2vw, 1.75rem);
+        cursor: text;
+
+        & + .compose-field {
+            border-top: var(--line-width) solid var(--line-color);
+        }
+    }
+
+    /* the message box grows with the screen, so there is room to write */
+    .compose-message {
+        flex: 1 1 auto;
+        grid-template-rows: minmax(0, 1fr);
+        align-items: stretch;
+
+        .caption {
+            align-self: start;
+            padding-top: 0.25rem;
+        }
+
+        textarea {
+            height: 100%;
+            min-height: 5rem;
+        }
+    }
+
+    input,
+    textarea {
+        width: 100%;
+        min-width: 0;
+        padding: 0;
+        border: none;
+        border-radius: 0;
+        background: none;
+        color: var(--foreground);
+        outline: none;
+        resize: none;
+    }
+
+    input {
+        font: 800 clamp(1.5rem, 3vw, 2.75rem) / 1.1 var(--font-display);
+        letter-spacing: -0.02em;
+    }
+
+    textarea {
+        font: 400 clamp(0.9375rem, 1.2vw, 1.125rem) / 1.6 var(--font-mono);
+    }
+
+    :is(input, textarea)::placeholder {
+        color: var(--foreground);
+        opacity: 0.3;
+    }
+
+    /* the field you are typing in gets the same thick line as the active project */
+    .compose-field:focus-within {
+        box-shadow: inset 0.375rem 0 0 var(--foreground);
+    }
+
+    /* the send button: the inverted button of the landing page, with the mail command on it */
+    .compose-send {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        gap: 1rem;
+        border: none;
+        background: var(--foreground);
+        color: var(--background);
+        clip-path: polygon(0 0, 100% 0, 100% calc(100% - 1.75rem), calc(100% - 1.75rem) 100%, 0 100%);
+        text-align: left;
+        font: inherit;
+        cursor: pointer;
+        transition: opacity 0.3s;
+
+        &:hover,
+        &:focus-visible {
+            opacity: 0.85;
+        }
+
+        .arrow {
+            font: 900 clamp(2.25rem, min(6vw, 8vh), 6rem) / 1 var(--font-display);
+        }
+
+        .compose-command {
+            font-size: 0.8125rem;
+            font-weight: 700;
+            overflow-wrap: anywhere;
+        }
+    }
+}
+
+/* the mail address on its own row, with a button that copies it */
+.mail-bar {
+    grid-template-columns: auto 1fr auto;
+    align-items: stretch;
+
+    .mail-bar-label {
+        display: flex;
+        align-items: center;
+    }
+
+    .mail-bar-address {
+        display: flex;
+        align-items: center;
+        min-width: 0;
+        overflow-wrap: anywhere;
+        font: 800 clamp(1.125rem, 2.2vw, 2rem) / 1.1 var(--font-display);
+        letter-spacing: -0.02em;
+    }
+
+    .mail-bar-copy {
+        display: flex;
+        align-items: center;
+    }
+}
+
+/* marquee (a block, not a grid, so the track is as wide as its text) */
+.marquee {
+    display: block;
+    overflow: hidden;
+    white-space: nowrap;
+    padding: 0.125rem 0;
+    font: 400 clamp(1.1rem, 4vw, 1.6rem) / 1.6 var(--font-mono);
+
+    span {
+        display: inline-block;
+        white-space: pre;
+        animation: scroll 22s linear infinite;
+        will-change: transform;
+        backface-visibility: hidden;
+    }
+}
+
+/* an inverted marquee that runs the other way */
+.marquee.is-inverted {
+    background: var(--foreground);
+    color: var(--background);
+
+    span {
+        animation-direction: reverse;
+    }
+}
+
+/* section head: number / terminal command / caption, starts every part of the page */
+.section-head {
+    grid-template-columns: 6rem 1fr auto;
+
+    .section-number {
+        display: grid;
+        place-items: center;
+        font: 900 1.75rem var(--font-display);
+        letter-spacing: -0.04em;
+    }
+
+    .section-prompt {
+        display: flex;
+        align-items: center;
+        margin: 0;
+        font-size: inherit;
+        font-weight: 700;
+        overflow-wrap: anywhere;
+    }
+
+    .section-caption {
+        display: flex;
+        align-items: center;
+    }
+
+    /* the output of the command in the nav: lighter than a command */
+    .section-output {
+        font-weight: 400;
+        opacity: 0.75;
+    }
+}
+
+/* links: big rows, circular fill on hover */
+.link-list {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    min-height: 0;
+}
+
+/* one link: number, name, address and the GO button (the page scrolls, so rows keep their own height) */
+.link-row {
+    --clr: var(--foreground);
+    position: relative;
+    flex: none;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: clamp(0.625rem, 2vw, 1.5rem);
+    padding: clamp(0.75rem, 2vh, 1.25rem) clamp(0.875rem, 2vw, 1.75rem);
+    border-bottom: var(--line-width) solid var(--line-color);
+    overflow: hidden;
+    z-index: 0;
+    transition: color 0.6s;
+
+    &:last-child {
+        border-bottom: none;
     }
 
     &::after {
         content: "";
         position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
+        inset: 0;
         background: var(--clr);
-        clip-path: inset(50% 50% 50% 50%);
-        -webkit-clip-path: inset(50% 50% 50% 50%);
-        transition: 0.55s;
+        clip-path: circle(0% at 50% 50%);
+        -webkit-clip-path: circle(0% at 50% 50%);
+        transition: 0.6s;
         z-index: -1;
     }
 
-    &:hover::after {
-        clip-path: inset(0 0 0 0);
-        -webkit-clip-path: inset(0 0 0 0);
-        transition: 0.4s ease-out;
+    &:hover,
+    &:focus-visible {
+        color: var(--background);
     }
 
-    &:hover {
-        color: var(--black);
-        border-color: transparent;
+    &:hover::after,
+    &:focus-visible::after {
+        clip-path: circle(100% at 50% 50%);
+        -webkit-clip-path: circle(100% at 50% 50%);
     }
 
-    &.glow-btn:hover {
-        box-shadow: 0 0 0.625rem var(--clr), 0 0 3.125rem var(--clr);
-        border-color: var(--grey);
+    .link-number {
+        align-self: start;
+        margin-top: 0.375rem;
+        font-size: 0.75rem;
+        font-style: normal;
+        opacity: 0.6;
+    }
+
+    .link-name {
+        display: inline-block;
+        font: 800 clamp(1.25rem, min(5vw, 4.4vh), 4rem) / 1 var(--font-display);
+        text-transform: uppercase;
+        letter-spacing: -0.02em;
+    }
+
+    .link-url {
+        display: inline-block;
+        margin-left: 1rem;
+        opacity: 0.75;
+    }
+
+    .link-go {
+        justify-self: end;
+        padding: 0.25rem 1.5rem;
+        border-radius: 3.125rem;
+        background: var(--foreground);
+        color: var(--background);
+        font: 900 1.25rem var(--font-display);
+        white-space: nowrap;
+        transition: 0.6s;
+    }
+
+    &:hover .link-go,
+    &:focus-visible .link-go {
+        background: var(--background);
+        color: var(--foreground);
     }
 }
 
-/* touch screens keep :hover after a tap, undo the whole hover state */
+/* projects: the same link rows, taller, with a short text under the name */
+.project-list .link-row {
+    padding-block: clamp(1rem, 2.5vh, 1.75rem);
+
+    .link-name {
+        font-size: clamp(1.75rem, 5.5vw, 4.5rem);
+    }
+
+    .link-about {
+        display: block;
+        max-width: 42rem;
+        margin-top: 0.625rem;
+        font-size: 0.875rem;
+        opacity: 0.8;
+    }
+}
+
+/* over: portrait + name card on the left, text and skills on the right (it takes the free height of the screen) */
+.content {
+    flex: 1 1 auto;
+    grid-template-columns: minmax(0, 4fr) minmax(0, 8fr);
+}
+
+/* socials as big link rows next to the about text (phones use the icon row on the contact screen instead) */
+.social-list {
+    display: flex;
+    flex: 1 1 auto;
+    border-top: var(--line-width) solid var(--line-color);
+
+    .link-row {
+        flex: 1 1 0;
+        min-height: 4.5rem;
+        padding-block: 0.5rem;
+
+        .link-name {
+            font-size: clamp(1.5rem, min(3vw, 4.2vh), 3rem);
+        }
+    }
+}
+
+/* left side: picture on top, name card below */
+.profile {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+
+    /* the photo box: the picture with the symbol grid on top of it */
+    .profile-photo {
+        position: relative;
+        flex: 1 1 0;
+        min-height: 14rem;
+        overflow: hidden;
+        border-bottom: var(--line-width) solid var(--line-color);
+    }
+
+    img {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        filter: grayscale(1) contrast(1.35);
+    }
+
+    .profile-info {
+        flex: none;
+        padding: 0.625rem 0.875rem;
+    }
+}
+
+/* possessed portrait: moving over the photo turns the cells under the pointer into flickering symbols
+   that fade back into the picture (pfpSymbols.js builds the grid and wakes the cells) */
+.pfp-symbols {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    justify-content: start;
+    align-content: start;
+    pointer-events: none;
+    font: 700 0.9375rem / 1 var(--font-mono);
+
+    span {
+        display: grid;
+        place-items: center;
+        background: var(--background);
+        color: var(--foreground);
+        opacity: 0;
+        transition: opacity 0.45s;
+    }
+
+    /* a woken cell shows at once, then fades out slowly when it goes back to sleep */
+    span.is-on {
+        opacity: 1;
+        transition: none;
+    }
+
+    span.is-inverted {
+        background: var(--foreground);
+        color: var(--background);
+    }
+}
+
+/* name card: lifts on hover and a spotlight follows the pointer */
+.profile-card {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+    transition: transform 0.3s, box-shadow 0.3s;
+    display: flex;
+    flex-direction: column;
+    gap: 0.375rem;
+    background: var(--card-background);
+    color: var(--foreground);
+    border-radius: 1.625rem;
+    padding: 0.875rem 1.125rem 1rem;
+
+    &::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        z-index: -1;
+        background: radial-gradient(circle 9rem at var(--x, 50%) var(--y, 50%), var(--glow), transparent);
+        opacity: 0;
+        transition: opacity 0.3s;
+    }
+
+    .card-label {
+        display: block;
+        font-size: 0.75rem;
+        opacity: 0.7;
+    }
+
+    .card-name {
+        font: 900 clamp(1.75rem, min(5vw, 6vh), 3.5rem) / 0.95 var(--font-display);
+        letter-spacing: -0.04em;
+    }
+
+    .card-asterisk {
+        display: inline-block;
+        margin-left: 0.05em;
+        font-size: 0.5em;
+        vertical-align: top;
+        transition: transform 0.6s;
+    }
+
+    .card-role {
+        font-size: 0.8125rem;
+        font-weight: 700;
+        opacity: 1;
+        text-wrap: balance;
+    }
+}
+
+/* hover: the card lifts with a hard shadow and a spotlight follows the cursor (cardSpotlight.js sets --x and --y) */
+@media (hover: hover) and (pointer: fine) {
+    .profile-card:hover {
+        transform: translate(-0.1875rem, -0.1875rem);
+        box-shadow: 0.375rem 0.375rem 0 var(--line-color);
+    }
+
+    .profile-card:hover::after {
+        opacity: 1;
+    }
+
+    .profile-card:hover .card-asterisk {
+        transform: rotate(180deg);
+    }
+}
+
+/* on the over screen the card is tall: label on top, the name in the middle, the role at the bottom */
+.content .profile-card {
+    min-height: clamp(10rem, 26vh, 20rem);
+    justify-content: space-between;
+
+    .card-name {
+        font-size: clamp(2.25rem, min(5vw, 7.5vh), 5rem);
+    }
+}
+
+/* touch: the same effect while a finger presses the card (cardSpotlight.js adds is-touched and keeps it a moment after the finger lifts) */
+.profile-card.is-touched {
+    transform: translate(-0.1875rem, -0.1875rem);
+    box-shadow: 0.375rem 0.375rem 0 var(--line-color);
+}
+
+/* same effect on a phone while the card is held */
+.profile-card.is-touched::after {
+    opacity: 1;
+}
+
+.profile-card.is-touched .card-asterisk {
+    transform: rotate(180deg);
+}
+
+/* touch screens: no hover, so the hold effect is used instead */
 @media (hover: none) {
-    .btn::after {
+    .profile-card {
+        -webkit-user-select: none;
+        user-select: none;
+        -webkit-touch-callout: none;
+    }
+}
+
+/* right side of over: the about text, then the skills */
+.about {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+
+    .about-text {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 1rem;
+        padding: clamp(1rem, 3vh, 2.5rem) clamp(0.875rem, 2vw, 1.75rem);
+
+        p {
+            margin: 0;
+            max-width: 44rem;
+            font: 600 clamp(1.125rem, 1.9vw, 1.75rem) / 1.25 var(--font-display);
+            letter-spacing: -0.01em;
+        }
+
+        p+p {
+            font-weight: 400;
+            opacity: 0.7;
+        }
+    }
+
+    .about-skills {
+        display: grid;
+        grid-template-columns: auto 1fr;
+        align-items: center;
+        gap: 0.75rem 1rem;
+        padding: 0.875rem clamp(0.875rem, 2vw, 1.75rem);
+        border-top: var(--line-width) solid var(--line-color);
+    }
+}
+
+/* skills: six numbered tiles in big type under the about text, they invert on hover like the buttons */
+.skill-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border-top: var(--line-width) solid var(--line-color);
+
+    .skill {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 0.25rem;
+        min-width: 0;
+        padding: clamp(0.75rem, 2.2vh, 1.75rem) clamp(0.875rem, 2vw, 1.75rem);
+        transition: background 0.3s, color 0.3s;
+
+        /* lines between the tiles: left between columns, top from the second row */
+        &:not(:nth-child(3n + 1)) {
+            border-left: var(--line-width) solid var(--line-color);
+        }
+
+        &:nth-child(n + 4) {
+            border-top: var(--line-width) solid var(--line-color);
+        }
+
+        &:hover {
+            background: var(--foreground);
+            color: var(--background);
+        }
+    }
+
+    .skill-name {
+        overflow-wrap: anywhere;
+        font: 800 clamp(1.375rem, min(2.6vw, 4.4vh), 2.75rem) / 1 var(--font-display);
+        letter-spacing: -0.03em;
+    }
+}
+
+/* list of small rounded labels (skills, stack) */
+.chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.375rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    li {
+        padding: 0.125rem 0.75rem 0.1875rem;
+        border: var(--line-width) solid var(--foreground);
+        border-radius: 3.125rem;
+        font-size: 0.8125rem;
+        font-weight: 700;
+    }
+}
+
+/* contact: a big question and the inverted mail button */
+.say-hi {
+    grid-template-columns: minmax(0, 8fr) minmax(0, 4fr);
+    min-height: clamp(12rem, 30vh, 18rem);
+
+    .say-hi-text {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 0.75rem;
+        padding: clamp(1rem, 3vh, 2rem) clamp(0.875rem, 2vw, 1.75rem);
+
+        p {
+            margin: 0;
+            font: 800 clamp(1.5rem, min(3.6vw, 5vh), 3.25rem) / 1.08 var(--font-display);
+            letter-spacing: -0.025em;
+            text-wrap: balance;
+        }
+
+        em {
+            font: normal 400 clamp(1rem, 1.8vw, 1.5rem) var(--font-display);
+            opacity: 0.55;
+        }
+    }
+
+    /* same look as the lead button */
+    .lead-cta {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        gap: 1rem;
+        background: var(--foreground);
+        color: var(--background);
+        clip-path: polygon(0 0, 100% 0, 100% calc(100% - 1.75rem), calc(100% - 1.75rem) 100%, 0 100%);
+        transition: opacity 0.3s;
+
+        &:hover {
+            opacity: 0.85;
+        }
+
+        .arrow {
+            font: 900 clamp(2.25rem, min(8vw, 10vh), 7.5rem) / 1 var(--font-display);
+        }
+    }
+}
+
+/* row of social icons (icons by Phosphor Icons) */
+.icon-row {
+    grid-template-columns: repeat(5, 1fr);
+}
+
+/* one icon button in an icon row */
+.icon-link {
+    --clr: var(--foreground);
+    position: relative;
+    display: grid;
+    place-items: center;
+    height: 4.25rem;
+    overflow: hidden;
+    z-index: 0;
+    transition: color 0.6s;
+
+    & + & {
+        border-left: var(--line-width) solid var(--line-color);
+    }
+
+    &::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: var(--clr);
+        clip-path: circle(0% at 50% 50%);
+        -webkit-clip-path: circle(0% at 50% 50%);
+        transition: 0.6s;
+        z-index: -1;
+    }
+
+    &:hover,
+    &:focus-visible,
+    &:active {
+        color: var(--background);
+    }
+
+    &:hover::after,
+    &:focus-visible::after,
+    &:active::after {
+        clip-path: circle(100% at 50% 50%);
+        -webkit-clip-path: circle(100% at 50% 50%);
+    }
+
+    svg {
+        width: 1.75rem;
+        height: 1.75rem;
+        fill: currentColor;
+    }
+
+    /* the name next to the icon, only shown in the big row on the contact screen */
+    .icon-label {
+        display: none;
+    }
+}
+
+/* project page: a big screenshot, grey until you point at it */
+.shot {
+    position: relative;
+    display: block;
+    margin: 0;
+    overflow: hidden;
+
+    img {
+        display: block;
+        width: 100%;
+        height: auto;
+        max-height: 80vh;
+        object-fit: cover;
+        filter: grayscale(1) contrast(1.15);
+        transition: filter 0.6s;
+    }
+
+    &:hover img {
+        filter: none;
+    }
+}
+
+/* project page: numbered feature rows */
+.feature-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    li {
+        display: grid;
+        grid-template-columns: 6rem 1fr;
+        align-items: baseline;
+        border-bottom: var(--line-width) solid var(--line-color);
+
+        &:last-child {
+            border-bottom: none;
+        }
+    }
+
+    .feature-number {
+        padding: 0.875rem;
+        text-align: center;
+        font-size: 0.75rem;
+        opacity: 0.6;
+    }
+
+    .feature-text {
+        padding: 0.75rem clamp(0.875rem, 2vw, 1.75rem);
+        border-left: var(--line-width) solid var(--line-color);
+        font: 600 clamp(1.0625rem, 1.8vw, 1.5rem) / 1.3 var(--font-display);
+        letter-spacing: -0.01em;
+    }
+}
+
+/* overlay: blurred veil + panel (the menu on phones) */
+.veil {
+    position: fixed;
+    inset: 0;
+    z-index: 50;
+    display: grid;
+    place-items: center;
+    padding: clamp(0.75rem, 3vw, 2rem);
+    background: color-mix(in srgb, var(--background) 50%, transparent);
+    -webkit-backdrop-filter: blur(1rem);
+    backdrop-filter: blur(1rem);
+    /* pointer-events off keeps the hidden close button from being tapped */
+    visibility: hidden;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.35s, visibility 0s 0.35s;
+
+    &.is-open {
+        visibility: visible;
+        opacity: 1;
+        pointer-events: auto;
+        transition: opacity 0.35s;
+    }
+}
+
+/* the box inside the veil */
+.panel {
+    width: min(35rem, 100%);
+    max-height: 100%;
+    overflow: auto;
+    background: var(--background);
+    border: var(--line-width) solid var(--foreground);
+    border-radius: 1.625rem;
+    animation: rise 0.45s cubic-bezier(0.2, 0.8, 0.2, 1);
+
+    &[hidden] {
         display: none;
     }
 
-    .btn:hover {
-        color: var(--clr);
-        border-color: var(--border);
+    .panel-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 0.625rem 0.75rem 0.625rem 1.125rem;
+        border-bottom: var(--line-width) solid var(--line-color);
+        font-weight: 700;
+        white-space: nowrap;
     }
 
-    .btn.glow-btn:hover {
-        box-shadow: none;
-        border-color: var(--border);
+    .link-row {
+        padding: 0.875rem 1.125rem;
+
+        .link-name {
+            font-size: clamp(1.4rem, 6vw, 2.1rem);
+        }
+    }
+
+    .panel-body {
+        border-bottom: var(--line-width) solid var(--line-color);
+    }
+
+    .panel-icons {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
     }
 }
 
-/* boot screen */
-.boot {
+/* footer */
+.site-footer {
+    padding: 0.5rem 0.875rem;
+
+    div {
+        padding: 0.375rem 1rem;
+        background: var(--foreground);
+        color: var(--background);
+        border-radius: 3.125rem;
+        font-size: 0.8125rem;
+        text-align: center;
+    }
+}
+
+/* preloader */
+.preloader {
     position: fixed;
     inset: 0;
-    background: var(--black);
-    z-index: 10;
+    z-index: 90;
     display: flex;
-    align-items: flex-start;
-    padding: 2rem;
-    transition: opacity 0.5s;
-    pointer-events: none;
+    padding: clamp(0.5rem, 2vw, 1.5rem);
+    background: var(--background);
+    transition: opacity 0.45s, visibility 0s 0.45s;
 
-    #boot-log {
-        margin: 0;
-        font-family: inherit;
-        color: var(--grey);
-        white-space: pre-wrap;
+    &.is-done {
+        opacity: 0;
+        visibility: hidden;
+    }
+
+    .preloader-frame {
+        flex: 1;
+        display: grid;
+        place-items: center;
+        padding: 1rem;
+        border: var(--line-width) solid var(--line-color);
+    }
+
+    .preloader-box {
+        width: min(22rem, 100%);
+        font-weight: 700;
+    }
+
+    .preloader-text {
+        margin: 0 0 0.75rem;
+        white-space: nowrap;
+    }
+
+    .preloader-bar {
+        height: 1.375rem;
+        padding: 0.1875rem;
+        border: var(--line-width) solid var(--foreground);
+        border-radius: 3.125rem;
+    }
+
+    .preloader-fill {
+        display: block;
+        width: 0;
+        height: 100%;
+        border-radius: 3.125rem;
+        background: var(--foreground);
+    }
+
+    .preloader-count {
+        margin: 0.5rem 0 0;
+        text-align: right;
+        font: 900 clamp(3rem, 12vw, 6rem) / 1 var(--font-display);
+        letter-spacing: -0.045em;
     }
 }
 
-.boot.done {
-    opacity: 0;
-}
-
-/* page transition (terminal, boot screen's little sibling) */
+/* page transition: a curtain wipes up between the pages */
 .page-transition {
     position: fixed;
     inset: 0;
-    background: var(--black);
-    z-index: 9;
-    display: flex;
-    align-items: flex-start;
-    padding: 2rem;
-    opacity: 0;
+    z-index: 95;
+    display: grid;
+    place-items: center;
+    background: var(--curtain);
+    color: var(--curtain-text);
+    visibility: hidden;
     pointer-events: none;
-    transition: opacity 0.25s ease;
+    transform: translateY(100%);
+    transition: transform 0.5s cubic-bezier(0.7, 0, 0.2, 1);
 
-    pre {
-        margin: 0;
-        font-family: inherit;
-        color: var(--grey);
-        white-space: pre-wrap;
+    &.is-covering,
+    &.is-exiting {
+        visibility: visible;
+        pointer-events: all;
+    }
+
+    &.is-covering {
+        transform: translateY(0);
+    }
+
+    &.is-exiting {
+        transform: translateY(-100%);
+    }
+
+    .page-transition-logo {
+        font: 900 clamp(4rem, 14vw, 10rem) / 1 var(--font-display);
+        letter-spacing: -0.04em;
     }
 }
 
-html.transitioning .page-transition,
-.page-transition.active {
-    opacity: 1;
-    pointer-events: all;
-}
-
-/* header */
-header {
-    border-bottom: 0.063rem solid var(--border);
-    position: sticky;
-    top: 0;
-    background: var(--header-bg);
-    backdrop-filter: blur(0.375rem);
-    -webkit-backdrop-filter: blur(0.375rem);
-    z-index: 5;
-    transition: transform 0.3s ease;
-}
-
-/* hidden while scrolling down, slides back when scrolling up */
-header.nav-hidden {
-    transform: translateY(-100%);
-}
-
-nav {
-    max-width: 60rem;
-    margin: 0 auto;
-    padding: 0.75rem 1.5rem;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 1rem;
-
-    ul {
-        list-style: none;
-        display: flex;
-        flex-wrap: wrap;
-        align-items: center;
-        justify-content: flex-end;
-        gap: 0.25rem;
-        margin: 0;
-        padding: 0;
-    }
-}
-
-#nav-toggle {
+/* set by the script in <head> when the preloader already played this visit, so it never shows twice */
+.has-loaded .preloader {
     display: none;
-    position: relative;
-    gap: 0.5ch;
 }
 
-/* [ menu ] <-> [ x ]: the brackets stay, the word rolls over and the slot
-   narrows from 4ch to 1ch. monospace, so ch is exactly one character wide */
-.nav-toggle-slot {
-    position: relative;
-    display: inline-block;
-    width: 4ch;
-    height: 1.6em;
-    overflow: hidden;
-    transition: width 0.32s cubic-bezier(0.4, 0, 0.2, 1);
+/* set by the script in <head> before the first paint, so the new page starts covered and no preloader flashes */
+.is-arriving {
+
+    .preloader {
+        display: none;
+    }
+
+    .page-transition {
+        visibility: visible;
+        transform: translateY(0);
+        transition: none;
+    }
 }
 
-.nav-toggle-word {
-    position: absolute;
+/* rotate notice: only on touch devices that are short and wide (a phone turned sideways), never for a desktop window or the keyboard opening in portrait */
+.rotate-notice {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 96;
+    padding: 0.5rem;
+    background: var(--background);
+    touch-action: none;
+    overscroll-behavior: contain;
+
+    .rotate-notice-frame {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 2.5rem;
+        padding: 1rem;
+        border: var(--line-width) solid var(--line-color);
+    }
+
+    .rotate-notice-icon {
+        position: relative;
+        flex: none;
+        width: 2.75rem;
+        height: 5rem;
+        border: 0.125rem solid var(--foreground);
+        border-radius: 0.6rem;
+        animation: rotate-phone 2.8s ease-in-out infinite;
+
+        span {
+            position: absolute;
+            top: 0.375rem;
+            left: 50%;
+            width: 0.875rem;
+            height: 0.125rem;
+            background: var(--foreground);
+            transform: translateX(-50%);
+        }
+    }
+
+    .rotate-notice-text p {
+        margin: 0;
+    }
+
+    .rotate-notice-prompt {
+        font-weight: 700;
+    }
+
+    .rotate-notice-title {
+        margin: 0.375rem 0 0.25rem;
+        font: 900 clamp(1.75rem, 6vw, 2.75rem) / 1 var(--font-display);
+        letter-spacing: -0.03em;
+    }
+
+    .rotate-notice-hint {
+        font-size: 0.75rem;
+        opacity: 0.7;
+    }
+}
+
+/* a phone held sideways: ask to rotate it back */
+@media (orientation: landscape) and (hover: none) and (pointer: coarse) and (min-width: 520px) and (max-width: 950px) and (max-height: 500px) {
+    .rotate-notice {
+        display: flex;
+    }
+}
+
+/* cursor (fine pointers only) */
+.cursor-dot,
+.cursor-outline {
+    display: none;
+    pointer-events: none;
+    position: fixed;
     top: 0;
     left: 0;
-    line-height: 1.6em;
-    transition:
-        transform 0.32s cubic-bezier(0.4, 0, 0.2, 1),
-        opacity 0.22s ease;
+    border-radius: 50%;
+    z-index: 99;
+    mix-blend-mode: difference;
+    will-change: transform;
 }
 
-/* [ x ] waits just below the slot */
-.word-close {
-    transform: translateY(110%);
-    opacity: 0;
+/* the negative margin centers them on the pointer, so the script only has to move them with transform */
+.cursor-dot {
+    width: 0.45rem;
+    height: 0.45rem;
+    margin: -0.225rem 0 0 -0.225rem;
+    background: #fff;
 }
 
-nav.open .nav-toggle-slot {
-    width: 1ch;
+/* the ring that trails behind the dot */
+.cursor-outline {
+    width: 1.875rem;
+    height: 1.875rem;
+    margin: -0.9375rem 0 0 -0.9375rem;
+    border: 0.125rem solid #fff;
 }
 
-nav.open .word-open {
-    transform: translateY(-110%);
-    opacity: 0;
-}
+/* mouse only: hide the real cursor once the custom one has appeared */
+@media (hover: hover) and (pointer: fine) {
 
-nav.open .word-close {
-    transform: none;
-    opacity: 1;
-}
-
-#logo {
-    color: var(--grey);
-    font-weight: 700;
-    text-decoration: none;
-    transition: 0.5s ease;
-    white-space: nowrap;
-
-    &:hover {
-        color: var(--bright);
+    body.cursor-visible,
+    body.cursor-visible * {
+        cursor: none !important;
     }
-}
 
-/* main layout */
-main {
-    flex-grow: 1;
-    width: 100%;
-    max-width: 60rem;
-    margin: 0 auto;
-    padding: 0 1.5rem;
-    box-sizing: border-box;
-    display: flex;
-    flex-direction: column;
-    gap: 5rem;
-}
+    body.cursor-visible {
 
-/* prompts */
-.prompt {
-    color: var(--border);
-    margin: 0 0 1.5rem 0;
-
-    &::before {
-        content: "";
-    }
-}
-
-.prompt-inline {
-    color: var(--border);
-}
-
-/* hero */
-.hero {
-    position: relative;
-    min-height: calc(100vh - 60px);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 3rem;
-
-    .hero-info {
-        display: flex;
-        flex-direction: column;
-        gap: 1rem;
-
-        h1 {
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin: 0;
-            color: var(--grey);
-            min-height: 3.5rem;
-        }
-
-        .hero-sub {
-            margin: 0;
-            font-size: 1.1rem;
-            max-width: 30rem;
-        }
-
-        .hero-links {
-            display: flex;
-            gap: 0.75rem;
-            margin-top: 1rem;
-
-            .btn {
-                border: 0.063rem solid var(--border);
-            }
+        .cursor-dot,
+        .cursor-outline {
+            display: block;
         }
     }
 }
 
-.cursor-block {
-    animation: blink 1s steps(1) infinite;
+/* title letters rise in one after the other (title.js sets --i on every letter and --start on the title) */
+.title :is(h1, h2, .echo) span {
+    animation: letter-rise 0.9s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+    animation-delay: calc(var(--start, 0.9s) + var(--i, 0) * 0.045s);
 }
 
+/* titles further down wait until they scroll into view (title.js adds is-visible) */
+.title:not(.is-visible) :is(h1, h2, .echo) span {
+    animation-play-state: paused;
+}
+
+/* the echoes follow a moment later, so the word seems to leave a trail */
+.title .echo-near span {
+    animation-delay: calc(var(--start, 0.9s) + 0.1s + var(--i, 0) * 0.045s);
+}
+
+.title .echo-far span {
+    animation-delay: calc(var(--start, 0.9s) + 0.2s + var(--i, 0) * 0.045s);
+}
+
+/* blink: fades the caret in and out */
 @keyframes blink {
     50% {
         opacity: 0;
     }
 }
 
-/* scroll hint, hero section */
-.scroll-hint {
-    position: absolute;
-    left: 50%;
-    bottom: 1.5rem;
-    transform: translateX(-50%);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.4rem;
-    color: var(--border);
-    text-decoration: none;
-    font-size: 0.85rem;
-    letter-spacing: 0.03rem;
-    transition: color 0.2s ease;
-
-    &:hover {
-        color: var(--grey);
-    }
-
-    .scroll-chevron {
-        animation: scroll-bounce 1.6s ease-in-out infinite;
+/* scroll: slides the marquee one phrase to the left, then loops */
+@keyframes scroll {
+    to {
+        transform: translate3d(-50%, 0, 0);
     }
 }
 
-@keyframes scroll-bounce {
+/* rotate-phone: turns the phone icon on the rotate notice */
+@keyframes rotate-phone {
 
     0%,
+    15% {
+        transform: rotate(-90deg);
+    }
+
+    45%,
+    85% {
+        transform: rotate(0deg);
+    }
+
     100% {
-        transform: translateY(0);
-        opacity: 0.4;
-    }
-
-    50% {
-        transform: translateY(0.3rem);
-        opacity: 1;
+        transform: rotate(-90deg);
     }
 }
 
-/* ASCII art */
-.ascii-box {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    #ascii-art {
-        margin: 0;
-        font-family: inherit;
-        font-size: 0.9rem;
-        line-height: 0.9rem;
-        letter-spacing: 0.04rem;
-        color: var(--grey);
-        text-shadow: 0 0 0.5rem var(--glow);
-        user-select: none;
-        white-space: pre;
-    }
-}
-
-/* sections */
-.content-section {
-    scroll-margin-top: 5rem;
-}
-
-/* projecten */
-.project-list {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-}
-
-.project-entry {
-    position: relative;
-    padding: 1.5rem 0 1.5rem 1.15rem;
-    border-top: 0.063rem solid var(--border);
-
-    &:first-child {
-        border-top-style: dashed;
-    }
-
-    &:last-child {
-        border-bottom: 0.063rem solid var(--border);
-    }
-
-    /* subtle underline reveal, drawn left-to-right on hover — no shift, no white */
-    &::after {
-        content: "";
-        position: absolute;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        height: 0.063rem;
-        background: var(--grey);
-        transform: scaleX(0);
-        transform-origin: left;
-        transition: transform 0.4s ease;
-    }
-
-    /* "$ " prompt sits in permanently-reserved space, so nothing shifts on hover */
-    &::before {
-        content: "$";
-        position: absolute;
-        left: 0;
-        top: 1.6rem;
-        color: var(--grey);
-        font-weight: 700;
+/* letter-rise: one title letter comes up while it fades in */
+@keyframes letter-rise {
+    from {
         opacity: 0;
-        transition: opacity 0.3s ease;
-    }
-
-    &:hover {
-        &::after {
-            transform: scaleX(1);
-        }
-
-        &::before {
-            opacity: 1;
-        }
-
-        .project-name {
-            color: var(--bright);
-        }
-    }
-
-    .project-line {
-        display: flex;
-        justify-content: space-between;
-        align-items: baseline;
-        gap: 1rem;
-        flex-wrap: wrap;
-    }
-
-    .project-name {
-        font-size: 1.25rem;
-        font-weight: 700;
-        color: var(--grey);
-        text-decoration: none;
-        transition: 0.75s;
-    }
-
-    .project-stack {
-        color: var(--border);
-        font-size: 0.9rem;
-    }
-
-    p {
-        margin: 0.5rem 0 0.75rem 0;
-        max-width: 40rem;
-    }
-
-    .project-links {
-        display: flex;
-        gap: 0.5rem;
-
-        .btn {
-            padding: 0.2rem 0.5rem;
-            font-size: 0.9rem;
-        }
+        transform: translateY(0.5em);
     }
 }
 
-/* screenshot on project pages */
-.project-shot {
-    margin: 1rem 0 1.5rem 0;
-    max-width: 40rem;
-
-    img {
-        display: block;
-        width: 100%;
-        height: auto;
-        border: 0.063rem solid var(--border);
-        transition: border-color 0.3s ease;
-    }
-
-    &:hover img {
-        border-color: var(--grey);
-    }
-
-    figcaption {
-        color: var(--border);
-        font-size: 0.85rem;
-        margin-top: 0.4rem;
-    }
-}
-
-/* project detail pages */
-.project-detail {
-    padding-top: 7rem;
-
-    h1 {
-        font-size: 2rem;
-        margin: 0 0 0.25rem 0;
-        color: var(--grey);
-    }
-
-    p {
-        max-width: 40rem;
-    }
-
-    .project-features {
-        list-style: none;
-        margin: 0 0 1.5rem 0;
-        padding: 0;
-
-        li {
-            margin: 0.3rem 0;
-
-            &::before {
-                content: "> ";
-                color: var(--border);
-            }
-        }
-    }
-
-    .project-links {
-        display: flex;
-        gap: 0.5rem;
-        margin-top: 1.5rem;
-    }
-}
-
-/* over */
-.about {
-    max-width: 40rem;
-
-    p {
-        margin: 0 0 1.25rem 0;
-    }
-
-    .skills-line {
-        margin: 0;
-    }
-}
-
-/* contact */
-.contact {
-    p {
-        margin: 0 0 1.5rem 0;
-        max-width: 40rem;
-    }
-
-    .contact-btn {
-        font-size: 1.1rem;
-        padding: 0.6rem 2rem;
-    }
-}
-
-#contact {
-    padding-bottom: 5rem;
-}
-
-/* theme toggle in the mobile menu */
-.theme-item {
-    display: none;
-}
-
-/* theme toggle — fixed corner, out of the way (desktop only) */
-#theme-toggle {
-    position: fixed;
-    right: 0.9rem;
-    bottom: 0.9rem;
-    z-index: 6;
-    padding: 0.3rem 0.55rem;
-    font-size: 0.9rem;
-    opacity: 0.45;
-    transition: opacity 0.3s ease, color 0.75s;
-
-    &:hover,
-    &:focus-visible {
-        opacity: 1;
-    }
-}
-
-/* footer */
-footer {
-    /* full-bleed line; length = footer width (100%) */
-    border-top: 0.063rem solid var(--border);
-    font-size: 0.9rem;
-    margin-top: 1rem;
-}
-
-.footer-inner {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 1rem;
-    flex-wrap: wrap;
-
-    max-width: 60rem;
-    width: 100%;
-    margin: 0 auto;
-    padding: 0.75rem 1.5rem;
-    box-sizing: border-box;
-}
-
-footer {
-    #footer-links {
-        display: flex;
-        gap: 0.25rem;
-
-        .btn {
-            padding: 0.2rem 0.5rem;
-            font-size: 0.9rem;
-            gap: 0.4rem;
-        }
-
-        /* phosphor icons: hidden on desktop, shown on mobile */
-        .icon {
-            display: none;
-            width: 1.25rem;
-            height: 1.25rem;
-        }
-    }
-}
-
-/* Tablet / mobile */
-@media (max-width: 64rem) {
-    .hideOnMobile {
-        display: none;
-    }
-
-    .btn {
-        transition: 0.35s;
-    }
-
-    .hero {
-        justify-content: flex-start;
-        min-height: calc(100svh - 60px);
-
-        .hero-info h1 {
-            font-size: clamp(1.6rem, 6vw, 2.5rem);
-            min-height: 2.5rem;
-        }
-    }
-}
-
-@media (max-width: 37.5rem) {
-    /* nav: logo + [ menu ] toggle on one row, links fold out below */
-    nav {
-        flex-wrap: wrap;
-        row-gap: 0;
-
-        #nav-toggle {
-            display: inline-flex;
-            padding: 0.5rem 0.75rem;
-        }
-
-        ul {
-            display: flex;
-            flex-basis: 100%;
-            flex-direction: column;
-            align-items: stretch;
-            gap: 0;
-            max-height: 0;
-            overflow: hidden;
-            opacity: 0;
-            transform: translateY(-0.35rem);
-            margin-top: 0;
-            padding-top: 0;
-            border-top: 0 solid transparent;
-            transition:
-                max-height 0.35s ease,
-                opacity 0.3s ease,
-                transform 0.3s ease,
-                margin-top 0.35s ease,
-                border-top-color 0.3s ease,
-                border-top-width 0.3s ease;
-
-            .btn {
-                width: 100%;
-                justify-content: flex-start;
-                box-sizing: border-box;
-                padding: 0.75rem 0.5rem;
-                font-size: 1rem;
-            }
-
-            .border-btn {
-                border: none;
-            }
-        }
-    }
-
-    nav.open ul {
-        max-height: 30rem;
-        opacity: 1;
-        transform: none;
-        margin-top: 0.6rem;
-        padding-top: 0.35rem;
-        border-top: 0.063rem solid var(--border);
-    }
-
-    .hero {
-        min-height: calc(100svh - 60px);
-    }
-
-    #theme-toggle {
-        display: none;
-    }
-
-    /* theme toggle lives in the menu here: plain, centered, no fill animation */
-    .theme-item {
-        display: block;
-        text-align: center;
-
-        .theme-toggle {
-            width: auto;
-            justify-content: center;
-            margin: 0 auto;
-            transition: none;
-
-            &::after {
-                display: none;
-            }
-
-            &:hover {
-                color: var(--clr);
-            }
-        }
-    }
-
-/* space between the buttons and the footer */
-    .project-detail .project-links {
-        margin-bottom: 2rem;
-    }
-
-    /* footer: copyright left, icons right, one row */
-    .footer-inner {
-        align-items: center;
-        gap: 0.75rem;
-        padding: 0.75rem 1.5rem;
-    }
-
-    footer {
-        #footer-links {
-            gap: 0.15rem;
-
-            .btn {
-                padding: 0.45rem;
-            }
-
-            .btn-label {
-                display: none;
-            }
-
-            .icon {
-                display: block;
-            }
-        }
-    }
-}
-
-/* crosshair cursor (desktop / fine pointers only) */
-@media (hover: hover) and (pointer: fine) {
-
-    /* hide the native pointer everywhere, including the text I-beam */
-    * {
-        cursor: none !important;
-    }
-
-    #cursor {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 1.6rem;
-        height: 1.6rem;
-        pointer-events: none;
-        z-index: 100;
+/* rise: panel slides up while it fades in */
+@keyframes rise {
+    from {
         opacity: 0;
-        transition: opacity 0.15s ease, filter 0.25s ease;
-        will-change: transform;
-    }
-
-    /* four bars with an open center, like a scope */
-    #cursor::before {
-        content: "";
-        position: absolute;
-        inset: 0;
-        --c: var(--grey);
-        background:
-            linear-gradient(var(--c), var(--c)) center top / 0.22rem 0.45rem,
-            linear-gradient(var(--c), var(--c)) center bottom / 0.22rem 0.45rem,
-            linear-gradient(var(--c), var(--c)) left center / 0.45rem 0.22rem,
-            linear-gradient(var(--c), var(--c)) right center / 0.45rem 0.22rem;
-        background-repeat: no-repeat;
-        transition: background 0.2s ease;
-    }
-
-    #cursor.visible {
-        opacity: 1;
-    }
-
-    /* wrapped around a button: animate the size + move, keep corners crisp */
-    #cursor.framing {
-        transition: opacity 0.15s ease, filter 0.25s ease,
-            transform 0.18s ease, width 0.18s ease, height 0.18s ease;
-    }
-
-    /* hover: bars turn bright + glow, but keep the open crosshair shape at
-       the default small size (brackets are reserved for framing, below) */
-    #cursor.on-link {
-        filter: drop-shadow(0 0 0.45rem var(--glow));
-    }
-
-    #cursor.on-link::before {
-        --c: var(--bright);
-    }
-
-    /* only switch to corner brackets once wrapped around a button, where the
-       box is big enough for 8 separate small segments to actually read as
-       brackets instead of merging into a solid blob */
-    #cursor.framing.on-link::before {
-        background:
-            linear-gradient(var(--c), var(--c)) top left / 0.45rem 0.125rem,
-            linear-gradient(var(--c), var(--c)) top left / 0.125rem 0.45rem,
-            linear-gradient(var(--c), var(--c)) top right / 0.45rem 0.125rem,
-            linear-gradient(var(--c), var(--c)) top right / 0.125rem 0.45rem,
-            linear-gradient(var(--c), var(--c)) bottom left / 0.45rem 0.125rem,
-            linear-gradient(var(--c), var(--c)) bottom left / 0.125rem 0.45rem,
-            linear-gradient(var(--c), var(--c)) bottom right / 0.45rem 0.125rem,
-            linear-gradient(var(--c), var(--c)) bottom right / 0.125rem 0.45rem;
-        background-repeat: no-repeat;
-    }
-
-    /* hover effect on the target itself */
-    a:hover,
-    button:hover {
-        text-shadow: 0 0 0.5rem var(--glow);
+        transform: translateY(1.125rem) scale(0.97);
     }
 }
 
-/* respect reduced motion */
+/* ------------------------------ */
+/* REDUCED MOTION                 */
+/* ------------------------------ */
 @media (prefers-reduced-motion: reduce) {
     html {
         scroll-behavior: auto;
     }
 
-    .btn,
-    .btn::after,
-    .project-entry,
-    .project-entry::before,
-    .project-entry::after,
-    .project-name,
-    header {
-        transition: none;
-    }
-
-    .cursor-block {
+    .caret,
+    .marquee span,
+    .rotate-notice-icon,
+    .title :is(h1, h2, .echo) span {
         animation: none;
     }
+}
 
-    .scroll-chevron {
-        animation: none;
+/* desktop: the social row above the copyright bar gets the names next to the icons */
+@media (min-width: 761px) {
+    .screen>.icon-row {
+        .icon-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.875rem;
+            height: clamp(4.5rem, 10vh, 7rem);
+        }
+
+        svg {
+            width: clamp(1.75rem, 2.4vw, 2.5rem);
+            height: clamp(1.75rem, 2.4vw, 2.5rem);
+        }
+
+        .icon-label {
+            display: inline;
+            font: 800 clamp(1.125rem, 2vw, 1.875rem) / 1 var(--font-display);
+            text-transform: uppercase;
+            letter-spacing: -0.02em;
+        }
+    }
+}
+
+/* big screens: the page gently snaps to the start of each screen */
+@media (min-width: 761px) and (min-height: 600px) {
+    html {
+        scroll-snap-type: y proximity;
     }
 
-    nav ul,
-    .nav-toggle-slot,
-    .nav-toggle-word,
-    #cursor,
-    .page-transition {
-        transition: none;
+    .screen {
+        scroll-snap-align: start;
+    }
+
+    /* the top of the page is already a stop, snapping the landing would hide the gap above the sheet */
+    .screen.landing {
+        scroll-snap-align: none;
     }
 }
 
-/* social links pinned top-right, mirroring the bottom-right theme toggle */
-.nav-socials {
-    display: flex;
-    align-items: center;
-    gap: 0.1rem;
-    position: fixed;
-    top: 0.85rem;
-    right: 0.9rem;
-    z-index: 6;
+/* tall screens: the projects and over screens fill their extra height with more of the real content */
+@media (min-height: 1000px) and (min-width: 761px) {
+    .browser .project-list .link-row {
+        .link-about {
+            display: block;
+        }
+
+        .link-name {
+            font-size: clamp(2rem, min(5vw, 7vh), 5.5rem);
+        }
+    }
+
+    .preview {
+        .preview-body {
+            display: block;
+        }
+
+        .preview-more {
+            display: grid;
+        }
+
+        .preview-shot {
+            display: block;
+        }
+
+        .preview-links {
+            display: none;
+        }
+
+        .preview-rows {
+            display: flex;
+        }
+
+        /* the screenshot sits above the rows, so they no longer push to the bottom on their own */
+        .preview-shot+.preview-links+.preview-rows {
+            margin-top: 0;
+        }
+    }
+
+
+    .about .about-text p {
+        font-size: clamp(1.25rem, 1.9vw, 2rem);
+    }
 }
 
-.nav-social {
-    padding: 0.35rem 0.45rem;
+/* ------------------------------ */
+/* SHORT SCREENS (landing page)   */
+/* ------------------------------ */
+@media (max-height: 760px) and (min-width: 761px) {
+    .lead.stage {
+        flex-basis: 15rem;
+    }
+
+    .marquee {
+        font-size: 1.1rem;
+        line-height: 1.4;
+    }
+
+    .status .status-item {
+        padding-block: 0.375rem;
+    }
+
+    .site-footer {
+        padding-block: 0.25rem;
+    }
 }
 
-.nav-social .icon {
-    display: block;
-    width: 1.15rem;
-    height: 1.15rem;
+/* tablets and small laptops: the stage columns share the width more evenly and the door numbers step aside */
+@media (min-width: 761px) and (max-width: 1100px) {
+    .lead.stage {
+        grid-template-columns: minmax(0, 4.5fr) minmax(0, 3fr) minmax(0, 4.5fr);
+
+        .lead-text .typed-line {
+            font-size: clamp(1.25rem, 2.6vw, 2rem);
+        }
+    }
+
+    .doors .link-row {
+        grid-template-columns: 1fr auto;
+
+        .link-number {
+            display: none;
+        }
+
+        .link-name {
+            font-size: clamp(1.25rem, 2.2vw, 1.75rem);
+        }
+    }
 }
 
-/* desktop: socials collapse into a dropdown under the trigger */
-.nav-social-menu {
-    position: absolute;
-    top: 100%;
-    right: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 0.1rem;
-    padding: 0.3rem;
-    background: var(--header-bg);
-    -webkit-backdrop-filter: blur(0.375rem);
-    backdrop-filter: blur(0.375rem);
-    border: 0.063rem solid var(--border);
-    border-radius: 0.4rem;
-    opacity: 0;
-    transform: translateY(-0.25rem);
-    pointer-events: none;
-    transition: opacity 0.15s ease, transform 0.15s ease;
+/* screens up to 1000px high: the skill tiles, social rows and name card tighten up, so the over screen fits */
+@media (max-height: 1000px) and (min-width: 761px) {
+    .skill-grid {
+        .skill {
+            padding-block: 0.5rem;
+        }
+
+        .skill-name {
+            font-size: clamp(1.25rem, min(2.2vw, 3.6vh), 2.25rem);
+        }
+    }
+
+    .social-list .link-row {
+        min-height: 3.25rem;
+        padding-block: 0.25rem;
+    }
+
+    .content .profile-card {
+        min-height: clamp(8rem, 20vh, 12rem);
+    }
 }
 
-.nav-social-menu .nav-social {
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    gap: 0.5rem;
-    white-space: nowrap;
+/* laptops: the over screen tightens up, so everything fits on one screen */
+@media (max-height: 820px) and (min-width: 761px) {
+    .about .about-text {
+        padding-block: 1rem;
+
+        p {
+            font-size: clamp(1rem, 1.5vw, 1.375rem);
+        }
+    }
+
+    .profile .profile-photo {
+        min-height: 11rem;
+    }
+
+    .icon-link,
+    .screen>.icon-row .icon-link {
+        height: 3.5rem;
+    }
 }
 
-.nav-social-menu .btn-label {
-    font-size: 0.85rem;
+/* very short desktop windows (a 768p laptop at 150%): the status bar steps aside */
+@media (max-height: 600px) and (min-width: 761px) {
+    .status {
+        display: none;
+    }
+
+    .lead.stage {
+        flex-basis: 12.5rem;
+    }
 }
 
-.nav-socials.open .nav-social-menu {
-    opacity: 1;
-    transform: none;
-    pointer-events: auto;
-}
+/* ------------------------------ */
+/* MOBILE (up to ~760px width)    */
+/* ------------------------------ */
+@media (max-width: 760px) {
+    :root {
+        --nav-height: 3.125rem;
+    }
 
-/* mobile: social row folds into the menu; separator sits before the toggle */
-@media (max-width: 64rem) {
-    .nav-socials {
-        position: static;
-        width: 100%;
-        justify-content: center;
-        gap: 0.25rem;
-        margin: 0.35rem 0 0;
-        padding: 0;
+    .veil {
+        padding: clamp(0.5rem, 2vw, 1.5rem);
+    }
+
+    #panel-menu {
+        align-self: start;
+    }
+
+    #panel-menu .panel-head {
+        padding: 0.8125rem 0.5rem 0.875rem 1.125rem;
+    }
+
+    .nav {
+        grid-template-columns: 4rem 1fr auto;
+
+        .nav-logo {
+            font-size: 1.5rem;
+        }
+
+        .nav-prompt {
+            padding: 0.75rem 0.625rem;
+            font-size: 0.8125rem;
+        }
+
+        .nav-tabs {
+            padding: 0.5rem;
+        }
+
+        .nav-tabs .pill {
+            display: none;
+        }
+
+        .nav-tabs .nav-menu {
+            display: inline-flex;
+        }
+    }
+
+    .title,
+    .title.compact {
+        flex: 0 0 clamp(8rem, 20dvh, 11rem);
+    }
+
+    /* lead: only the text, the donut and the button need a wider screen */
+    .lead {
+        grid-template-columns: 1fr;
+        min-height: 0;
+
+        .lead-caption,
+        .lead-cta,
+        .ascii {
+            display: none;
+        }
+    }
+
+    .title.hero {
+        flex: 0 0 clamp(8rem, 20dvh, 11rem);
+    }
+
+    .screen,
+    .screen.landing {
+        min-height: 0;
+    }
+
+    .browser {
+        grid-template-columns: 1fr;
+
+        .preview-pane {
+            display: none;
+        }
+
+        .project-list .link-row {
+            flex: none;
+            min-height: 0;
+            padding-block: 1rem;
+
+            .link-about {
+                display: block;
+            }
+        }
+    }
+
+    .project-list .link-row.is-current {
+        box-shadow: none;
+    }
+
+    .browser .project-list .link-row .link-number {
+        display: none;
+    }
+
+    .mail-title {
+        flex-basis: clamp(7rem, 18dvh, 10rem);
+    }
+
+    .social-list {
+        display: none;
+    }
+
+    .skill-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+
+        .skill:nth-child(n) {
+            border-left: none;
+            border-top: none;
+        }
+
+        .skill:nth-child(even) {
+            border-left: var(--line-width) solid var(--line-color);
+        }
+
+        .skill:nth-child(n + 3) {
+            border-top: var(--line-width) solid var(--line-color);
+        }
+    }
+
+    .content .profile-card {
+        min-height: 0;
+    }
+
+    .compose {
+        grid-template-columns: 1fr;
+
+        .compose-field {
+            grid-template-columns: 1fr;
+            gap: 0.375rem;
+        }
+
+        .compose-send {
+            min-height: 9rem;
+            border-top: var(--line-width) solid var(--line-color);
+        }
+    }
+
+    .mail-bar {
+        grid-template-columns: 1fr auto;
+
+        .mail-bar-label {
+            display: none;
+        }
+    }
+
+
+    .lead.stage {
+        flex: none;
+        grid-template-columns: 1fr;
+        grid-template-rows: none;
+    }
+
+    .doors .link-row {
+        flex: none;
+        padding-block: 0.875rem;
+    }
+
+    .lead>*+* {
+        border-top: var(--line-width) solid var(--line-color);
+    }
+
+    .status {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+
+        &>*:nth-child(n+3) {
+            border-top: var(--line-width) solid var(--line-color);
+        }
+
+        &>*:nth-child(even) {
+            border-left: var(--line-width) solid var(--line-color);
+        }
+    }
+
+    .section-head {
+        grid-template-columns: 4rem 1fr;
+
+        .section-number {
+            font-size: 1.5rem;
+        }
+
+        .section-prompt {
+            font-size: 0.8125rem;
+        }
+
+        .section-caption {
+            display: none;
+        }
+    }
+
+    .content,
+    .say-hi {
+        grid-template-columns: 1fr;
+    }
+
+    :is(.nav, .lead, .content, .section-head, .say-hi, .status, .browser, .mail-bar, .compose)>*+* {
         border-left: none;
     }
 
-    .nav-socials .btn {
-        width: auto;
-        justify-content: center;
-        padding: 0.6rem 0.75rem;
+    .nav>*+*,
+    .section-head>*+*,
+    .mail-bar>*+* {
+        border-left: var(--line-width) solid var(--line-color);
     }
 
-    /* no dropdown on mobile: hide trigger, show links inline */
-    .nav-social-toggle {
-        display: none;
+    :is(.content, .say-hi)>*+* {
+        border-top: var(--line-width) solid var(--line-color);
     }
 
-    .nav-social-menu {
-        position: static;
+    .profile {
         flex-direction: row;
-        justify-content: center;
-        gap: 0.25rem;
-        padding: 0;
-        background: none;
-        border: none;
-        -webkit-backdrop-filter: none;
-        backdrop-filter: none;
-        opacity: 1;
-        transform: none;
-        pointer-events: auto;
+        height: 22dvh;
+        min-height: 10rem;
+
+        .profile-photo {
+            flex: none;
+            width: 38%;
+            height: 100%;
+            min-height: 0;
+            border-bottom: none;
+            border-right: var(--line-width) solid var(--line-color);
+        }
+
+        .profile-info {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .tag {
+            top: 0.25rem;
+            left: 0.25rem;
+            padding: 0.16rem;
+            font-size: 0.4rem;
+        }
     }
 
-    .nav-social-menu .nav-social {
-        justify-content: center;
-        gap: 0;
+    .about .about-skills {
+        grid-template-columns: 1fr;
     }
 
-    .nav-social-menu .btn-label {
-        display: none;
+    .say-hi .lead-cta {
+        min-height: 9rem;
     }
 
-    .theme-item {
-        border-top: 0.063rem solid var(--border);
-        margin-top: 0.35rem;
-        padding-top: 0.5rem;
-    }
-}
-
-
-/* ask phones in landscape to rotate back to portrait */
-.rotate-note {
-    display: none;
-}
-
-@media (orientation: landscape) and (max-height: 30rem) and (pointer: coarse) {
-    .rotate-note {
-        display: flex;
-        position: fixed;
-        inset: 0;
-        z-index: 300;
-        background: var(--black);
-        color: var(--grey);
-        align-items: center;
-        justify-content: center;
-        text-align: center;
-        padding: 1.5rem;
+    .icon-link {
+        height: 3.75rem;
     }
 
-    .rotate-inner {
-        max-width: 22rem;
+    .feature-list li {
+        grid-template-columns: 3rem 1fr;
     }
 
-    .rotate-icon {
-        width: 3rem;
-        height: 3rem;
-        color: var(--bright);
-        margin-bottom: 1rem;
-        transform-origin: center;
-        animation: rotate-hint 2s ease-in-out infinite;
+    .feature-list .feature-number {
+        padding: 0.875rem 0.25rem;
     }
 
-    .rotate-note p {
-        margin: 0;
-        font-size: 1rem;
-        line-height: 1.5;
+    .link-row {
+        grid-template-columns: 1fr auto;
+
+        .link-number {
+            display: none;
+        }
+
+        .link-name,
+        .link-url {
+            display: block;
+        }
+
+        .link-url {
+            margin: 0.25rem 0 0;
+        }
+
+        .link-go {
+            padding: 0.25rem 1rem;
+        }
     }
 
-    @keyframes rotate-hint {
-        0%, 25%   { transform: rotate(-90deg); }
-        60%, 100% { transform: rotate(0deg); }
-    }
-}
-
-@media (prefers-reduced-motion: reduce) {
-    .rotate-icon {
-        animation: none !important;
+    .project-list .link-row .link-about {
+        font-size: 0.8125rem;
     }
 }
