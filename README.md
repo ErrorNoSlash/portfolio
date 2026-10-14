@@ -81,17 +81,17 @@ My portfolio, live at [hello.errornoslash.be](https://hello.errornoslash.be). Re
     ├── title.js        # spreads the big title letters and times their rise
     ├── reveal.js       # rows, tiles and links fade and rise in when they come into view, on every load
     ├── marquee.js      # endless scrolling text (every marquee on the page)
-    ├── typeLine.js     # typed line on the landing page
-    ├── ascii.js        # spinning ascii donut that follows the mouse
+    ├── typedIntro.js   # typed line on the landing page
+    ├── asciiDonut.js   # spinning ascii donut that follows the mouse
     ├── uptime.js       # uptime counter in the status bar
-    ├── dotField.js     # dot field / led sign under the title (only when it fits)
-    ├── scrollSpy.js    # nav prompt, active pill and progress line while scrolling
+    ├── dotMatrix.js    # dot field / led sign under the title (only when it fits)
+    ├── navOnScroll.js  # nav prompt, active pill and progress line while scrolling
     ├── projectPreview.js # preview next to the project list
     ├── copyMail.js     # copy button next to the mail address
-    ├── compose.js      # mail composer on the contact screen
+    ├── mailComposer.js # mail composer on the contact screen
     ├── menu.js         # menu panel on phones
     ├── cardSpotlight.js # spotlight on the profile card
-    ├── pfpSymbols.js   # possessed pictures (portrait, slashyos screenshot): symbols flicker where you move
+    ├── pictureSymbols.js # possessed pictures (portrait, slashyos screenshot): symbols flicker where you move
     └── notFound.js     # shows the missing path on the 404 page
 ```
 
@@ -120,7 +120,7 @@ Served with GitHub Pages on a subdomain:
 - **Typed line** — the `data-text` on `#typed-line` in `index.html`
 - **Status bar** — the `.status-item` blocks in `index.html`
 - **Tab title** — the `tabCommands` list at the top of `scripts/tabTitle.js`
-- **Donut speed / size** — the constants at the top of `scripts/ascii.js`
+- **Donut speed / size** — the constants at the top of `scripts/asciiDonut.js`
 - **Link preview** — edit the Open Graph tags in the `<head>` of every page; to change the image, edit `assets/og-image.svg` and export it as `images/og-image.png` (1200×630, PNG)
 - **Profile picture** — replace `images/pfp.jpg`
 - **Colors** — the CSS variables at the top of `styles/style.css` (the same palette as the contact page):

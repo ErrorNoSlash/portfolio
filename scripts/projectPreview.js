@@ -2,6 +2,7 @@
 const projectRows = [...document.querySelectorAll(".project-list [data-preview]")];
 const projectPreviews = [...document.querySelectorAll(".preview")];
 
+// shows the preview of one project and marks its row
 function showPreview(slug) {
     projectPreviews.forEach(function (preview) {
         preview.hidden = preview.id !== `preview-${slug}`;

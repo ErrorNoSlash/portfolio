@@ -10,6 +10,7 @@ const startTime = performance.now();
 
 let isPageLoaded = document.readyState === "complete";
 
+/* the page has loaded: the bar may go to 100% */
 window.addEventListener("load", function () {
     isPageLoaded = true;
 })
@@ -22,6 +23,7 @@ function rememberPreloader() {
     } catch (error) { }
 }
 
+// fades the preloader out and removes it
 function hidePreloader() {
     rememberPreloader();
     preloader.classList.add("is-done");
@@ -30,6 +32,7 @@ function hidePreloader() {
     }, fadeTime);
 }
 
+// moves the bar and the counter, every frame, until 100%
 function updateProgress() {
     const elapsed = performance.now() - startTime;
     const timeProgress = Math.min(elapsed / minimumTime, 1);

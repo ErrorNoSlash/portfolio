@@ -73,22 +73,23 @@
     <script src="scripts/tabTitle.js" defer></script>
     <script src="scripts/title.js" defer></script>
     <script src="scripts/reveal.js" defer></script>
-    <script src="scripts/dotField.js" defer></script>
+    <script src="scripts/dotMatrix.js" defer></script>
     <script src="scripts/marquee.js" defer></script>
-    <script src="scripts/typeLine.js" defer></script>
-    <script src="scripts/ascii.js" defer></script>
+    <script src="scripts/typedIntro.js" defer></script>
+    <script src="scripts/asciiDonut.js" defer></script>
     <script src="scripts/uptime.js" defer></script>
-    <script src="scripts/scrollSpy.js" defer></script>
+    <script src="scripts/navOnScroll.js" defer></script>
     <script src="scripts/projectPreview.js" defer></script>
     <script src="scripts/cardSpotlight.js" defer></script>
-    <script src="scripts/pfpSymbols.js" defer></script>
+    <script src="scripts/pictureSymbols.js" defer></script>
     <script src="scripts/copyMail.js" defer></script>
-    <script src="scripts/compose.js" defer></script>
+    <script src="scripts/mailComposer.js" defer></script>
     <script src="scripts/menu.js" defer></script>
 </head>
 
 <body>
 
+    <!-- preloader: only on the first page of a visit (preloader.js) -->
     <div class="preloader" id="preloader" aria-hidden="true">
         <div class="preloader-frame">
             <div class="preloader-box">
@@ -99,13 +100,16 @@
         </div>
     </div>
 
+    <!-- curtain between the pages (pageTransition.js) -->
     <div class="page-transition" id="page-transition" aria-hidden="true">
         <span class="page-transition-logo">ds/</span>
     </div>
 
+    <!-- custom cursor, mouse only (cursor.js) -->
     <div class="cursor-dot" data-cursor-dot></div>
     <div class="cursor-outline" data-cursor-outline></div>
 
+    <!-- shown on a phone held sideways (pure css) -->
     <div class="rotate-notice">
         <div class="rotate-notice-frame">
             <div class="rotate-notice-icon" aria-hidden="true"><span></span></div>
@@ -119,6 +123,7 @@
 
     <main class="sheet">
 
+        <!-- nav: logo, the prompt (types the command of the screen you are on) and the pills -->
         <div class="row nav">
             <a class="cell nav-logo" href="#home" aria-label="Naar het begin">ds/</a>
             <div class="cell nav-prompt"><span class="nav-line"><span class="nav-user">dias@stas:</span>~$&nbsp;<span id="nav-command">./portfolio</span></span><span class="caret"></span></div>
@@ -138,11 +143,12 @@
                 <div class="echo echo-far" aria-hidden="true">PORTFOLIO</div>
                 <div class="echo echo-near" aria-hidden="true">PORTFOLIO</div>
                 <h1>PORTFOLIO</h1>
-                <div class="hero-field" id="dot-field" aria-hidden="true">
+                <div class="dot-matrix" id="dot-matrix" aria-hidden="true">
                     <span class="caption tag">dot-matrix / typ iets, beweeg &amp; klik</span>
                     <canvas></canvas>
                 </div>
             </div>
+            <!-- intro / ascii donut / the three doors to the other screens -->
             <div class="row lead stage">
                 <div class="cell lead-text">
                     <small class="stage-label">{ whoami }</small>
@@ -169,6 +175,7 @@
 
             <div class="row marquee" aria-hidden="true"><span>FRONT-END DEVELOPER * DRIVEN BY CURIOSITY * </span></div>
 
+            <!-- status bar, the uptime counts up (uptime.js) -->
             <div class="row status" aria-label="Status">
                 <div class="status-item"><span class="caption">rol</span><span class="status-value">front-end dev</span></div>
                 <div class="status-item"><span class="caption">stack</span><span class="status-value">html · css · js</span></div>
@@ -192,7 +199,8 @@
                 <div class="echo echo-near" aria-hidden="true">PROJECTEN</div>
                 <h2>PROJECTEN</h2>
             </div>
-            <div class="row browser">
+            <!-- the project list and the preview of the one you point at (projectPreview.js) -->
+            <div class="row project-browser">
                 <nav class="link-list project-list" aria-label="Projecten">
                     <a class="link-row" data-preview="personal-website" href="pages/projects/personal-website.html">
                         <span class="link-number">01</span><span><b class="link-name">personal-website/</b><small class="link-url">html · css · js</small><span class="link-about">Deze site. Vanilla HTML, CSS en JavaScript met een live gerenderde ASCII-donut.</span></span><span class="link-go">GO &nearr;</span>
@@ -309,12 +317,13 @@
                 <p class="cell section-prompt section-output">&gt; wie ik ben, wat ik kan, en waar je me vindt</p>
                 <div class="cell section-caption"><span class="caption">OVER / DIAS</span></div>
             </div>
+            <!-- portrait + name card / about, skills and socials -->
             <div class="row content">
 
                 <div class="profile">
                     <div class="profile-photo" data-symbols>
                         <img src="images/pfp.jpg" alt="Profielfoto van Dias Stas" loading="lazy">
-                        <div class="pfp-symbols" aria-hidden="true"></div>
+                        <div class="symbol-grid" aria-hidden="true"></div>
                     </div>
                     <span class="caption tag">PORTRET</span>
                     <div class="profile-info">
@@ -375,7 +384,8 @@
                 <div class="echo echo-near" aria-hidden="true">ZEG HALLO</div>
                 <h2>ZEG HALLO</h2>
             </a>
-            <form class="row compose" id="compose" data-mail="dias.stas@pm.me" aria-label="Schrijf een mail">
+            <!-- mail composer: opens your own mail app with everything filled in (mailComposer.js) -->
+            <form class="row compose" id="mail-composer" data-mail="dias.stas@pm.me" aria-label="Schrijf een mail">
                 <div class="compose-fields">
                     <label class="compose-field">
                         <span class="caption">onderwerp</span>
@@ -393,6 +403,7 @@
                 </button>
             </form>
 
+            <!-- the address with a copy button (copyMail.js) -->
             <div class="row mail-bar">
                 <div class="cell mail-bar-label"><span class="caption">of direct</span></div>
                 <div class="cell mail-bar-address">dias.stas@pm.me</div>

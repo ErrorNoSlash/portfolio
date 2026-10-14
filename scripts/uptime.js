@@ -2,10 +2,12 @@
 const uptimeValue = document.querySelector("#uptime");
 const uptimeStart = performance.now();
 
+// 7 becomes 07
 function twoDigits(number) {
     return String(number).padStart(2, "0");
 }
 
+// writes the time since the page opened as hh:mm:ss
 function showUptime() {
     const seconds = Math.floor((performance.now() - uptimeStart) / 1000);
     const hours = Math.floor(seconds / 3600);

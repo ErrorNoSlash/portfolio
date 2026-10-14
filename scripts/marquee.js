@@ -6,6 +6,7 @@ const marquees = [...document.querySelectorAll(".marquee")].map(function (row) {
     return { row: row, track: track, phrase: track.textContent, lastRowWidth: 0 };
 });
 
+// fills one marquee with copies of its phrase and sets its speed
 function fillMarquee(marquee) {
     marquee.track.textContent = marquee.phrase;
 
@@ -21,6 +22,7 @@ function fillMarquee(marquee) {
     marquee.lastRowWidth = marquee.row.clientWidth;
 }
 
+// fills every marquee on the page
 function fillAllMarquees() {
     marquees.forEach(fillMarquee);
 }

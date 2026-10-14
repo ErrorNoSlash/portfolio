@@ -15,11 +15,13 @@ let isDeleting = false;
 let blinksLeft = 0;
 let isCursorVisible = true;
 
+// writes the prompt, the typed part of the command and the cursor in the tab
 function showTabTitle() {
     const typedText = tabCommands[commandIndex].slice(0, typedLength);
     document.title = tabPrompt + typedText + (isCursorVisible ? tabCursor : "");
 }
 
+// one step: blink, type a letter, delete a letter or go to the next command
 function tick() {
     const command = tabCommands[commandIndex];
     let delay = blinkDelay;

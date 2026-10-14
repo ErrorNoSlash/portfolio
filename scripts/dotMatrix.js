@@ -1,16 +1,16 @@
 /*controles the dot field under the big title: a grid of dots that waves on its own, lights up around the mouse
   (or finger) and ripples out from every click. In the middle it works like an led sign: words light up dot by dot,
   long ones scroll by, and anything you type on the page shows up on it*/
-const dotField = document.querySelector("#dot-field");
-const dotCanvas = dotField.querySelector("canvas");
-const dotContext = dotCanvas.getContext("2d");
-const dotTitle = dotField.closest(".title");
+const dotMatrix = document.querySelector("#dot-matrix");
+const matrixCanvas = dotMatrix.querySelector("canvas");
+const matrixPen = matrixCanvas.getContext("2d");
+const matrixTitle = dotMatrix.closest(".title");
 
 // what the sign says, one after the other
 const signMessages = ["HALLO WERELD", "WELKOM!", "TYP IETS...", "KLIK MAAR!", "SUDO ZEG HALLO", "SCROLL VERDER"];
 
 // 5 x 7 dot-matrix letters: every letter is 7 rows of 5 dots, 1 is lit
-const signFont = {
+const dotFont = {
     "A": "01110|10001|10001|11111|10001|10001|10001",
     "B": "11110|10001|10001|11110|10001|10001|11110",
     "C": "01110|10001|10000|10000|10000|10001|01110",
@@ -66,13 +66,13 @@ const signFont = {
 };
 
 // sizes in rem (x 16 pixels), so the field grows with the page on very wide screens
-const fieldRem = parseFloat(getComputedStyle(document.documentElement).fontSize) / 16;
-const dotSpacing = 22 * fieldRem;
-const dotRadius = 1.8 * fieldRem;
-const signRadius = 8.5 * fieldRem;
-const pointerReach = 150 * fieldRem;
-const rippleSpeed = 0.45 * fieldRem;
-const rippleWidth = 70 * fieldRem;
+const remScale = parseFloat(getComputedStyle(document.documentElement).fontSize) / 16;
+const dotSpacing = 22 * remScale;
+const dotRadius = 1.8 * remScale;
+const signRadius = 8.5 * remScale;
+const pointerReach = 150 * remScale;
+const rippleSpeed = 0.45 * remScale;
+const rippleWidth = 70 * remScale;
 const rippleLife = 2200;
 const signStartDelay = 1400;
 const signWipeIn = 900;
@@ -83,55 +83,56 @@ const signScanTime = 1100;
 const signScrollSpeed = 14;
 const signTypedHold = 5000;
 const signTypedMax = 24;
-const minimumFieldHeight = 190 * fieldRem;
+const minimumMatrixHeight = 190 * remScale;
 
 let dotColumns = 0;
 let dotRows = 0;
 let dotColor = "#000";
 let pointer = null;
 let ripples = [];
-let isFieldVisible = false;
-let isFieldDrawing = false;
+let isMatrixOnScreen = false;
+let isMatrixDrawing = false;
 let messageIndex = 0;
 let messageStart = performance.now() + signStartDelay;
 let signTypedText = "";
 let signLastTyped = 0;
-const fieldStartTime = performance.now();
-const isFieldStill = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+const matrixStartTime = performance.now();
+const isMatrixStill = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 /* the field only shows when there is room under the word (otherwise the title just keeps the word) */
-function checkFieldRoom() {
-    dotTitle.classList.add("has-room");
-    if (dotField.clientHeight < minimumFieldHeight) dotTitle.classList.remove("has-room");
-    sizeField();
+function checkMatrixRoom() {
+    matrixTitle.classList.add("has-room");
+    if (dotMatrix.clientHeight < minimumMatrixHeight) matrixTitle.classList.remove("has-room");
+    sizeMatrix();
 }
 
 // the canvas matches the field in real pixels, so the dots stay sharp on every screen
-function sizeField() {
+function sizeMatrix() {
     const ratio = window.devicePixelRatio || 1;
-    const width = dotField.clientWidth;
-    const height = dotField.clientHeight;
+    const width = dotMatrix.clientWidth;
+    const height = dotMatrix.clientHeight;
 
-    dotCanvas.width = Math.round(width * ratio);
-    dotCanvas.height = Math.round(height * ratio);
-    dotContext.setTransform(ratio, 0, 0, ratio, 0, 0);
+    matrixCanvas.width = Math.round(width * ratio);
+    matrixCanvas.height = Math.round(height * ratio);
+    matrixPen.setTransform(ratio, 0, 0, ratio, 0, 0);
 
     dotColumns = Math.floor(width / dotSpacing);
     dotRows = Math.floor(height / dotSpacing);
 
     readDotColor();
-    if (isFieldStill) drawField(performance.now());
+    if (isMatrixStill) drawMatrix(performance.now());
 }
 
+// the dots take the text color of the page (light or dark theme)
 function readDotColor() {
-    dotColor = getComputedStyle(dotField).color;
+    dotColor = getComputedStyle(dotMatrix).color;
 }
 
 // the lit dots of a text: every letter is 5 dots wide with one empty column after it
-function textDots(text) {
+function lettersToDots(text) {
     const dots = [];
     [...text].forEach(function (letter, index) {
-        const glyph = signFont[letter] || signFont["?"];
+        const glyph = dotFont[letter] || dotFont["?"];
         glyph.split("|").forEach(function (line, row) {
             [...line].forEach(function (dot, column) {
                 if (dot === "1") dots.push({ column: index * 6 + column, row: row });
@@ -142,17 +143,17 @@ function textDots(text) {
 }
 
 // which grid places the sign lights up right now, and how bright (0 to 1)
-function signLights(time) {
+function litSignDots(time) {
     const lights = new Map();
     const top = Math.floor((dotRows - 7) / 2);
-    const age = time - fieldStartTime;
+    const age = time - matrixStartTime;
     const isTyping = signTypedText && time - signLastTyped < signTypedHold;
 
-    if (!isTyping && age < signStartDelay && !isFieldStill) return lights;
+    if (!isTyping && age < signStartDelay && !isMatrixStill) return lights;
 
     if (isTyping) {
         // what you type: centred, or the end of it when it gets too long, with a blinking caret
-        const typed = textDots(signTypedText);
+        const typed = lettersToDots(signTypedText);
         const left = Math.min(Math.floor((dotColumns - typed.width) / 2), dotColumns - typed.width - 3);
         typed.dots.forEach(function (dot) {
             lights.set((top + dot.row) * dotColumns + left + dot.column, 1);
@@ -163,8 +164,8 @@ function signLights(time) {
         return lights;
     }
 
-    const message = textDots(signMessages[messageIndex]);
-    const elapsed = isFieldStill ? signWipeIn + signPopTime : time - messageStart;
+    const message = lettersToDots(signMessages[messageIndex]);
+    const elapsed = isMatrixStill ? signWipeIn + signPopTime : time - messageStart;
     if (elapsed < 0) return lights;
 
     const fits = message.width <= dotColumns - 4;
@@ -207,7 +208,7 @@ function signLights(time) {
     });
 
     // the next word starts when this one has gone, or scrolled out
-    if (!isFieldStill) {
+    if (!isMatrixStill) {
         const isDone = fits
             ? elapsed > signWipeIn + signPopTime * 2 + signHold + signWipeOut
             : left < -message.width;
@@ -216,21 +217,23 @@ function signLights(time) {
     return lights;
 }
 
+// on to the next word of the list (back to the first after the last)
 function nextMessage(time) {
     messageIndex = (messageIndex + 1) % signMessages.length;
     messageStart = time;
 }
 
-function drawField(time) {
-    const width = dotField.clientWidth;
-    const height = dotField.clientHeight;
+// draws every dot once: the wave, the glow around the pointer, the ripples and the lit letters
+function drawMatrix(time) {
+    const width = dotMatrix.clientWidth;
+    const height = dotMatrix.clientHeight;
     const offsetX = (width - (dotColumns - 1) * dotSpacing) / 2;
     const offsetY = (height - (dotRows - 1) * dotSpacing) / 2;
-    const age = time - fieldStartTime;
-    const lights = signLights(time);
+    const age = time - matrixStartTime;
+    const lights = litSignDots(time);
 
-    dotContext.clearRect(0, 0, width, height);
-    dotContext.fillStyle = dotColor;
+    matrixPen.clearRect(0, 0, width, height);
+    matrixPen.fillStyle = dotColor;
 
     // old ripples fade out and are dropped
     ripples = ripples.filter(function (ripple) {
@@ -243,7 +246,7 @@ function drawField(time) {
             const y = offsetY + row * dotSpacing;
 
             // a slow wave runs over the field
-            const wave = isFieldStill ? 0.5 : (Math.sin(column * 0.32 + row * 0.18 - age * 0.0016) + 1) / 2;
+            const wave = isMatrixStill ? 0.5 : (Math.sin(column * 0.32 + row * 0.18 - age * 0.0016) + 1) / 2;
 
             // dots close to the pointer grow and light up
             let glow = 0;
@@ -271,49 +274,53 @@ function drawField(time) {
                 alpha = Math.max(alpha, Math.min(light, 1));
             }
 
-            dotContext.globalAlpha = Math.min(alpha, 1);
-            dotContext.beginPath();
-            dotContext.arc(x, y, radius, 0, Math.PI * 2);
-            dotContext.fill();
+            matrixPen.globalAlpha = Math.min(alpha, 1);
+            matrixPen.beginPath();
+            matrixPen.arc(x, y, radius, 0, Math.PI * 2);
+            matrixPen.fill();
         }
     }
-    dotContext.globalAlpha = 1;
+    matrixPen.globalAlpha = 1;
 }
 
-function drawLoop(time) {
-    if (!isFieldVisible || !dotTitle.classList.contains("has-room")) {
-        isFieldDrawing = false;
+// keeps drawing, every frame, as long as the matrix is on screen and has room
+function drawEveryFrame(time) {
+    if (!isMatrixOnScreen || !matrixTitle.classList.contains("has-room")) {
+        isMatrixDrawing = false;
         return;
     }
-    drawField(time);
-    requestAnimationFrame(drawLoop);
+    drawMatrix(time);
+    requestAnimationFrame(drawEveryFrame);
 }
 
+// starts the drawing loop (once, it keeps itself going)
 function startDrawing() {
-    if (isFieldStill || isFieldDrawing) return;
-    isFieldDrawing = true;
-    requestAnimationFrame(drawLoop);
+    if (isMatrixStill || isMatrixDrawing) return;
+    isMatrixDrawing = true;
+    requestAnimationFrame(drawEveryFrame);
 }
 
 /* the pointer lights up the dots, a click sends a ripple */
-dotField.addEventListener("pointermove", function (e) {
-    const box = dotField.getBoundingClientRect();
+dotMatrix.addEventListener("pointermove", function (e) {
+    const box = dotMatrix.getBoundingClientRect();
     pointer = { x: e.clientX - box.left, y: e.clientY - box.top };
 });
 
-dotField.addEventListener("pointerleave", function () {
+/* the pointer leaves: no more glow */
+dotMatrix.addEventListener("pointerleave", function () {
     pointer = null;
 });
 
-dotField.addEventListener("pointerdown", function (e) {
-    const box = dotField.getBoundingClientRect();
+/* a click or a tap sends a ripple from that spot */
+dotMatrix.addEventListener("pointerdown", function (e) {
+    const box = dotMatrix.getBoundingClientRect();
     ripples.push({ x: e.clientX - box.left, y: e.clientY - box.top, start: performance.now() });
-    if (isFieldStill) drawField(performance.now());
+    if (isMatrixStill) drawMatrix(performance.now());
 });
 
 /* typing anywhere on the page (not in a field, no shortcuts) writes on the sign while it is on screen */
 window.addEventListener("keydown", function (e) {
-    if (!isFieldVisible || !dotTitle.classList.contains("has-room")) return;
+    if (!isMatrixOnScreen || !matrixTitle.classList.contains("has-room")) return;
     if (e.ctrlKey || e.metaKey || e.altKey) return;
     if (e.target.closest("input, textarea, [contenteditable]")) return;
 
@@ -323,7 +330,7 @@ window.addEventListener("keydown", function (e) {
 
     if (e.key === "Backspace" && isTyping) {
         signTypedText = signTypedText.slice(0, -1);
-    } else if (e.key.length === 1 && signFont[letter] && (letter !== " " || isTyping)) {
+    } else if (e.key.length === 1 && dotFont[letter] && (letter !== " " || isTyping)) {
         if (!isTyping) signTypedText = "";
         signTypedText = (signTypedText + letter).slice(-signTypedMax);
         // a space would scroll the page, but while typing it belongs on the sign
@@ -335,19 +342,20 @@ window.addEventListener("keydown", function (e) {
     signLastTyped = now;
     // when you stop typing, the sign picks up its own words again
     messageStart = now + signTypedHold;
-    if (isFieldStill) drawField(now);
+    if (isMatrixStill) drawMatrix(now);
 });
 
 /* only draw while the field is on screen */
 new IntersectionObserver(function (entries) {
-    isFieldVisible = entries[0].isIntersecting;
-    if (isFieldVisible) startDrawing();
-}).observe(dotField);
+    isMatrixOnScreen = entries[0].isIntersecting;
+    if (isMatrixOnScreen) startDrawing();
+}).observe(dotMatrix);
 
+/* a new size: check the room again and redraw */
 new ResizeObserver(function () {
-    checkFieldRoom();
+    checkMatrixRoom();
     startDrawing();
-}).observe(dotTitle);
+}).observe(matrixTitle);
 
 // the dots follow the light / dark theme of the system
 window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", readDotColor);

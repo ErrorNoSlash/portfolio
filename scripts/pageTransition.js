@@ -7,6 +7,7 @@ const maximumWaitTime = 600;
 
 let isLeaving = false;
 
+// covers the page with the curtain, then goes to the next page (?via=curtain tells it to skip the preloader)
 function goToPage(url) {
     if (isLeaving) return;
     isLeaving = true;
@@ -25,6 +26,7 @@ function goToPage(url) {
     }, coverTime);
 }
 
+// the new page starts covered, this slides the curtain up and away
 function revealPage() {
     if (!htmlElement.classList.contains("is-arriving")) return;
 
@@ -43,6 +45,7 @@ function revealPage() {
     }, coverTime);
 }
 
+/* clicks on links to another page of this site go through the curtain (new tabs, mail and other sites do not) */
 document.addEventListener("click", function (e) {
     const link = e.target.closest("a[href]");
     if (!link || e.defaultPrevented || e.button !== 0) return;
@@ -57,6 +60,7 @@ document.addEventListener("click", function (e) {
     goToPage(url.href);
 })
 
+/* coming back with the back button: make sure the curtain is not stuck */
 window.addEventListener("pageshow", function (e) {
     if (!e.persisted) return;
     isLeaving = false;
@@ -66,6 +70,7 @@ window.addEventListener("pageshow", function (e) {
     } catch (error) { }
 })
 
+/* arriving through the curtain: lift it once the fonts are ready (or after a short wait) */
 if (htmlElement.classList.contains("is-arriving")) {
     document.fonts.ready.then(revealPage);
     setTimeout(revealPage, maximumWaitTime);

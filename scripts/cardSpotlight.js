@@ -1,6 +1,7 @@
 /*controles the spotlight on the profile card: follows the mouse, or the finger on a phone*/
 const touchHoldTime = 700;
 
+// moves the spotlight to the pointer, as a percentage of the card
 function moveSpotlight(card, e) {
     const cardBox = card.getBoundingClientRect();
     const x = (e.clientX - cardBox.left) / cardBox.width;

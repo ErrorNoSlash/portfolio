@@ -105,7 +105,7 @@ a {
 }
 
 /* rows made of columns get a line between them */
-:is(.nav, .lead, .content, .section-head, .say-hi, .status, .browser, .mail-bar, .compose)>*+* {
+:is(.nav, .lead, .content, .section-head, .status, .project-browser, .mail-bar, .compose)>*+* {
     border-left: var(--line-width) solid var(--line-color);
 }
 
@@ -188,7 +188,7 @@ a {
         text-overflow: ellipsis;
     }
 
-    /* scroll progress: a line under the nav that fills while you scroll down (scrollSpy.js sets --progress) */
+    /* scroll progress: a line under the nav that fills while you scroll down (navOnScroll.js sets --progress) */
     &::after {
         content: "";
         position: absolute;
@@ -355,21 +355,6 @@ a {
         }
     }
 
-    .lead-caption {
-        display: flex;
-        flex-direction: column;
-        align-items: flex-end;
-        justify-content: flex-end;
-        gap: 0.25rem;
-        text-align: right;
-
-        .lead-stack {
-            font: 800 clamp(1.25rem, 2.2vw, 2rem) / 1 var(--font-display);
-            text-transform: uppercase;
-            letter-spacing: -0.02em;
-        }
-    }
-
     .lead-cta {
         display: flex;
         flex-direction: column;
@@ -390,7 +375,7 @@ a {
     }
 }
 
-/* the spinning ascii donut: ascii.js draws 60 x 30 characters but the donut only uses about 30 x 16 of them,
+/* the spinning ascii donut: asciiDonut.js draws 60 x 30 characters but the donut only uses about 30 x 16 of them,
    so the font is sized to that middle part and the empty edges are cut off */
 .ascii {
     position: relative;
@@ -419,12 +404,13 @@ a {
 }
 
 /* landing: the word sits at the top, right under the label. On tall screens the space below it holds
-   a field of dots with the ds mark, only when the row is tall enough (dotField.js checks) */
+   a field of dots with the ds mark, only when the row is tall enough (dotMatrix.js checks) */
 .title.hero {
     grid-template-rows: auto auto auto auto minmax(0, 1fr);
 }
 
-.hero-field {
+/* the dot matrix under the big word: a canvas that dotMatrix.js draws on, separated from the word by a line */
+.dot-matrix {
     position: relative;
     display: none;
     min-height: 0;
@@ -448,8 +434,8 @@ a {
     }
 }
 
-/* dotField.js adds has-room when there is enough height under the word */
-.title.hero.has-room .hero-field {
+/* dotMatrix.js adds has-room when there is enough height under the word */
+.title.hero.has-room .dot-matrix {
     display: block;
 }
 
@@ -544,7 +530,7 @@ a {
 }
 
 /* projects screen: the list on the left, a preview of the project you point at on the right */
-.browser {
+.project-browser {
     flex: 1 1 auto;
     min-height: 0;
     grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
@@ -606,6 +592,7 @@ a {
     overflow: hidden;
 }
 
+/* one project preview: name, stack, story, features and links (projectPreview.js shows one at a time) */
 .preview {
     position: relative;
     flex: 1;
@@ -1095,8 +1082,8 @@ a {
 }
 
 /* possessed portrait: moving over the photo turns the cells under the pointer into flickering symbols
-   that fade back into the picture (pfpSymbols.js builds the grid and wakes the cells) */
-.pfp-symbols {
+   that fade back into the picture (pictureSymbols.js builds the grid and wakes the cells) */
+.symbol-grid {
     position: absolute;
     inset: 0;
     display: grid;
@@ -1214,6 +1201,7 @@ a {
     opacity: 1;
 }
 
+/* the asterisk spins on a touch too */
 .profile-card.is-touched .card-asterisk {
     transform: rotate(180deg);
 }
@@ -1254,14 +1242,6 @@ a {
         }
     }
 
-    .about-skills {
-        display: grid;
-        grid-template-columns: auto 1fr;
-        align-items: center;
-        gap: 0.75rem 1rem;
-        padding: 0.875rem clamp(0.875rem, 2vw, 1.75rem);
-        border-top: var(--line-width) solid var(--line-color);
-    }
 }
 
 /* skills: six numbered tiles in big type under the about text, they invert on hover like the buttons */
@@ -1322,52 +1302,6 @@ a {
     }
 }
 
-/* contact: a big question and the inverted mail button */
-.say-hi {
-    grid-template-columns: minmax(0, 8fr) minmax(0, 4fr);
-    min-height: clamp(12rem, 30vh, 18rem);
-
-    .say-hi-text {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        gap: 0.75rem;
-        padding: clamp(1rem, 3vh, 2rem) clamp(0.875rem, 2vw, 1.75rem);
-
-        p {
-            margin: 0;
-            font: 800 clamp(1.5rem, min(3.6vw, 5vh), 3.25rem) / 1.08 var(--font-display);
-            letter-spacing: -0.025em;
-            text-wrap: balance;
-        }
-
-        em {
-            font: normal 400 clamp(1rem, 1.8vw, 1.5rem) var(--font-display);
-            opacity: 0.55;
-        }
-    }
-
-    /* same look as the lead button */
-    .lead-cta {
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        gap: 1rem;
-        background: var(--foreground);
-        color: var(--background);
-        clip-path: polygon(0 0, 100% 0, 100% calc(100% - 1.75rem), calc(100% - 1.75rem) 100%, 0 100%);
-        transition: opacity 0.3s;
-
-        &:hover {
-            opacity: 0.85;
-        }
-
-        .arrow {
-            font: 900 clamp(2.25rem, min(8vw, 10vh), 7.5rem) / 1 var(--font-display);
-        }
-    }
-}
-
 /* row of social icons (icons by Phosphor Icons) */
 .icon-row {
     grid-template-columns: repeat(5, 1fr);
@@ -1421,28 +1355,6 @@ a {
     /* the name next to the icon, only shown in the big row on the contact screen */
     .icon-label {
         display: none;
-    }
-}
-
-/* project page: a big screenshot, grey until you point at it */
-.shot {
-    position: relative;
-    display: block;
-    margin: 0;
-    overflow: hidden;
-
-    img {
-        display: block;
-        width: 100%;
-        height: auto;
-        max-height: 80vh;
-        object-fit: cover;
-        filter: grayscale(1) contrast(1.15);
-        transition: filter 0.6s;
-    }
-
-    &:hover img {
-        filter: none;
     }
 }
 
@@ -1515,7 +1427,7 @@ a {
             container: story / inline-size;
         }
 
-        .shot-frame {
+        .screenshot-frame {
             flex: 0 0 min(100cqh * 1.5, 66cqw);
         }
     }
@@ -1746,10 +1658,12 @@ a {
     }
 }
 
+/* pointing at a screen makes its drawing darker */
 .sitemap-item:hover .sketch i {
     opacity: 1;
 }
 
+/* the shapes of the four screens: columns and rows like the real ones */
 .sketch-landing {
     grid-template-columns: repeat(3, 1fr);
     grid-template-rows: 0.4fr 1.6fr 1.6fr 0.3fr 0.4fr;
@@ -1771,11 +1685,12 @@ a {
 }
 
 /* slashyos: the screenshot fills the whole right half, with the possessed symbols on top */
-.shot-frame {
+.screenshot-frame {
     display: flex;
 }
 
-.project-shot {
+/* the screenshot itself, grey until you point at it */
+.project-screenshot {
     position: relative;
     flex: 1;
     margin: 0;
@@ -1800,12 +1715,12 @@ a {
 }
 
 /* blog: a markdown file on top, the page zola makes from it below */
-.build {
+.blog-build {
     display: flex;
     flex-direction: column;
     padding-top: 2rem;
 
-    .build-source {
+    .markdown-file {
         flex: 1 1 0;
         min-height: 0;
         overflow: hidden;
@@ -1815,7 +1730,7 @@ a {
         opacity: 0.8;
     }
 
-    .build-step {
+    .build-command {
         display: flex;
         align-items: center;
         gap: 0.25rem;
@@ -1830,7 +1745,7 @@ a {
     }
 
     /* the page that comes out: the inverted block, it rises in like the panels */
-    .build-result {
+    .built-page {
         flex: 1 1 0;
         min-height: 0;
         display: flex;
@@ -1853,7 +1768,7 @@ a {
         }
     }
 
-    .build-title {
+    .built-page-title {
         font: 900 clamp(1.5rem, min(3vw, 5vh), 3.25rem) / 0.95 var(--font-display);
         letter-spacing: -0.03em;
     }
@@ -1895,15 +1810,15 @@ a {
         font-size: clamp(0.8125rem, 1.8vh, 1rem);
     }
 
-    .build {
-        .build-source {
+    .blog-build {
+        .markdown-file {
             flex-grow: 1.3;
             padding-block: 0.5rem;
             font-size: 0.6875rem;
             line-height: 1.35;
         }
 
-        .build-result {
+        .built-page {
             flex: none;
             gap: 0.375rem;
         }
@@ -1924,7 +1839,7 @@ a {
         }
     }
 
-    .build .build-source {
+    .blog-build .markdown-file {
         font-size: 0.625rem;
     }
 }
@@ -2301,6 +2216,7 @@ a {
     animation-delay: calc(var(--start, 0.9s) + 0.1s + var(--i, 0) * 0.045s);
 }
 
+/* the far echo follows last */
 .title .echo-far span {
     animation-delay: calc(var(--start, 0.9s) + 0.2s + var(--i, 0) * 0.045s);
 }
@@ -2311,6 +2227,7 @@ a {
     transform: translateY(1.25rem);
 }
 
+/* revealed: back in place, each one a little later than the one before (--reveal-i) */
 .will-reveal.is-revealed {
     opacity: 1;
     transform: none;
@@ -2425,7 +2342,7 @@ a {
 
 /* tall screens: the projects and over screens fill their extra height with more of the real content */
 @media (min-height: 1000px) and (min-width: 761px) {
-    .browser .project-list .link-row {
+    .project-browser .project-list .link-row {
         .link-about {
             display: block;
         }
@@ -2598,7 +2515,7 @@ a {
         flex-basis: clamp(6.5rem, 17vh, 8rem);
     }
 
-    .browser .link-go,
+    .project-browser .link-go,
     .social-list .link-go {
         padding: 0.125rem 0.875rem;
         font-size: 0.9375rem;
@@ -2609,7 +2526,7 @@ a {
         line-height: 1.3;
     }
 
-    .browser .project-list .link-row {
+    .project-browser .project-list .link-row {
         min-height: 0;
         padding-block: 0.375rem;
 
@@ -2722,7 +2639,7 @@ a {
         }
     }
 
-    .build .build-source {
+    .blog-build .markdown-file {
         font-size: 0.5625rem;
         line-height: 1.3;
     }
@@ -2812,36 +2729,36 @@ a {
         min-height: 20rem;
     }
 
-    .shot-frame {
+    .screenshot-frame {
         align-self: start;
         aspect-ratio: 1600 / 1066;
         min-height: 0;
     }
 
     /* the blog example: the markdown and the page side by side instead of stacked */
-    .build {
+    .blog-build {
         flex-direction: row;
         flex-wrap: wrap;
         align-content: stretch;
 
-        .build-source,
-        .build-result {
+        .markdown-file,
+        .built-page {
             flex: 1 1 50%;
             min-width: 0;
             height: calc(100% - 2.5rem);
         }
 
-        .build-step {
+        .build-command {
             order: -1;
             flex: 1 1 100%;
             border-top: none;
         }
 
-        .build-source {
+        .markdown-file {
             line-height: 1.2;
         }
 
-        .build-title {
+        .built-page-title {
             font-size: 1.5rem;
         }
     }
@@ -2867,7 +2784,7 @@ a {
 /* an ipad standing up is too narrow for things side by side: the project list loses its preview (the rows show
    their own text), and the project pages stack and scroll, like on a phone */
 @media (min-width: 761px) and (max-width: 1100px) and (orientation: portrait) {
-    .browser {
+    .project-browser {
         grid-template-columns: 1fr;
 
         .preview-pane {
@@ -2925,12 +2842,12 @@ a {
         height: 34rem;
     }
 
-    .shot-frame {
+    .screenshot-frame {
         aspect-ratio: 1600 / 1066;
     }
 
-    .build .build-source,
-    .build .build-result {
+    .blog-build .markdown-file,
+    .blog-build .built-page {
         flex: none;
     }
 }
@@ -2990,7 +2907,6 @@ a {
         grid-template-columns: 1fr;
         min-height: 0;
 
-        .lead-caption,
         .lead-cta,
         .ascii {
             display: none;
@@ -3006,7 +2922,7 @@ a {
         min-height: 0;
     }
 
-    .browser {
+    .project-browser {
         grid-template-columns: 1fr;
 
         .preview-pane {
@@ -3028,7 +2944,7 @@ a {
         box-shadow: none;
     }
 
-    .browser .project-list .link-row .link-number {
+    .project-browser .project-list .link-row .link-number {
         display: none;
     }
 
@@ -3118,12 +3034,12 @@ a {
         height: 24rem;
     }
 
-    .shot-frame {
+    .screenshot-frame {
         height: 16rem;
     }
 
-    .build .build-source,
-    .build .build-result {
+    .blog-build .markdown-file,
+    .blog-build .built-page {
         flex: none;
     }
 
@@ -3193,12 +3109,11 @@ a {
         }
     }
 
-    .content,
-    .say-hi {
+    .content {
         grid-template-columns: 1fr;
     }
 
-    :is(.nav, .lead, .content, .section-head, .say-hi, .status, .browser, .mail-bar, .compose)>*+* {
+    :is(.nav, .lead, .content, .section-head, .status, .project-browser, .mail-bar, .compose)>*+* {
         border-left: none;
     }
 
@@ -3208,7 +3123,7 @@ a {
         border-left: var(--line-width) solid var(--line-color);
     }
 
-    :is(.content, .say-hi)>*+* {
+    .content>*+* {
         border-top: var(--line-width) solid var(--line-color);
     }
 
@@ -3239,14 +3154,6 @@ a {
             padding: 0.16rem;
             font-size: 0.4rem;
         }
-    }
-
-    .about .about-skills {
-        grid-template-columns: 1fr;
-    }
-
-    .say-hi .lead-cta {
-        min-height: 9rem;
     }
 
     .icon-link {

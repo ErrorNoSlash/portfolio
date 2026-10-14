@@ -15,6 +15,7 @@ function typeCommand(command) {
     let length = 0;
     clearTimeout(commandTimer);
 
+    // one more letter of the command
     function typeNext() {
         navCommand.textContent = command.slice(0, length);
         if (length < command.length) {
@@ -26,6 +27,7 @@ function typeCommand(command) {
     typeNext();
 }
 
+// fills the progress line and, on a new screen, types its command and lights its pill
 function updateNav() {
     isNavTicking = false;
 
@@ -54,6 +56,7 @@ function requestNavUpdate() {
     requestAnimationFrame(updateNav);
 }
 
+/* update while scrolling and when the window changes size */
 window.addEventListener("scroll", requestNavUpdate, { passive: true });
 window.addEventListener("resize", requestNavUpdate);
 updateNav();

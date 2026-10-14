@@ -3,6 +3,7 @@ const copyButton = document.querySelector("#copy-mail");
 const copyLabel = copyButton.textContent;
 const copyResetTime = 1600;
 
+// the button shows if it worked, then goes back to "kopieer"
 function showCopyResult(text) {
     copyButton.textContent = text;
     copyButton.classList.add("is-active");

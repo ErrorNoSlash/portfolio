@@ -4,6 +4,7 @@ const sheet = document.querySelector(".sheet");
 const menuPill = document.querySelector(".nav-tabs a[href='#menu']");
 let wasOpenedByPill = false;
 
+// opens or closes the menu: the blur, the page behind it and the focus go along
 function showMenu(isOpen) {
     veil.classList.toggle("is-open", isOpen);
     veil.setAttribute("aria-hidden", String(!isOpen));
@@ -18,11 +19,13 @@ function showMenu(isOpen) {
     }
 }
 
+// closes the menu and takes #menu out of the address bar
 function closeMenu() {
     showMenu(false);
     if (location.hash === "#menu") history.replaceState(null, "", location.pathname + location.search);
 }
 
+/* the menu pill opens it */
 menuPill.addEventListener("click", function (e) {
     e.preventDefault();
     wasOpenedByPill = true;
@@ -39,10 +42,12 @@ veil.addEventListener("click", function (e) {
     }
 });
 
+/* Escape closes it */
 window.addEventListener("keydown", function (e) {
     if (e.key === "Escape" && veil.classList.contains("is-open")) closeMenu();
 });
 
+/* back / forward: #menu in the address opens it, anything else closes it */
 window.addEventListener("hashchange", function () {
     showMenu(location.hash === "#menu");
 });

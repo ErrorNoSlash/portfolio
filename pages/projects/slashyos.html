@@ -72,12 +72,13 @@
     <script src="../../scripts/getYear.js" defer></script>
     <script src="../../scripts/title.js" defer></script>
     <script src="../../scripts/reveal.js" defer></script>
-    <script src="../../scripts/pfpSymbols.js" defer></script>
+    <script src="../../scripts/pictureSymbols.js" defer></script>
     <script src="../../scripts/menu.js" defer></script>
 </head>
 
 <body>
 
+    <!-- preloader: only on the first page of a visit (preloader.js) -->
     <div class="preloader" id="preloader" aria-hidden="true">
         <div class="preloader-frame">
             <div class="preloader-box">
@@ -88,13 +89,16 @@
         </div>
     </div>
 
+    <!-- curtain between the pages (pageTransition.js) -->
     <div class="page-transition" id="page-transition" aria-hidden="true">
         <span class="page-transition-logo">ds/</span>
     </div>
 
+    <!-- custom cursor, mouse only (cursor.js) -->
     <div class="cursor-dot" data-cursor-dot></div>
     <div class="cursor-outline" data-cursor-outline></div>
 
+    <!-- shown on a phone held sideways (pure css) -->
     <div class="rotate-notice">
         <div class="rotate-notice-frame">
             <div class="rotate-notice-icon" aria-hidden="true"><span></span></div>
@@ -108,6 +112,7 @@
 
     <main class="sheet project-page">
 
+        <!-- nav: logo, the prompt (types the command of the screen you are on) and the pills -->
         <div class="row nav">
             <a class="cell nav-logo" href="../../index.html" aria-label="Naar het begin">ds/</a>
             <div class="cell nav-prompt"><span class="nav-line"><span class="nav-user">dias@stas:</span>~$&nbsp;cat slashyos.md</span><span class="caret"></span></div>
@@ -126,6 +131,7 @@
             <h1>SLASHYOS</h1>
         </div>
 
+        <!-- story, features and links on the left, the visual of this project on the right -->
         <div class="row project-body project-slashyos">
             <div class="project-story">
                 <div class="project-text">
@@ -154,10 +160,10 @@
                 </a>
                 </nav>
             </div>
-            <div class="project-visual shot-frame">
-                <figure class="project-shot" data-symbols>
+            <div class="project-visual screenshot-frame">
+                <figure class="project-screenshot" data-symbols>
                     <img src="../../images/slashyos.jpg" alt="SlashyOS-desktop: niri op Wayland met kitty, fastfetch en btop, blauw kleurenschema" width="1600" height="1066" decoding="async">
-                    <div class="pfp-symbols" aria-hidden="true"></div>
+                    <div class="symbol-grid" aria-hidden="true"></div>
                     <figcaption class="caption tag">$ niri msg action screenshot</figcaption>
                 </figure>
             </div>

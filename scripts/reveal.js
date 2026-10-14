@@ -6,7 +6,7 @@ const revealTargets = [
     ".doors .link-row",
     ".marquee",
     ".status-item",
-    ".hero-field",
+    ".dot-matrix",
     ".project-list .link-row",
     ".preview-pane",
     ".profile",
@@ -42,6 +42,7 @@ function revealIndex(element) {
     return Math.max(0, siblings.indexOf(element));
 }
 
+// lets one element fade and rise in
 function revealElement(element) {
     element.classList.add("is-revealed");
 
@@ -51,6 +52,7 @@ function revealElement(element) {
     }, revealTime + revealIndex(element) * revealStagger + 50);
 }
 
+// from now on every element reveals as soon as it comes into view
 function startRevealing() {
     revealObserver = new IntersectionObserver(function (entries) {
         entries.forEach(function (entry) {
@@ -65,6 +67,7 @@ function startRevealing() {
     });
 }
 
+// hides every element (a bit lower) and gives it its place in line for the delay
 function hideForReveal() {
     revealElements.forEach(function (element) {
         element.classList.remove("is-revealed");
