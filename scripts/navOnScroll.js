@@ -31,8 +31,10 @@ function typeCommand(command) {
 function updateNav() {
     isNavTicking = false;
 
+    // how far down the page you are, 0 to 1 (the last two pixels count as the end, browsers round)
     const scrollable = document.documentElement.scrollHeight - window.innerHeight;
-    navBar.style.setProperty("--progress", scrollable > 0 ? Math.min(window.scrollY / scrollable, 1) : 0);
+    const scrolled = scrollable - window.scrollY <= 2 ? scrollable : window.scrollY;
+    navBar.style.setProperty("--progress", scrollable > 0 ? Math.min(scrolled / scrollable, 1) : 0);
 
     // the screen you are on is the last one whose top passed the middle of the window
     let activeScreen = screens[0];

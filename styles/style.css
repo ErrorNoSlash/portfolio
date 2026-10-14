@@ -529,6 +529,12 @@ a {
     min-height: calc(100dvh - var(--nav-height) - var(--page-gap) - 2 * var(--line-width));
 }
 
+/* the last screen leaves room for the bottom border and the gap under the sheet,
+   so when it snaps into place the page is scrolled all the way down */
+.screen:last-child {
+    min-height: calc(100dvh - var(--nav-height) - var(--page-gap) - var(--line-width));
+}
+
 /* projects screen: the list on the left, a preview of the project you point at on the right */
 .project-browser {
     flex: 1 1 auto;
