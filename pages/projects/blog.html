@@ -131,40 +131,34 @@
             <h1>BLOG</h1>
         </div>
 
-        <!-- story, features and links on the left, the visual of this project on the right -->
+        <!-- the story and features on the left, a window with the project on graph paper on the right -->
         <div class="row project-body project-blog">
             <div class="project-story">
                 <div class="project-text">
                     <span class="caption">cat blog.md</span>
                     <p>Mijn blog, gehost op GitHub Pages en live op <a href="https://blog.errornoslash.be" target="_blank" rel="noopener">blog.errornoslash.be</a>. Hier documenteer ik de projecten die ik maak.</p>
-                    <p class="lead-body">Gebouwd met Zola: één binary, geen runtime, output is gewoon statische HTML. Het Terminus-thema zit als git submodule in de repo, met daarbovenop een eigen kleurenschema in CSS-variabelen. Posts zijn Markdown-bestanden met wat front matter, en een push naar main bouwt en deployt de site.</p>
+                    <p class="project-more">Gebouwd met Zola: één binary, geen runtime, output is gewoon statische HTML. Het Terminus-thema zit als git submodule in de repo, met daarbovenop een eigen kleurenschema in CSS-variabelen. Posts zijn Markdown-bestanden met wat front matter, en een push naar main bouwt en deployt de site.</p>
                     <ul class="chips" aria-label="Stack"><li>zola</li><li>rust</li></ul>
                 </div>
                 <div class="project-features">
                     <span class="caption project-features-head">ls ./features — 05</span>
                     <ol class="feature-list">
-                <li><span class="feature-number">01</span><span class="feature-text">statisch gegenereerd met Zola, geen runtime nodig</span></li>
-                <li><span class="feature-number">02</span><span class="feature-text">eigen licht/donker kleurenschema bovenop Terminus</span></li>
-                <li><span class="feature-number">03</span><span class="feature-text">tags met een eigen pagina en feed per term</span></li>
-                <li><span class="feature-number">04</span><span class="feature-text">nix devshell voor een reproduceerbare build</span></li>
-                <li><span class="feature-number">05</span><span class="feature-text">posts schrijven is één Markdown-bestand toevoegen</span></li>
+                        <li><span class="feature-number">01</span><span class="feature-text">statisch gegenereerd met Zola, geen runtime nodig</span></li>
+                        <li><span class="feature-number">02</span><span class="feature-text">eigen licht/donker kleurenschema bovenop Terminus</span></li>
+                        <li><span class="feature-number">03</span><span class="feature-text">tags met een eigen pagina en feed per term</span></li>
+                        <li><span class="feature-number">04</span><span class="feature-text">nix devshell voor een reproduceerbare build</span></li>
+                        <li><span class="feature-number">05</span><span class="feature-text">posts schrijven is één Markdown-bestand toevoegen</span></li>
                     </ol>
                 </div>
-                <nav class="link-list project-links" aria-label="Links">
-                <a class="link-row" href="https://blog.errornoslash.be" target="_blank" rel="noopener">
-                    <span><b class="link-name">Live</b><small class="link-url">blog.errornoslash.be</small></span><span class="link-go">GO &nearr;</span>
-                </a>
-                <a class="link-row" href="https://github.com/ErrorNoSlash/blog" target="_blank" rel="noopener">
-                    <span><b class="link-name">Code</b><small class="link-url">github.com/ErrorNoSlash/blog</small></span><span class="link-go">GO &nearr;</span>
-                </a>
-                <a class="link-row" href="../../index.html#projecten">
-                    <span><b class="link-name">Terug</b><small class="link-url">~/projecten</small></span><span class="link-go">GO &nearr;</span>
-                </a>
-                </nav>
             </div>
-            <div class="project-visual blog-build">
-                <span class="caption tag">voorbeeld / zo wordt een post een pagina</span>
-                <pre class="markdown-file" aria-label="Markdown-bestand">+++
+            <div class="project-visual">
+                <div class="project-window">
+                    <div class="project-window-bar">
+                        <span class="caption">voorbeeld / zo wordt een post een pagina</span>
+                    </div>
+                    <!-- a markdown file on top, the page zola makes from it below -->
+                    <div class="project-window-body blog-build">
+                        <pre class="markdown-file" aria-label="Markdown-bestand">+++
 title = "hallo wereld"
 date = 2026-10-14
 [taxonomies]
@@ -175,15 +169,31 @@ tags = ["nix", "web"]
 
 Mijn eerste post: gewoon
 een Markdown-bestand.</pre>
-                <div class="build-command"><span>$ zola build</span><span class="caret"></span><span class="build-arrow">&darr;</span></div>
-                <article class="built-page" aria-label="De pagina die eruit komt">
-                    <span class="caption">14 / 10 / 2026</span>
-                    <b class="built-page-title">HALLO WERELD</b>
-                    <ul class="chips"><li>nix</li><li>web</li></ul>
-                    <p>Mijn eerste post: gewoon een Markdown-bestand.</p>
-                </article>
+                        <div class="build-command"><span>$ zola build</span><span class="caret"></span><span class="build-arrow">&darr;</span></div>
+                        <article class="built-page" aria-label="De pagina die eruit komt">
+                            <span class="caption">14 / 10 / 2026</span>
+                            <b class="built-page-title">HALLO WERELD</b>
+                            <ul class="chips"><li>nix</li><li>web</li></ul>
+                            <p>Mijn eerste post: gewoon een Markdown-bestand.</p>
+                        </article>
+                    </div>
+                    <span class="sticker">/markdown &rarr; html/</span>
+                </div>
             </div>
         </div>
+
+        <!-- the links: cards that press in, like the doors on the landing -->
+        <nav class="row doors project-doors" aria-label="Links">
+                <a class="link-row" href="https://blog.errornoslash.be" target="_blank" rel="noopener">
+                    <span class="link-number">01</span><span><b class="link-name">Live</b><small class="link-url">blog.errornoslash.be</small></span><span class="link-go">GO &nearr;</span>
+                </a>
+                <a class="link-row" href="https://github.com/ErrorNoSlash/blog" target="_blank" rel="noopener">
+                    <span class="link-number">02</span><span><b class="link-name">Code</b><small class="link-url">github.com/ErrorNoSlash/blog</small></span><span class="link-go">GO &nearr;</span>
+                </a>
+                <a class="link-row" href="../../index.html#projecten">
+                    <span class="link-number">03</span><span><b class="link-name">Terug</b><small class="link-url">~/projecten</small></span><span class="link-go">GO &nearr;</span>
+                </a>
+        </nav>
 
         <footer class="row site-footer">
             <div>&copy;<span id="year"></span> - Dias Stas</div>
