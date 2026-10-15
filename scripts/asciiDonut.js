@@ -14,24 +14,42 @@ let tiltUpDown = 0;
 let targetTiltSideways = 0;
 let targetTiltUpDown = 0;
 
+// the sine and cosine of every step around the tube (theta) and around the donut (phi), worked out once,
+// so a frame only multiplies instead of calling Math.sin and Math.cos thousands of times
+const thetaStep = 0.07;
+const phiStep = 0.03;
+const thetaCos = [], thetaSin = [], phiCos = [], phiSin = [];
+for (let theta = 0; theta < 6.28; theta += thetaStep) {
+    thetaCos.push(Math.cos(theta));
+    thetaSin.push(Math.sin(theta));
+}
+for (let phi = 0; phi < 6.28; phi += phiStep) {
+    phiCos.push(Math.cos(phi));
+    phiSin.push(Math.sin(phi));
+}
+
+// the buffers of one frame, reused every frame instead of making new ones
+const donutCharacters = new Array(donutColumns * donutRows);
+const closestDepth = new Float32Array(donutColumns * donutRows);
+const donutLines = new Array(donutRows);
+
 // draws one frame: every point of the donut is turned, lit and written as a character, closest ones win
 function drawDonut() {
-    const donutCharacters = new Array(donutColumns * donutRows).fill(" ");
-    const closestDepth = new Array(donutColumns * donutRows).fill(0);
+    donutCharacters.fill(" ");
+    closestDepth.fill(0);
 
     // the two spin angles (plus the mouse tilt) as sine and cosine, used for every point
     const cosSpinX = Math.cos(spinAngleX + tiltUpDown), sinSpinX = Math.sin(spinAngleX + tiltUpDown);
     const cosSpinZ = Math.cos(spinAngleZ + tiltSideways), sinSpinZ = Math.sin(spinAngleZ + tiltSideways);
 
     // theta goes around the tube, phi goes around the whole donut
-    for (let theta = 0; theta < 6.28; theta += 0.07) {
-        const cosTheta = Math.cos(theta), sinTheta = Math.sin(theta);
+    for (let thetaIndex = 0; thetaIndex < thetaCos.length; thetaIndex++) {
+        const cosTheta = thetaCos[thetaIndex], sinTheta = thetaSin[thetaIndex];
+        const circleX = cosTheta + 2;
+        const circleY = sinTheta;
 
-        for (let phi = 0; phi < 6.28; phi += 0.02) {
-            const cosPhi = Math.cos(phi), sinPhi = Math.sin(phi);
-
-            const circleX = cosTheta + 2;
-            const circleY = sinTheta;
+        for (let phiIndex = 0; phiIndex < phiCos.length; phiIndex++) {
+            const cosPhi = phiCos[phiIndex], sinPhi = phiSin[phiIndex];
 
             const x = circleX * (cosSpinZ * cosPhi + sinSpinX * sinSpinZ * sinPhi) - circleY * cosSpinX * sinSpinZ;
             const y = circleX * (sinSpinZ * cosPhi - sinSpinX * cosSpinZ * sinPhi) + circleY * cosSpinX * cosSpinZ;
@@ -40,43 +58,63 @@ function drawDonut() {
 
             const column = Math.floor(donutColumns / 2 + 22 * oneOverZ * x);
             const line = Math.floor(donutRows / 2 - 11 * oneOverZ * y);
-
-            const light = cosPhi * cosTheta * sinSpinZ
-                - cosSpinX * cosTheta * sinPhi
-                - sinSpinX * sinTheta
-                + cosSpinZ * (cosSpinX * sinTheta - cosTheta * sinSpinX * sinPhi);
-
-            const index = column + line * donutColumns;
-            const isOnScreen = line >= 0 && line < donutRows && column >= 0 && column < donutColumns;
+            if (line < 0 || line >= donutRows || column < 0 || column >= donutColumns) continue;
 
             // only keep the point closest to the screen
-            if (isOnScreen && oneOverZ > closestDepth[index]) {
+            const index = column + line * donutColumns;
+            if (oneOverZ > closestDepth[index]) {
+                const light = cosPhi * cosTheta * sinSpinZ
+                    - cosSpinX * cosTheta * sinPhi
+                    - sinSpinX * sinTheta
+                    + cosSpinZ * (cosSpinX * sinTheta - cosTheta * sinSpinX * sinPhi);
+
                 closestDepth[index] = oneOverZ;
                 donutCharacters[index] = shadeCharacters[Math.max(0, Math.floor(light * 8))];
             }
         }
     }
 
-    let frame = "";
     for (let line = 0; line < donutRows; line++) {
-        frame += donutCharacters.slice(line * donutColumns, (line + 1) * donutColumns).join("") + "\n";
+        donutLines[line] = donutCharacters.slice(line * donutColumns, (line + 1) * donutColumns).join("");
     }
-    donutElement.textContent = frame;
+    donutElement.textContent = donutLines.join("\n");
 }
 
-/* draw the first frame, then keep spinning (and rest while the tab is hidden) */
-drawDonut();
-setInterval(function () {
-    if (document.hidden) return;
-
+// one step of the spin: turn a bit further and let the tilt slide towards the mouse
+function spinDonut() {
     spinAngleX += 0.04;
     spinAngleZ += 0.02;
-
-    // the tilt slides towards the mouse instead of jumping
     tiltSideways += (targetTiltSideways - tiltSideways) * tiltEase;
     tiltUpDown += (targetTiltUpDown - tiltUpDown) * tiltEase;
     drawDonut();
-}, donutFrameTime);
+}
+
+let isDonutInView = true;
+let donutTimer = null;
+
+// spins only while the donut can be seen: not when it is scrolled away or the tab is hidden
+function updateDonutSpin() {
+    const shouldSpin = isDonutInView && !document.hidden && !isInsidePreview;
+    if (shouldSpin && donutTimer === null) donutTimer = setInterval(spinDonut, donutFrameTime);
+    if (!shouldSpin && donutTimer !== null) {
+        clearInterval(donutTimer);
+        donutTimer = null;
+    }
+}
+
+// inside the small live preview on the personal-website page the donut stands still, one moving donut is enough
+const isInsidePreview = window.self !== window.top;
+document.documentElement.classList.toggle("is-preview", isInsidePreview);
+
+/* draw the first frame, then spin while it is in view */
+drawDonut();
+new IntersectionObserver(function (entries) {
+    isDonutInView = entries[0].isIntersecting;
+    updateDonutSpin();
+}).observe(donutElement);
+
+/* switching to another tab and back stops and starts the spin */
+document.addEventListener("visibilitychange", updateDonutSpin);
 
 /* the mouse position, from -0.5 to 0.5 over the window, tilts the donut */
 window.addEventListener("pointermove", function (e) {
@@ -84,4 +122,4 @@ window.addEventListener("pointermove", function (e) {
 
     targetTiltSideways = (e.clientX / window.innerWidth - 0.5) * tiltStrength;
     targetTiltUpDown = (e.clientY / window.innerHeight - 0.5) * tiltStrength;
-});
+}, { passive: true });

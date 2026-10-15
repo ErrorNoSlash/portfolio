@@ -36,3 +36,15 @@ window.addEventListener("resize", function () {
         if (marquee.row.clientWidth !== marquee.lastRowWidth) fillMarquee(marquee);
     });
 })
+
+/* a marquee only runs while it can be seen, so a slow laptop does not keep drawing rows you scrolled past */
+const marqueeWatcher = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+        entry.target.classList.toggle("is-paused", !entry.isIntersecting);
+    });
+});
+
+/* watch every marquee on the page */
+marquees.forEach(function (marquee) {
+    marqueeWatcher.observe(marquee.row);
+});

@@ -98,6 +98,7 @@ window.addEventListener("touchstart", function () {
     stopSnapping();
 }, { passive: true });
 
+/* the finger lets go: snap once the page has stopped moving */
 window.addEventListener("touchend", function () {
     isTouching = false;
     snapWhenStill();

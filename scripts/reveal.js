@@ -77,8 +77,8 @@ function hideForReveal() {
 hideForReveal();
 
 // wait for the preloader, or only for the curtain when coming from another page
-const html = document.documentElement;
-const skipsPreloader = html.classList.contains("is-arriving") || html.classList.contains("has-loaded");
+const revealRootElement = document.documentElement;
+const skipsPreloader = revealRootElement.classList.contains("is-arriving") || revealRootElement.classList.contains("has-loaded");
 setTimeout(startRevealing, skipsPreloader ? revealStartAfterTransition : revealStartAfterPreloader);
 
 // back / forward can bring the page back from the browser cache: play everything again
