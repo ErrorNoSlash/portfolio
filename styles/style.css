@@ -14,8 +14,8 @@
     --curtain: var(--foreground);
     --curtain-text: var(--background);
 
-    /* the circle that fills a link on hover: slow and soft, so a big area never flips at once */
-    --fill-time: 1.1s;
+    /* the circle that fills a link on hover: soft and not too fast, so a big area never flips at once */
+    --fill-time: 0.8s;
     --fill-ease: cubic-bezier(0.65, 0, 0.35, 1);
 
     --line-width: 0.0625rem;
