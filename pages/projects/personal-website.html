@@ -132,57 +132,62 @@
             <h1>WEBSITE</h1>
         </div>
 
-        <!-- story, features and links on the left, the visual of this project on the right -->
+        <!-- the story and features on the left, a window with the project on graph paper on the right -->
         <div class="row project-body project-personal-website">
             <div class="project-story">
                 <div class="project-text">
                     <span class="caption">cat personal-website.md</span>
                     <p>Deze site. Vanilla HTML, CSS en JavaScript — geen frameworks, geen build-stap.</p>
-                    <p class="lead-body">Herbouwd in dezelfde stijl als mijn contactpagina: één groot raster van lijnen, twee lettertypes en verder alleen zwart en wit. De ASCII-donut op de homepage wordt nog altijd live gerenderd.</p>
+                    <p class="project-more">Herbouwd in dezelfde stijl als mijn contactpagina: één groot raster van lijnen, twee lettertypes en verder alleen zwart en wit. De ASCII-donut op de homepage wordt nog altijd live gerenderd.</p>
                     <ul class="chips" aria-label="Stack"><li>html</li><li>css</li><li>js</li></ul>
                 </div>
                 <div class="status project-stats" aria-label="De site in cijfers">
                     <div class="status-item"><span class="caption">frameworks</span><span class="status-value">0</span></div>
                     <div class="status-item"><span class="caption">build-stappen</span><span class="status-value">0</span></div>
-                    <div class="status-item"><span class="caption">scripts</span><span class="status-value">19</span></div>
+                    <div class="status-item"><span class="caption">scripts</span><span class="status-value">20</span></div>
                     <div class="status-item"><span class="caption">schermen</span><span class="status-value">04</span></div>
                 </div>
                 <div class="project-features">
                     <span class="caption project-features-head">ls ./features — 06</span>
                     <ol class="feature-list">
-                <li><span class="feature-number">01</span><span class="feature-text">live gerenderde ASCII-donut</span></li>
-                <li><span class="feature-number">02</span><span class="feature-text">terminal-preloader met voortgangsbalk</span></li>
-                <li><span class="feature-number">03</span><span class="feature-text">gordijn-overgang tussen de pagina's</span></li>
-                <li><span class="feature-number">04</span><span class="feature-text">licht en donker thema dat het systeem volgt</span></li>
-                <li><span class="feature-number">05</span><span class="feature-text">eigen cursor: een punt met een ring</span></li>
-                <li><span class="feature-number">06</span><span class="feature-text">volledig responsive, van telefoon tot 4k-scherm</span></li>
+                        <li><span class="feature-number">01</span><span class="feature-text">live gerenderde ASCII-donut</span></li>
+                        <li><span class="feature-number">02</span><span class="feature-text">terminal-preloader met voortgangsbalk</span></li>
+                        <li><span class="feature-number">03</span><span class="feature-text">gordijn-overgang tussen de pagina's</span></li>
+                        <li><span class="feature-number">04</span><span class="feature-text">licht en donker thema dat het systeem volgt</span></li>
+                        <li><span class="feature-number">05</span><span class="feature-text">eigen cursor: een punt met een ring</span></li>
+                        <li><span class="feature-number">06</span><span class="feature-text">volledig responsive, van telefoon tot 4k-scherm</span></li>
                     </ol>
                 </div>
-                <nav class="link-list project-links" aria-label="Links">
-                <a class="link-row" href="https://github.com/ErrorNoSlash/portfolio" target="_blank" rel="noopener">
-                    <span><b class="link-name">Code</b><small class="link-url">github.com/ErrorNoSlash/portfolio</small></span><span class="link-go">GO &nearr;</span>
-                </a>
-                <a class="link-row" href="../../index.html#projecten">
-                    <span><b class="link-name">Terug</b><small class="link-url">~/projecten</small></span><span class="link-go">GO &nearr;</span>
-                </a>
-                </nav>
             </div>
-            <!-- the real home page, scaled down, in a small browser window (sitePreview.js) -->
-            <div class="project-visual site-preview">
-                <div class="site-preview-bar">
-                    <span class="caption">live / hello.errornoslash.be</span>
-                    <nav class="site-preview-tabs" aria-label="Schermen van de site">
-                        <button class="pill" type="button" data-screen="home">01 landing</button>
-                        <button class="pill" type="button" data-screen="projecten">02 projecten</button>
-                        <button class="pill" type="button" data-screen="over">03 over</button>
-                        <button class="pill" type="button" data-screen="contact">04 contact</button>
-                    </nav>
-                </div>
-                <div class="site-preview-window">
-                    <iframe src="../../index.html?via=curtain#home" title="De homepage, verkleind" tabindex="-1"></iframe>
+            <div class="project-visual">
+                <div class="project-window">
+                    <div class="project-window-bar">
+                        <span class="caption">live / hello.errornoslash.be</span>
+                        <nav class="site-preview-tabs" aria-label="Schermen van de site">
+                            <button class="pill" type="button" data-screen="home">01 landing</button>
+                            <button class="pill" type="button" data-screen="projecten">02 projecten</button>
+                            <button class="pill" type="button" data-screen="over">03 over</button>
+                            <button class="pill" type="button" data-screen="contact">04 contact</button>
+                        </nav>
+                    </div>
+                    <!-- the real home page, scaled down (sitePreview.js) -->
+                    <div class="project-window-body site-preview-window">
+                        <iframe src="../../index.html?via=curtain" title="De homepage, verkleind" tabindex="-1"></iframe>
+                    </div>
+                    <span class="sticker">/0 frameworks/</span>
                 </div>
             </div>
         </div>
+
+        <!-- the links: cards that press in, like the doors on the landing -->
+        <nav class="row doors project-doors" aria-label="Links">
+                <a class="link-row" href="https://github.com/ErrorNoSlash/portfolio" target="_blank" rel="noopener">
+                    <span class="link-number">01</span><span><b class="link-name">Code</b><small class="link-url">github.com/ErrorNoSlash/portfolio</small></span><span class="link-go">GO &nearr;</span>
+                </a>
+                <a class="link-row" href="../../index.html#projecten">
+                    <span class="link-number">02</span><span><b class="link-name">Terug</b><small class="link-url">~/projecten</small></span><span class="link-go">GO &nearr;</span>
+                </a>
+        </nav>
 
         <footer class="row site-footer">
             <div>&copy;<span id="year"></span> - Dias Stas</div>

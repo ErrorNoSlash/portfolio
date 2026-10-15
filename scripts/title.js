@@ -8,6 +8,7 @@ const titles = [...document.querySelectorAll(".title")];
 // no preloader this time (curtain or already seen), so the title starts sooner
 const isArrivingPage = document.documentElement.classList.contains("is-arriving") || document.documentElement.classList.contains("has-loaded");
 
+/* every title: split its word into letters and set when they start to rise */
 titles.forEach(function (title, titleIndex) {
     const word = title.querySelector("h1, h2");
     const text = word.textContent.trim();
@@ -42,6 +43,7 @@ const titleObserver = new IntersectionObserver(function (entries) {
     });
 }, { threshold: 0.25 });
 
+/* watch every title on the page */
 titles.forEach(function (title) {
     titleObserver.observe(title);
 });

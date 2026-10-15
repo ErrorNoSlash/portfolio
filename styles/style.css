@@ -14,6 +14,10 @@
     --curtain: var(--foreground);
     --curtain-text: var(--background);
 
+    /* the circle that fills a link on hover: soft and not too fast, so a big area never flips at once */
+    --fill-time: 0.8s;
+    --fill-ease: cubic-bezier(0.65, 0, 0.35, 1);
+
     --line-width: 0.0625rem;
     --nav-height: 3.625rem;
     --page-gap: clamp(0.5rem, 2vw, 1.5rem);
@@ -105,7 +109,7 @@ a {
 }
 
 /* rows made of columns get a line between them */
-:is(.nav, .lead, .content, .section-head, .status, .project-browser, .mail-bar, .compose)>*+* {
+:is(.nav, .section-head, .status)>*+* {
     border-left: var(--line-width) solid var(--line-color);
 }
 
@@ -120,21 +124,6 @@ a {
     font-size: 0.6875rem;
     letter-spacing: 0.04em;
     text-transform: uppercase;
-}
-
-/* small label that sits on top of a picture */
-.tag {
-    position: absolute;
-    top: 0.5rem;
-    left: 0.625rem;
-    z-index: 1;
-    display: inline-flex;
-    align-items: center;
-    padding: 0.2rem;
-    background-color: var(--surface);
-    color: var(--foreground);
-    font-size: 0.6rem;
-    line-height: 1;
 }
 
 /* blinking terminal cursor */
@@ -303,78 +292,6 @@ a {
     }
 }
 
-/* lead: intro text / ascii donut (or stack) / inverted jump button */
-.lead {
-    grid-template-columns: minmax(0, 6fr) minmax(0, 3fr) minmax(0, 3fr);
-    min-height: clamp(13rem, 32vh, 20rem);
-
-    .lead-text {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        gap: 0.75rem;
-        padding: clamp(0.875rem, 2vh, 1.5rem) clamp(0.875rem, 2vw, 1.75rem);
-
-        p {
-            margin: 0;
-            font: 600 clamp(1.125rem, min(2.6vw, 3.4vh), 2rem) / 1.2 var(--font-display);
-            letter-spacing: -0.01em;
-        }
-
-        em {
-            font: normal 400 clamp(1rem, 1.8vw, 1.5rem) var(--font-display);
-            opacity: 0.55;
-        }
-
-        /* a link inside the text: underlined, inverted on hover */
-        a {
-            text-decoration: underline;
-            text-underline-offset: 0.1875rem;
-            text-decoration-thickness: 0.125rem;
-
-            &:hover {
-                background: var(--foreground);
-                color: var(--background);
-            }
-        }
-
-        /* the typed line keeps its height, so nothing jumps while it types */
-        .typed-line {
-            min-height: 1.2em;
-            font-weight: 800;
-            font-size: clamp(1.75rem, min(4.4vw, 5.5vh), 3.75rem);
-            letter-spacing: -0.03em;
-        }
-
-        /* plain text under the big line on the project pages */
-        .lead-body {
-            max-width: 46rem;
-            font: 400 0.9375rem/1.6 var(--font-mono);
-            letter-spacing: 0;
-            opacity: 0.85;
-        }
-    }
-
-    .lead-cta {
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        gap: 1rem;
-        background: var(--foreground);
-        color: var(--background);
-        clip-path: polygon(0 0, 100% 0, 100% calc(100% - 1.75rem), calc(100% - 1.75rem) 100%, 0 100%);
-        transition: opacity 0.3s;
-
-        &:hover {
-            opacity: 0.85;
-        }
-
-        .arrow {
-            font: 900 clamp(2.25rem, min(8vw, 10vh), 7.5rem) / 1 var(--font-display);
-        }
-    }
-}
-
 /* the spinning ascii donut: asciiDonut.js draws 60 x 30 characters but the donut only uses about 30 x 16 of them,
    so the font is sized to that middle part and the empty edges are cut off */
 .ascii {
@@ -457,6 +374,16 @@ a {
     }
 }
 
+/* graph paper: faint lines every 1.5rem, behind the cards on the landing and the windows of the project pages */
+:is(.intro-visual, .project-visual) {
+    --paper-line: color-mix(in srgb, var(--line-color) 30%, transparent);
+    background-image:
+        linear-gradient(var(--paper-line) var(--line-width), transparent var(--line-width)),
+        linear-gradient(90deg, var(--paper-line) var(--line-width), transparent var(--line-width));
+    background-size: 1.5rem 1.5rem;
+    background-position: -1px -1px;
+}
+
 /* the right cell: graph paper with the donut card on top of it */
 .intro-visual {
     position: relative;
@@ -464,21 +391,6 @@ a {
     place-items: center;
     overflow: hidden;
     padding: clamp(1.25rem, 3.5vh, 2.5rem) clamp(1.25rem, 2.5vw, 2.5rem);
-    background-image:
-        linear-gradient(var(--line-color) var(--line-width), transparent var(--line-width)),
-        linear-gradient(90deg, var(--line-color) var(--line-width), transparent var(--line-width));
-    background-size: 1.5rem 1.5rem;
-    background-position: -1px -1px;
-    background-color: var(--background);
-
-    /* the paper lines stay faint, the card is the thing to look at */
-    &::before {
-        content: "";
-        position: absolute;
-        inset: 0;
-        background: var(--background);
-        opacity: 0.75;
-    }
 }
 
 /* the donut card: a square card with a thick border and a hard shadow, turned a little */
@@ -550,7 +462,7 @@ a {
         border: 0.125rem solid var(--foreground);
         border-radius: 1rem;
         box-shadow: 0.375rem 0.375rem 0 var(--foreground);
-        transition: color 0.6s, transform 0.2s, box-shadow 0.2s;
+        transition: color var(--fill-time) var(--fill-ease), transform 0.2s, box-shadow 0.2s;
 
         &:last-child {
             border-bottom: 0.125rem solid var(--foreground);
@@ -582,6 +494,671 @@ a {
             overflow: hidden;
             white-space: nowrap;
             text-overflow: ellipsis;
+        }
+    }
+}
+
+/* projects screen: the three projects as folders side by side, sharing the height under the title */
+.project-cards {
+    flex: 1 1 0;
+    min-height: 0;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(1rem, 2.2vw, 2rem);
+    padding: clamp(1.25rem, 3vh, 2rem) clamp(0.875rem, 2vw, 1.75rem) clamp(1rem, 2.5vh, 1.75rem);
+}
+
+/* one project: a folder with a tab on top, it lifts when you point at it and pulls its paper out a bit */
+.project-card {
+    position: relative;
+    isolation: isolate;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    min-height: 0;
+    transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+
+    &:hover,
+    &:focus-visible {
+        transform: translateY(-0.5rem);
+    }
+
+    /* the tab of the folder: what kind of project it is */
+    .project-card-tab {
+        position: relative;
+        z-index: 1;
+        align-self: flex-start;
+        display: flex;
+        align-items: baseline;
+        gap: 0.375rem;
+        margin-bottom: -0.125rem;
+        padding: 0.5rem 1rem 0.375rem;
+        border: 0.125rem solid var(--foreground);
+        border-bottom: none;
+        border-radius: 0.75rem 0.75rem 0 0;
+        background: var(--background);
+        transition: background 0.6s var(--fill-ease), color 0.6s var(--fill-ease);
+
+        b {
+            font: 700 0.9375rem var(--font-mono);
+        }
+    }
+
+    &:is(:hover, :focus-visible) .project-card-tab {
+        background: var(--foreground);
+        color: var(--background);
+    }
+
+    /* the folder itself */
+    .project-card-sheet {
+        position: relative;
+        flex: 1 1 0;
+        min-height: 0;
+        display: flex;
+        flex-direction: column;
+        border: 0.125rem solid var(--foreground);
+        border-radius: 0 1rem 1rem 1rem;
+        background: var(--background);
+
+        /* a paper that sticks out of the folder behind it */
+        &::before {
+            content: "";
+            position: absolute;
+            z-index: -1;
+            top: -1.125rem;
+            right: 1.25rem;
+            width: 45%;
+            height: 3rem;
+            border: 0.125rem solid var(--foreground);
+            border-radius: 0.5rem 0.5rem 0 0;
+            background: var(--card-background);
+            transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+    }
+
+    &:is(:hover, :focus-visible) .project-card-sheet::before {
+        transform: translateY(-0.625rem);
+    }
+
+    /* the picture fills the top of the folder, its corners follow the folder */
+    .project-card-visual {
+        position: relative;
+        flex: 1 1 0;
+        min-height: 0;
+        overflow: hidden;
+        border-radius: 0 0.875rem 0 0;
+    }
+
+    /* the name and the GO button in an inverted band across the folder */
+    .project-card-label {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1rem;
+        padding: clamp(0.625rem, 1.8vh, 1rem) clamp(0.875rem, 1.5vw, 1.25rem);
+        background: var(--foreground);
+        color: var(--background);
+    }
+
+    .project-card-name {
+        min-width: 0;
+        font: 900 clamp(1.375rem, min(2.3vw, 4.2vh), 2.875rem) / 0.95 var(--font-display);
+        letter-spacing: -0.03em;
+        text-transform: uppercase;
+        overflow-wrap: anywhere;
+    }
+
+    /* the GO pill, inverted on the band */
+    .link-go {
+        flex: none;
+        padding: 0.25rem 1.25rem;
+        border-radius: 3.125rem;
+        background: var(--background);
+        color: var(--foreground);
+        font: 900 1.125rem var(--font-display);
+        white-space: nowrap;
+    }
+
+    /* the stack and the story on the left, the number of the project on the right */
+    .project-card-body {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        gap: 1rem;
+        padding: clamp(0.75rem, 2vh, 1.25rem) clamp(0.875rem, 1.5vw, 1.25rem);
+    }
+
+    .project-card-info {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.625rem;
+        min-width: 0;
+    }
+
+    /* the story stops after three lines, the project page tells the rest */
+    .project-card-about {
+        display: -webkit-box;
+        overflow: hidden;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 3;
+        line-clamp: 3;
+        font-size: 0.8125rem;
+        line-height: 1.5;
+        opacity: 0.8;
+    }
+
+    /* the big number: only its outline, filled in when you point at the folder */
+    .project-card-number {
+        flex: none;
+        margin-bottom: -0.12em;
+        color: transparent;
+        -webkit-text-stroke: 0.09375rem var(--foreground);
+        font: 900 clamp(3rem, min(5.5vw, 9vh), 6.5rem) / 0.8 var(--font-display);
+        letter-spacing: -0.05em;
+        transition: color 0.3s;
+    }
+
+    &:is(:hover, :focus-visible) .project-card-number {
+        color: var(--foreground);
+    }
+}
+
+/* the picture of a project, it fills the top of its folder and zooms in a little when you point at it */
+.thumb {
+    position: absolute;
+    inset: 0;
+    display: block;
+    transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+/* pointing at a project zooms its picture in a little */
+.project-card:is(:hover, :focus-visible) .thumb {
+    transform: scale(1.04);
+}
+
+/* personal-website: the landing in small on a field of dots: the nav, the big word with its echoes, the intro and the doors */
+.thumb-site {
+    display: grid;
+    grid-template-rows: auto auto minmax(0, 1fr) auto;
+    container-type: size;
+    background-image: radial-gradient(color-mix(in srgb, var(--foreground) 22%, transparent) 0.0625rem, transparent 0.0938rem);
+    background-size: 0.875rem 0.875rem;
+
+    .thumb-site-nav {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding: 0.5rem 1rem;
+        border-bottom: var(--line-width) solid var(--line-color);
+        background: var(--background);
+        font: 800 0.9375rem / 1.2 var(--font-display);
+
+        span {
+            font: 700 0.6875rem var(--font-mono);
+            opacity: 0.7;
+        }
+    }
+
+    /* the doors: three small cards with their names, always on the last row */
+    .thumb-site-doors {
+        grid-row: 4;
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 0.625rem;
+        padding: 0 1rem 1rem;
+
+        span {
+            overflow: hidden;
+            padding: 0.375rem 0.5rem;
+            border: var(--line-width) solid var(--foreground);
+            border-radius: 0.375rem;
+            background: var(--background);
+            box-shadow: 0.1875rem 0.1875rem 0 var(--foreground);
+            font: 800 clamp(0.5625rem, 4cqw, 0.875rem) var(--font-display);
+            text-transform: uppercase;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+    }
+}
+
+/* the big word, like the title of the site: letters spread over the width, two sliced echoes on top */
+.thumb-site-title {
+    padding: 1rem 1rem 0.75rem;
+    border-bottom: var(--line-width) solid var(--line-color);
+
+    &>* {
+        display: flex;
+        justify-content: space-between;
+        font: 900 calc(100cqw / 7.4) / 0.78 var(--font-display);
+        letter-spacing: -0.04em;
+    }
+
+    /* the echoes only show the top of their letters */
+    .thumb-site-echo {
+        overflow: hidden;
+    }
+
+    .thumb-site-echo-far {
+        height: 0.2em;
+        opacity: 0.3;
+    }
+
+    .thumb-site-echo-near {
+        height: 0.34em;
+        opacity: 0.65;
+    }
+
+    /* every letter jumps up a moment after the one before it when you point at the folder */
+    span span,
+    b span {
+        transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+        transition-delay: calc(var(--letter) * 40ms);
+    }
+}
+
+/* pointing at the folder makes the letters of the big word jump up, one after the other */
+.project-card:is(:hover, :focus-visible) .thumb-site-title .thumb-site-word span {
+    transform: translateY(-0.12em);
+}
+
+/* the intro under the word: the label, the hello and one line with the marked word */
+.thumb-site-intro {
+    align-self: center;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.375rem;
+    min-height: 0;
+    overflow: hidden;
+    padding: 0.75rem 1rem;
+
+    b {
+        font: 800 clamp(1.125rem, 8cqw, 2.25rem) / 1.1 var(--font-display);
+        letter-spacing: -0.03em;
+    }
+
+    &>span:last-child {
+        max-width: 26ch;
+        font: 600 clamp(0.75rem, 4.2cqw, 1.125rem) / 1.3 var(--font-display);
+    }
+
+    mark {
+        padding: 0 0.25em;
+        background: var(--foreground);
+        color: var(--background);
+    }
+}
+
+/* a low folder has no room for the intro */
+@container (max-height: 15rem) {
+    .thumb-site-intro {
+        display: none;
+    }
+}
+
+/* slashyos: the whole screenshot, on a blurred and darker copy of itself that fills the rest of the folder.
+   grey until you point at the project */
+.thumb-shot {
+    display: grid;
+    place-items: center;
+    padding: 1rem;
+    overflow: hidden;
+    filter: grayscale(1) contrast(1.15);
+    transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1), filter 0.6s;
+
+    &::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        /* a tiny copy that is already blurred and darker, stretched out: it looks soft and costs nothing to draw */
+        background: url("../images/slashyos-blur.jpg") center / cover;
+    }
+
+    img {
+        position: relative;
+        display: block;
+        width: 100%;
+        height: auto;
+        max-height: 100%;
+        object-fit: contain;
+        border: var(--line-width) solid var(--line-color);
+        border-radius: 0.5rem;
+    }
+}
+
+/* pointing at the project brings the colour back */
+.project-card:is(:hover, :focus-visible) .thumb-shot {
+    filter: none;
+}
+
+/* blog: a screenshot of the home page of the blog, it scrolls down slowly when you point at the project */
+.thumb-page img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 50% 0%;
+    transition: object-position 2.4s ease-in-out;
+}
+
+/* pointing at the project scrolls the screenshot of the blog down to its footer */
+.project-card:is(:hover, :focus-visible) .thumb-page img {
+    object-position: 50% 100%;
+}
+
+/* project page: one screen, the body takes the height between the title and the link cards */
+.sheet.project-page {
+    height: calc(100dvh - 2 * var(--page-gap));
+    overflow: hidden;
+
+    .title.compact {
+        flex: 0 0 clamp(7rem, 19vh, 12.5rem);
+    }
+}
+
+/* the body of a project: the story and features on the left, the window on graph paper on the right */
+.project-body {
+    flex: 1 1 0;
+    min-height: 0;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    grid-template-rows: minmax(0, 1fr);
+
+    &>*+* {
+        border-left: var(--line-width) solid var(--line-color);
+    }
+}
+
+/* the left column: text on top, the features fill the rest */
+.project-story {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    min-height: 0;
+}
+
+/* the story: caption, the lead with the stack under it */
+.project-text {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: clamp(0.875rem, 2.5vh, 1.75rem) clamp(0.875rem, 2vw, 1.75rem);
+    border-bottom: var(--line-width) solid var(--line-color);
+
+    p {
+        margin: 0;
+        font: 600 clamp(1.125rem, min(1.7vw, 2.9vh), 1.875rem) / 1.25 var(--font-display);
+        letter-spacing: -0.01em;
+    }
+
+    /* the second paragraph: plain mono text */
+    .project-more {
+        max-width: 46rem;
+        font: 400 clamp(0.8125rem, 0.95vw, 0.9375rem) / 1.6 var(--font-mono);
+        letter-spacing: 0;
+        opacity: 0.85;
+    }
+
+    /* a link inside the text: underlined, inverted on hover */
+    a {
+        text-decoration: underline;
+        text-underline-offset: 0.1875rem;
+        text-decoration-thickness: 0.125rem;
+
+        &:hover {
+            background: var(--foreground);
+            color: var(--background);
+        }
+    }
+}
+
+/* personal-website: the numbers about the site, the same bar as the status bar */
+.project-stats {
+    flex: none;
+    display: grid;
+    border-bottom: var(--line-width) solid var(--line-color);
+}
+
+/* the features: a list of tiles in two columns that share the height that is left */
+.project-features {
+    flex: 1 1 0;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+
+    .project-features-head {
+        padding: 0.625rem clamp(0.875rem, 2vw, 1.75rem);
+        border-bottom: var(--line-width) solid var(--line-color);
+    }
+}
+
+/* one feature: its number in an inverted block with a hard shadow, the text next to it */
+.feature-list {
+    flex: 1 1 0;
+    min-height: 0;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-auto-rows: minmax(0, 1fr);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    li {
+        display: flex;
+        align-items: center;
+        gap: clamp(0.75rem, 1.2vw, 1.25rem);
+        min-height: 0;
+        overflow: hidden;
+        padding: 0.5rem clamp(0.875rem, 2vw, 1.75rem);
+
+        /* a line between the rows and between the two columns */
+        &:nth-child(n + 3) {
+            border-top: var(--line-width) solid var(--line-color);
+        }
+
+        &:nth-child(even) {
+            border-left: var(--line-width) solid var(--line-color);
+        }
+
+        /* the last one alone on its row takes both columns */
+        &:last-child:nth-child(odd) {
+            grid-column: 1 / -1;
+        }
+    }
+
+    .feature-number {
+        flex: none;
+        display: grid;
+        place-items: center;
+        width: 2.75rem;
+        aspect-ratio: 1;
+        border: 0.125rem solid var(--foreground);
+        border-radius: 0.625rem;
+        background: var(--foreground);
+        color: var(--background);
+        box-shadow: 0.25rem 0.25rem 0 var(--line-color);
+        font: 900 1.125rem / 1 var(--font-display);
+        transition: transform 0.2s;
+    }
+
+    li:hover .feature-number {
+        transform: rotate(-6deg);
+    }
+
+    .feature-text {
+        font: 700 clamp(0.9375rem, min(1.1vw, 1.8vh), 1.25rem) / 1.25 var(--font-display);
+    }
+}
+
+/* the right column: graph paper with the window of the project on top, the sticker on its corner */
+.project-visual {
+    display: flex;
+    min-width: 0;
+    min-height: 0;
+    overflow: hidden;
+    padding: clamp(1rem, 3vh, 2.25rem) clamp(1.25rem, 2.5vw, 2.5rem) clamp(1.5rem, 3.5vh, 2.75rem);
+}
+
+/* the window: a thick border and round corners, a bar with its caption on top */
+.project-window {
+    position: relative;
+    flex: 1 1 0;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    border: 0.125rem solid var(--foreground);
+    border-radius: 1rem;
+    background: var(--background);
+
+    /* the caption (and on the personal-website page the pills of the screens) */
+    .project-window-bar {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.5rem 1rem;
+        min-height: 2.75rem;
+        padding: 0.5rem 1rem;
+        border-bottom: 0.125rem solid var(--foreground);
+        font-weight: 700;
+    }
+
+    /* what is inside takes the height that is left, the round corners cut it off */
+    .project-window-body {
+        position: relative;
+        flex: 1 1 0;
+        min-height: 0;
+        margin: 0;
+        overflow: hidden;
+        border-radius: 0 0 0.875rem 0.875rem;
+    }
+}
+
+/* personal-website: the pills of the four screens */
+.site-preview-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.375rem;
+
+    .pill {
+        height: 1.75rem;
+        font-size: 0.8125rem;
+    }
+}
+
+/* personal-website: the home page inside is drawn at laptop size and scaled down (sitePreview.js), it can not be clicked */
+.site-preview-window iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    border: 0;
+    transform-origin: 0 0;
+    pointer-events: none;
+    transition: opacity 0.3s;
+}
+
+/* while it jumps to another screen the page is faded out (sitePreview.js) */
+.site-preview-window.is-switching iframe {
+    opacity: 0;
+}
+
+/* slashyos: the screenshot, grey until you point at it, with the possessed symbols on top */
+.project-screenshot img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: grayscale(1) contrast(1.15);
+    transition: filter 0.6s;
+}
+
+/* pointing at the screenshot brings its colour back */
+.project-screenshot:hover img {
+    filter: none;
+}
+
+/* blog: a markdown file on top, the page zola makes from it below */
+.blog-build {
+    display: flex;
+    flex-direction: column;
+
+    .markdown-file {
+        flex: 1 1 0;
+        min-height: 0;
+        overflow: hidden;
+        margin: 0;
+        padding: 0.875rem 1.25rem;
+        font: 400 clamp(0.6875rem, min(0.95vw, 1.55vh), 0.9375rem) / 1.45 var(--font-mono);
+        opacity: 0.8;
+    }
+
+    .build-command {
+        display: flex;
+        align-items: center;
+        gap: 0.25rem;
+        padding: 0.5rem 1.25rem;
+        border-block: 0.125rem solid var(--foreground);
+        font-weight: 700;
+
+        .build-arrow {
+            margin-left: auto;
+            font: 900 1.25rem / 1 var(--font-display);
+        }
+    }
+
+    /* the page that comes out: the inverted block, it rises in after the build */
+    .built-page {
+        flex: 1 1 0;
+        min-height: 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: flex-start;
+        gap: 0.625rem;
+        overflow: hidden;
+        padding: 0.875rem 1.25rem;
+        background: var(--foreground);
+        color: var(--background);
+        animation: rise 0.6s 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+
+        .chips li {
+            border-color: var(--background);
+        }
+
+        p {
+            margin: 0;
+            font-size: clamp(0.75rem, 1vw, 0.9375rem);
+        }
+    }
+
+    .built-page-title {
+        font: 900 clamp(1.5rem, min(3vw, 5vh), 3.25rem) / 0.95 var(--font-display);
+        letter-spacing: -0.03em;
+    }
+}
+
+/* the links of a project: the same cards as the doors on the landing, as many as there are links */
+.project-doors {
+    grid-template-columns: none;
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(0, 1fr);
+
+    /* one line per card: the number, the name with its address and the GO button */
+    .link-row {
+        grid-template-columns: auto minmax(0, 1fr) auto;
+        grid-template-rows: none;
+        align-items: center;
+        min-height: 0;
+        padding-block: clamp(0.625rem, 1.6vh, 1rem);
+
+        .link-number {
+            grid-column: auto;
+            align-self: center;
+        }
+
+        .link-name {
+            font-size: clamp(1.375rem, min(2.2vw, 3.6vh), 2.25rem);
         }
     }
 }
@@ -642,186 +1219,13 @@ a {
     min-height: calc(100dvh - var(--nav-height) - var(--page-gap) - var(--line-width));
 }
 
-/* projects screen: the list on the left, a preview of the project you point at on the right */
-.project-browser {
-    flex: 1 1 auto;
-    min-height: 0;
-    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
-
-    /* one project: a big number, the name with its stack as a caption under it, and the GO button */
-    .project-list .link-row {
-        flex: 1 1 0;
-        min-height: 6rem;
-        align-items: center;
-        column-gap: clamp(1rem, 2.5vw, 2.5rem);
-        padding-block: 0.75rem;
-
-        .link-number {
-            align-self: center;
-            margin: 0;
-            min-width: 2ch;
-            font: 900 clamp(1.5rem, 2.6vw, 2.75rem) / 1 var(--font-display);
-            letter-spacing: -0.04em;
-            opacity: 0.35;
-            transition: opacity 0.6s;
-        }
-
-        .link-name {
-            display: block;
-            font-size: clamp(1.75rem, min(4.6vw, 7vh), 4.5rem);
-        }
-
-        .link-url {
-            display: block;
-            margin: 0.625rem 0 0;
-            font-size: 0.6875rem;
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
-            opacity: 0.6;
-        }
-
-        &:hover .link-number,
-        &.is-current .link-number {
-            opacity: 1;
-        }
-
-        /* the preview already tells the story, so the short text waits for phones */
-        .link-about {
-            display: none;
-        }
-    }
-}
-
-/* the project the preview shows gets a thick line on its left */
-.project-list .link-row.is-current {
-    box-shadow: inset 0.375rem 0 0 var(--foreground);
-}
-
-/* right side of the browser: one preview at a time (projectPreview.js switches them) */
-.preview-pane {
-    position: relative;
-    display: flex;
-    min-width: 0;
-    overflow: hidden;
-}
-
-/* one project preview: name, stack, story, features and links (projectPreview.js shows one at a time) */
-.preview {
-    position: relative;
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 0.875rem;
-    padding: 2.25rem clamp(0.875rem, 2vw, 1.75rem) clamp(1rem, 3vh, 1.75rem);
-    animation: rise 0.45s cubic-bezier(0.2, 0.8, 0.2, 1);
-
-    &[hidden] {
-        display: none;
-    }
-
-    /* the project number, huge and faint behind everything */
-    .preview-number {
-        position: absolute;
-        right: -0.04em;
-        bottom: -0.12em;
-        z-index: -1;
-        font: 900 clamp(11rem, 30vw, 32rem) / 1 var(--font-display);
-        letter-spacing: -0.06em;
-        opacity: 0.08;
-        pointer-events: none;
-    }
-
-    .preview-name {
-        margin: 0;
-        font: 900 clamp(2rem, 3.4vw, 3.5rem) / 0.95 var(--font-display);
-        letter-spacing: -0.035em;
-        text-transform: uppercase;
-        overflow-wrap: anywhere;
-    }
-
-    p {
-        margin: 0;
-        max-width: 34rem;
-        opacity: 0.85;
-    }
-
-    .preview-features {
-        margin: 0;
-        padding: 0;
-        list-style: none;
-
-        li {
-            display: grid;
-            grid-template-columns: 2.25rem 1fr;
-            align-items: baseline;
-            padding: 0.4375rem 0;
-            border-top: var(--line-width) solid var(--line-color);
-            font: 600 clamp(0.9375rem, 1.2vw, 1.125rem) / 1.3 var(--font-display);
-        }
-
-        span {
-            font: 400 0.6875rem var(--font-mono);
-            opacity: 0.6;
-        }
-    }
-
-    /* the second paragraph, the rest of the features and the screenshot wait for tall screens */
-    .preview-body,
-    .preview-more,
-    .preview-shot {
-        display: none;
-    }
-
-    /* the whole screenshot shows: the box keeps the shape of the image and gets as tall as the free space allows */
-    .preview-shot {
-        flex: 1 1 0;
-        align-self: flex-start;
-        min-height: 0;
-        width: auto;
-        max-width: 100%;
-        aspect-ratio: 1600 / 1066;
-        object-fit: contain;
-        border: var(--line-width) solid var(--line-color);
-        filter: grayscale(1) contrast(1.15);
-        transition: filter 0.6s;
-
-        &:hover {
-            filter: none;
-        }
-    }
-
-    /* tall screens: the links as rows, from edge to edge at the bottom of the preview */
-    .preview-rows {
-        display: none;
-        margin: auto calc(-1 * clamp(0.875rem, 2vw, 1.75rem)) calc(-1 * clamp(1rem, 3vh, 1.75rem));
-        border-top: var(--line-width) solid var(--line-color);
-
-        .link-row {
-            grid-template-columns: 1fr auto;
-            padding-block: clamp(0.75rem, 1.6vh, 1.25rem);
-
-            .link-name {
-                font-size: clamp(1.5rem, 2.6vw, 2.5rem);
-            }
-        }
-    }
-
-    /* open the project, or go straight to its code, site or docs */
-    .preview-links {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.375rem;
-        margin-top: auto;
-    }
-}
-
 /* the giant mail link: a title you can click, filled with a circle on hover like the link rows */
 .mail-title {
     /* tall enough for the word at full width, the composer below takes the rest of the screen */
-    flex: 0 1 clamp(9rem, 34vh, 28rem);
+    flex: 0 1 clamp(8rem, 28vh, 24rem);
     min-height: 9rem;
     z-index: 0;
-    transition: color 0.6s;
+    transition: color var(--fill-time) var(--fill-ease);
 
     &::after {
         content: "";
@@ -831,7 +1235,7 @@ a {
         background: var(--foreground);
         clip-path: circle(0% at 50% 50%);
         -webkit-clip-path: circle(0% at 50% 50%);
-        transition: 0.6s;
+        transition: clip-path var(--fill-time) var(--fill-ease), -webkit-clip-path var(--fill-time) var(--fill-ease);
     }
 
     &:hover,
@@ -846,34 +1250,548 @@ a {
     }
 }
 
-/* contact: a small mail composer, the fields on the left and the big send button on the right */
-.compose {
-    flex: 1 1 auto;
-    min-height: 12rem;
-    grid-template-columns: minmax(0, 8fr) minmax(0, 4fr);
+/* a field of dots behind the badge on the over screen and the mail window on the contact screen */
+:is(.badge-desk, .mail-desk) {
+    background-image: radial-gradient(color-mix(in srgb, var(--foreground) 22%, transparent) 0.0625rem, transparent 0.0938rem);
+    background-size: 1rem 1rem;
+}
 
-    .compose-fields {
-        display: flex;
-        flex-direction: column;
-        min-width: 0;
+/* over: the badge on the left, the story, skills and socials on the right (it takes the free height of the screen) */
+.about-body {
+    flex: 1 1 auto;
+    min-height: 0;
+    grid-template-columns: minmax(0, 4fr) minmax(0, 8fr);
+
+    &>*+* {
+        border-left: var(--line-width) solid var(--line-color);
+    }
+}
+
+/* the left cell: the badge hangs from a strap that comes down from the top, the note is taped below it */
+.badge-desk {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 0;
+    min-height: 0;
+    overflow: hidden;
+    padding: clamp(2.5rem, 6vh, 4rem) clamp(1rem, 2.5vw, 2.25rem) clamp(1.25rem, 3.5vh, 2.5rem);
+
+    /* the strap: a woven band from the top of the cell to the slot of the badge */
+    .badge-strap {
+        position: absolute;
+        top: 0;
+        left: 50%;
+        width: 1.75rem;
+        height: calc(clamp(2.5rem, 6vh, 4rem) + 1.5rem);
+        border-inline: 0.125rem solid var(--foreground);
+        background: repeating-linear-gradient(0deg, var(--foreground) 0 0.375rem, var(--card-background) 0.375rem 0.5rem);
+        transform: translateX(-50%);
+    }
+}
+
+/* the badge: a pass with a slot on top, the portrait, the name and a barcode, it swings when you point at it.
+   a spotlight follows the pointer (cardSpotlight.js sets --x and --y) */
+.profile-card.badge {
+    position: relative;
+    isolation: isolate;
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    width: min(100%, 26rem);
+    min-height: 0;
+    max-height: 40rem;
+    border: 0.125rem solid var(--foreground);
+    border-radius: 1.125rem;
+    background: var(--background);
+    box-shadow: 0.5rem 0.5rem 0 var(--foreground);
+    transform-origin: 50% -1.5rem;
+    transition: transform 0.6s cubic-bezier(0.3, 1.6, 0.5, 1);
+
+    /* the slot the strap goes through */
+    &::before {
+        content: "";
+        position: absolute;
+        top: 0.5rem;
+        left: 50%;
+        width: 2.75rem;
+        height: 0.5rem;
+        border: 0.125rem solid var(--foreground);
+        border-radius: 1rem;
+        background: var(--card-background);
+        transform: translateX(-50%);
     }
 
+    /* the spotlight */
+    &::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        z-index: 2;
+        border-radius: inherit;
+        background: radial-gradient(circle 9rem at var(--x, 50%) var(--y, 50%), var(--glow), transparent);
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.3s;
+    }
+
+    /* the top of the pass: what it is for and the asterisk */
+    .badge-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1.375rem 1rem 0.5rem;
+        border-bottom: 0.125rem solid var(--foreground);
+        font-weight: 700;
+    }
+
+    .card-asterisk {
+        font: 900 1.5rem / 1 var(--font-display);
+        transition: transform 0.6s;
+    }
+
+    /* the possessed portrait: moving over it turns the cells into flickering symbols (pictureSymbols.js) */
+    .badge-photo {
+        position: relative;
+        flex: 1 1 0;
+        min-height: 6rem;
+        overflow: hidden;
+        border-bottom: 0.125rem solid var(--foreground);
+
+        img {
+            display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: grayscale(1) contrast(1.35);
+        }
+    }
+
+    /* the name and the role */
+    .badge-info {
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+        padding: 0.75rem 1rem 0.5rem;
+    }
+
+    .card-label {
+        font-size: 0.75rem;
+        opacity: 0.7;
+    }
+
+    .card-name {
+        font: 900 clamp(1.75rem, min(3.2vw, 5vh), 3rem) / 0.95 var(--font-display);
+        letter-spacing: -0.04em;
+    }
+
+    .card-role {
+        font-size: 0.8125rem;
+        font-weight: 700;
+    }
+
+    /* the barcode at the bottom: bars of different widths */
+    .badge-code {
+        flex: none;
+        height: 2rem;
+        margin: 0.25rem 1rem 1rem;
+        background: repeating-linear-gradient(90deg,
+                var(--foreground) 0 0.125rem, transparent 0.125rem 0.25rem,
+                var(--foreground) 0.25rem 0.5rem, transparent 0.5rem 0.5625rem,
+                var(--foreground) 0.5625rem 0.625rem, transparent 0.625rem 0.875rem,
+                var(--foreground) 0.875rem 1.0625rem, transparent 1.0625rem 1.1875rem);
+    }
+}
+
+/* the note under the badge: what I am busy with right now, taped on and turned a little.
+   pointing at it straightens it */
+.now-note {
+    position: relative;
+    flex: none;
+    width: min(100%, 22rem);
+    margin-top: clamp(2rem, 5vh, 3.5rem);
+    padding: 1.5rem 1.25rem 1rem;
+    border: 0.125rem solid var(--foreground);
+    border-radius: 0.25rem;
+    background: var(--surface);
+    box-shadow: 0.375rem 0.375rem 0 var(--foreground);
+    transform: rotate(2deg);
+    transition: transform 0.3s;
+
+    &:hover {
+        transform: rotate(0deg);
+    }
+
+    p {
+        margin: 0;
+    }
+
+    /* the file name */
+    .now-title {
+        padding-bottom: 0.5rem;
+        border-bottom: var(--line-width) dashed var(--line-color);
+        font-weight: 700;
+    }
+
+    .now-updated {
+        padding-top: 0.5rem;
+        border-top: var(--line-width) dashed var(--line-color);
+        font-size: 0.75rem;
+        opacity: 0.7;
+    }
+}
+
+/* the tape on top of the note, see-through and a bit crooked */
+.now-tape {
+    position: absolute;
+    top: -0.875rem;
+    left: 50%;
+    width: 5.5rem;
+    height: 1.5rem;
+    border: var(--line-width) solid var(--line-color);
+    background: color-mix(in srgb, var(--card-background) 75%, transparent);
+    transform: translateX(-50%) rotate(-4deg);
+}
+
+/* one line of the note: what kind of thing, and what it is */
+.now-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.625rem;
+    margin: 0.75rem 0;
+    padding: 0;
+    list-style: none;
+
+    li {
+        display: flex;
+        flex-direction: column;
+        gap: 0.125rem;
+    }
+
+    b {
+        font: 800 clamp(1rem, 1.3vw, 1.25rem) / 1.15 var(--font-display);
+        letter-spacing: -0.01em;
+    }
+}
+
+/* a window up to 940px high has no room for the note, the badge gets the whole cell */
+@media (max-height: 940px) and (min-width: 761px) {
+    .now-note {
+        display: none;
+    }
+}
+
+/* pointing at the badge (or holding it on a phone): it swings, the spotlight shows and the asterisk spins */
+.profile-card.badge:is(:hover, .is-touched) {
+    transform: rotate(-3deg);
+
+    &::after {
+        opacity: 1;
+    }
+
+    .card-asterisk {
+        transform: rotate(180deg);
+    }
+}
+
+/* touch screens: no hover, so the hold effect is used instead */
+@media (hover: none) {
+    .profile-card {
+        -webkit-user-select: none;
+        user-select: none;
+        -webkit-touch-callout: none;
+    }
+}
+
+/* the right side of over: the story, the skills and the socials */
+.about {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    min-height: 0;
+}
+
+/* the story: a caption, one big line with a marked word, a calm paragraph and three numbered points */
+.about-text {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    gap: clamp(0.875rem, 2.4vh, 1.75rem);
+    padding: clamp(1rem, 3vh, 2.5rem) clamp(0.875rem, 2vw, 1.75rem);
+
+    p {
+        margin: 0;
+    }
+
+    /* the big line */
+    .about-lead {
+        font: 900 clamp(2rem, min(4.4vw, 7vh), 5rem) / 1 var(--font-display);
+        letter-spacing: -0.04em;
+    }
+
+    mark {
+        padding: 0 0.15em;
+        background: var(--foreground);
+        color: var(--background);
+    }
+
+    /* the paragraph: lighter and with room between the lines, so it reads easily */
+    .about-intro {
+        max-width: 52ch;
+        font: 400 clamp(1rem, min(1.4vw, 2.4vh), 1.375rem) / 1.6 var(--font-display);
+        opacity: 0.8;
+    }
+}
+
+/* what I care about: three boxes side by side, the number in a black block, the important word in bold */
+.about-points {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(0.625rem, 1.2vw, 1rem);
+    width: min(100%, 52rem);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    li {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        min-width: 0;
+        padding: 0.625rem 0.875rem 0.625rem 0.625rem;
+        border: 0.125rem solid var(--foreground);
+        border-radius: 0.75rem;
+        font: 400 clamp(0.9375rem, min(1.2vw, 2vh), 1.25rem) / 1.15 var(--font-display);
+        transition: transform 0.2s, box-shadow 0.2s;
+
+        &:hover {
+            transform: translate(-0.1875rem, -0.1875rem);
+            box-shadow: 0.375rem 0.375rem 0 var(--foreground);
+        }
+
+        b {
+            display: block;
+            font-weight: 800;
+        }
+    }
+
+    .about-point-number {
+        flex: none;
+        display: grid;
+        place-items: center;
+        width: 2.25rem;
+        aspect-ratio: 1;
+        border-radius: 0.5rem;
+        background: var(--foreground);
+        color: var(--background);
+        font: 900 1rem / 1 var(--font-display);
+    }
+}
+
+/* the skills: stickers that lean a little, every third one inverted */
+.skills {
+    display: flex;
+    flex-direction: column;
+    gap: 0.875rem;
+    padding: clamp(0.875rem, 2.5vh, 1.75rem) clamp(0.875rem, 2vw, 1.75rem);
+    border-top: var(--line-width) solid var(--line-color);
+}
+
+/* the list of skill stickers: they wrap onto a new line when there is no room */
+.skill-stickers {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem 0.875rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    .skill {
+        padding: 0.375rem 1.125rem 0.4375rem;
+        border: 0.125rem solid var(--foreground);
+        border-radius: 3.125rem;
+        background: var(--background);
+        font: 800 clamp(1.125rem, min(1.9vw, 3.2vh), 2rem) / 1.1 var(--font-display);
+        letter-spacing: -0.02em;
+        transform: rotate(-2deg);
+        transition: transform 0.3s, box-shadow 0.3s;
+
+        &:nth-child(even) {
+            transform: rotate(1.5deg);
+        }
+
+        &:nth-child(3n) {
+            background: var(--foreground);
+            color: var(--background);
+        }
+
+        /* pointing at one: it stands up straight and lifts off the page */
+        &:hover {
+            transform: translateY(-0.25rem);
+            box-shadow: 0.25rem 0.25rem 0 var(--foreground);
+        }
+    }
+}
+
+/* the socials: four tiles in two columns with the icon, the name, the address and an arrow that turns */
+.social-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    border-top: var(--line-width) solid var(--line-color);
+}
+
+/* one social tile: icon, name with address, and the arrow */
+.social-tile {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center;
+    gap: clamp(0.75rem, 1.5vw, 1.25rem);
+    min-width: 0;
+    padding: clamp(0.875rem, 2.4vh, 1.75rem) clamp(0.875rem, 2vw, 1.75rem);
+    transition: background 0.6s var(--fill-ease), color 0.6s var(--fill-ease);
+
+    /* lines between the tiles */
+    &:nth-child(even) {
+        border-left: var(--line-width) solid var(--line-color);
+    }
+
+    &:nth-child(n + 3) {
+        border-top: var(--line-width) solid var(--line-color);
+    }
+
+    svg {
+        width: clamp(1.75rem, 2.4vw, 2.5rem);
+        height: clamp(1.75rem, 2.4vw, 2.5rem);
+        fill: currentColor;
+    }
+
+    .social-text {
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+        min-width: 0;
+
+        b {
+            font: 800 clamp(1.25rem, min(2vw, 3.4vh), 2.125rem) / 1 var(--font-display);
+            letter-spacing: -0.02em;
+            text-transform: uppercase;
+        }
+
+        small {
+            overflow: hidden;
+            font-size: 0.75rem;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            opacity: 0.75;
+        }
+    }
+
+    .social-arrow {
+        font: 900 clamp(1.5rem, 2.2vw, 2.25rem) / 1 var(--font-display);
+        transition: transform 0.3s;
+    }
+
+    /* pointing at one inverts it and turns the arrow to the right */
+    &:hover,
+    &:focus-visible {
+        background: var(--foreground);
+        color: var(--background);
+
+        .social-arrow {
+            transform: rotate(45deg);
+        }
+    }
+}
+
+/* contact: the mail window on the left, the address and the socials on the right */
+.contact-body {
+    flex: 1 1 auto;
+    min-height: 0;
+    grid-template-columns: minmax(0, 8fr) minmax(0, 4fr);
+
+    &>*+* {
+        border-left: var(--line-width) solid var(--line-color);
+    }
+}
+
+/* the left cell: the mail window on dots, with room for its shadow and the stamp */
+.mail-desk {
+    display: flex;
+    min-width: 0;
+    min-height: 0;
+    padding: clamp(1.25rem, 3.5vh, 2.25rem) calc(clamp(1rem, 2.5vw, 2.5rem) + 0.5rem) calc(clamp(1rem, 3vh, 2rem) + 0.5rem) clamp(1rem, 2.5vw, 2.5rem);
+}
+
+/* the mail window: a bar with three dots, the fields, and the command with the send button at the bottom */
+.mail-window {
+    position: relative;
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    border: 0.125rem solid var(--foreground);
+    border-radius: 1rem;
+    background: var(--background);
+    box-shadow: 0.5rem 0.5rem 0 var(--foreground);
+
+    .mail-window-bar {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding: 0.625rem 1rem;
+        border-bottom: 0.125rem solid var(--foreground);
+        font-weight: 700;
+    }
+
+    /* the three dots of the window, the first one filled */
+    .mail-window-dots {
+        display: flex;
+        gap: 0.375rem;
+
+        i {
+            width: 0.75rem;
+            height: 0.75rem;
+            border: 0.125rem solid var(--foreground);
+            border-radius: 50%;
+        }
+
+        i:first-child {
+            background: var(--foreground);
+        }
+    }
+
+    /* one field: the label on the left, what you type on the right */
     .compose-field {
         display: grid;
-        grid-template-columns: 8rem 1fr;
+        grid-template-columns: 7rem minmax(0, 1fr);
         align-items: baseline;
         gap: 1rem;
-        padding: clamp(0.75rem, 2vh, 1.25rem) clamp(0.875rem, 2vw, 1.75rem);
+        padding: clamp(0.625rem, 1.8vh, 1.125rem) 1.25rem;
         cursor: text;
 
         & + .compose-field {
             border-top: var(--line-width) solid var(--line-color);
         }
+
+        /* the field you are typing in gets a thick line on its left */
+        &:focus-within {
+            box-shadow: inset 0.375rem 0 0 var(--foreground);
+        }
     }
 
-    /* the message box grows with the screen, so there is room to write */
+    /* the address it goes to, it can not be changed */
+    .compose-to {
+        cursor: default;
+        font-weight: 700;
+    }
+
+    /* the message box takes the height that is left, so there is room to write */
     .compose-message {
-        flex: 1 1 auto;
+        flex: 1 1 0;
+        min-height: 0;
         grid-template-rows: minmax(0, 1fr);
         align-items: stretch;
 
@@ -884,7 +1802,7 @@ a {
 
         textarea {
             height: 100%;
-            min-height: 5rem;
+            min-height: 3.5rem;
         }
     }
 
@@ -902,7 +1820,7 @@ a {
     }
 
     input {
-        font: 800 clamp(1.5rem, 3vw, 2.75rem) / 1.1 var(--font-display);
+        font: 800 clamp(1.5rem, min(3vw, 5vh), 2.75rem) / 1.1 var(--font-display);
         letter-spacing: -0.02em;
     }
 
@@ -915,65 +1833,210 @@ a {
         opacity: 0.3;
     }
 
-    /* the field you are typing in gets the same thick line as the active project */
-    .compose-field:focus-within {
-        box-shadow: inset 0.375rem 0 0 var(--foreground);
+    /* the bottom: the mail command as you type, and the send button */
+    .mail-window-foot {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        align-items: center;
+        gap: 0.75rem 1.5rem;
+        padding: 0.75rem 1.25rem;
+        border-top: 0.125rem solid var(--foreground);
     }
 
-    /* the send button: the inverted button of the landing page, with the mail command on it */
+    .compose-command {
+        min-width: 0;
+        font-size: 0.8125rem;
+        font-weight: 700;
+        overflow-wrap: anywhere;
+    }
+
+    /* the send button: a big inverted pill with a hard shadow, it presses in */
     .compose-send {
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        gap: 1rem;
-        border: none;
+        flex: none;
+        padding: 0.5rem 1.5rem;
+        border: 0.125rem solid var(--foreground);
+        border-radius: 3.125rem;
         background: var(--foreground);
         color: var(--background);
-        clip-path: polygon(0 0, 100% 0, 100% calc(100% - 1.75rem), calc(100% - 1.75rem) 100%, 0 100%);
-        text-align: left;
-        font: inherit;
+        box-shadow: 0.25rem 0.25rem 0 var(--line-color);
+        font: 900 clamp(1.125rem, 1.6vw, 1.5rem) var(--font-display);
         cursor: pointer;
-        transition: opacity 0.3s;
+        transition: transform 0.2s, box-shadow 0.2s;
 
         &:hover,
         &:focus-visible {
-            opacity: 0.85;
-        }
-
-        .arrow {
-            font: 900 clamp(2.25rem, min(6vw, 8vh), 6rem) / 1 var(--font-display);
-        }
-
-        .compose-command {
-            font-size: 0.8125rem;
-            font-weight: 700;
-            overflow-wrap: anywhere;
+            transform: translate(0.25rem, 0.25rem);
+            box-shadow: 0 0 0 var(--line-color);
         }
     }
 }
 
-/* the mail address on its own row, with a button that copies it */
-.mail-bar {
-    grid-template-columns: auto 1fr auto;
-    align-items: stretch;
+/* the stamp on the corner of the window: its edge has holes like a real stamp */
+.stamp {
+    position: absolute;
+    top: -1.25rem;
+    right: 1.5rem;
+    display: grid;
+    place-items: center;
+    align-content: center;
+    gap: 0.25rem;
+    width: 5.5rem;
+    aspect-ratio: 4 / 5;
+    border: 0.3125rem dotted var(--background);
+    outline: 0.125rem solid var(--foreground);
+    background: var(--foreground);
+    color: var(--background);
+    transform: rotate(6deg);
+    transition: transform 0.4s;
+    pointer-events: none;
 
-    .mail-bar-label {
-        display: flex;
-        align-items: center;
+    b {
+        font: 900 1.75rem / 1 var(--font-display);
+        letter-spacing: -0.04em;
     }
 
-    .mail-bar-address {
-        display: flex;
-        align-items: center;
-        min-width: 0;
+    span {
+        font-size: 0.75rem;
+        font-weight: 700;
+    }
+}
+
+/* typing a message straightens the stamp */
+.mail-window:focus-within .stamp {
+    transform: rotate(-4deg) scale(1.05);
+}
+
+/* the right cell: the address with its copy button, and the socials below */
+.contact-side {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    min-height: 0;
+}
+
+/* the mail address in big type with its copy button */
+.mail-direct {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: clamp(1rem, 3vh, 2rem) clamp(0.875rem, 2vw, 1.75rem);
+
+    .mail-address {
+        max-width: 100%;
         overflow-wrap: anywhere;
-        font: 800 clamp(1.125rem, 2.2vw, 2rem) / 1.1 var(--font-display);
+        font: 800 clamp(1.5rem, min(2.8vw, 5vh), 3.25rem) / 1.05 var(--font-display);
         letter-spacing: -0.02em;
     }
+}
 
-    .mail-bar-copy {
+/* the status window: a small terminal with what I am up to and my local time (localTime.js) */
+.status-window {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin: 0 clamp(0.875rem, 2vw, 1.75rem) clamp(1rem, 3vh, 2rem);
+    padding: 1rem 1.25rem;
+    border: 0.125rem solid var(--foreground);
+    border-radius: 1rem;
+    background: var(--surface);
+    font-size: 0.875rem;
+
+    p {
+        margin: 0;
+    }
+
+    .status-window-command {
+        font-weight: 700;
+    }
+
+    /* open for projects, with a dot that pulses */
+    .status-open {
         display: flex;
         align-items: center;
+        gap: 0.625rem;
+        font: 800 clamp(1.125rem, min(1.7vw, 3vh), 1.75rem) / 1.15 var(--font-display);
+        letter-spacing: -0.01em;
+    }
+
+    .status-dot {
+        flex: none;
+        width: 0.75rem;
+        aspect-ratio: 1;
+        border-radius: 50%;
+        background: var(--foreground);
+        animation: blink 1.4s infinite;
+    }
+
+    .status-window-hint {
+        opacity: 0.7;
+    }
+}
+
+/* one line of the status: the label, a dotted line and the value */
+.status-window-lines {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    margin: 0;
+
+    div {
+        display: flex;
+        align-items: baseline;
+        gap: 0.5rem;
+
+        &::after {
+            content: "";
+            order: 1;
+            flex: 1;
+            border-bottom: 0.125rem dotted var(--line-color);
+        }
+    }
+
+    dt {
+        opacity: 0.75;
+    }
+
+    dd {
+        order: 2;
+        margin: 0;
+        font-weight: 700;
+        font-variant-numeric: tabular-nums;
+    }
+}
+
+/* the socials: a row of icon buttons with their names, part of the footer */
+.icon-row {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+
+    .icon-link {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 0.875rem;
+        height: clamp(3.5rem, 8vh, 5.5rem);
+
+        svg {
+            width: clamp(1.5rem, 2vw, 2.25rem);
+            height: clamp(1.5rem, 2vw, 2.25rem);
+        }
+
+        .icon-label {
+            display: inline;
+            font: 800 clamp(1rem, 1.6vw, 1.625rem) / 1 var(--font-display);
+            text-transform: uppercase;
+            letter-spacing: -0.02em;
+        }
+    }
+}
+
+/* touch screens: 16px text in the message box so the phone does not zoom in when you tap it */
+@media (hover: none) {
+    .mail-window textarea {
+        font-size: 1rem;
     }
 }
 
@@ -990,6 +2053,11 @@ a {
         white-space: pre;
         animation: scroll 22s linear infinite;
         will-change: transform;
+    }
+
+    /* a marquee that is scrolled out of view rests (marquee.js), so it costs nothing while you cannot see it */
+    &.is-paused span {
+        animation-play-state: paused;
         backface-visibility: hidden;
     }
 }
@@ -1036,14 +2104,6 @@ a {
     }
 }
 
-/* links: big rows, circular fill on hover */
-.link-list {
-    display: flex;
-    flex-direction: column;
-    min-width: 0;
-    min-height: 0;
-}
-
 /* one link: number, name, address and the GO button (the page scrolls, so rows keep their own height) */
 .link-row {
     --clr: var(--foreground);
@@ -1057,7 +2117,7 @@ a {
     border-bottom: var(--line-width) solid var(--line-color);
     overflow: hidden;
     z-index: 0;
-    transition: color 0.6s;
+    transition: color var(--fill-time) var(--fill-ease);
 
     &:last-child {
         border-bottom: none;
@@ -1070,7 +2130,7 @@ a {
         background: var(--clr);
         clip-path: circle(0% at 50% 50%);
         -webkit-clip-path: circle(0% at 50% 50%);
-        transition: 0.6s;
+        transition: clip-path var(--fill-time) var(--fill-ease), -webkit-clip-path var(--fill-time) var(--fill-ease);
         z-index: -1;
     }
 
@@ -1114,83 +2174,13 @@ a {
         color: var(--background);
         font: 900 1.25rem var(--font-display);
         white-space: nowrap;
-        transition: 0.6s;
+        transition: background var(--fill-time) var(--fill-ease), color var(--fill-time) var(--fill-ease);
     }
 
     &:hover .link-go,
     &:focus-visible .link-go {
         background: var(--background);
         color: var(--foreground);
-    }
-}
-
-/* projects: the same link rows, taller, with a short text under the name */
-.project-list .link-row {
-    padding-block: clamp(1rem, 2.5vh, 1.75rem);
-
-    .link-name {
-        font-size: clamp(1.75rem, 5.5vw, 4.5rem);
-    }
-
-    .link-about {
-        display: block;
-        max-width: 42rem;
-        margin-top: 0.625rem;
-        font-size: 0.875rem;
-        opacity: 0.8;
-    }
-}
-
-/* over: portrait + name card on the left, text and skills on the right (it takes the free height of the screen) */
-.content {
-    flex: 1 1 auto;
-    grid-template-columns: minmax(0, 4fr) minmax(0, 8fr);
-}
-
-/* socials as big link rows next to the about text (phones use the icon row on the contact screen instead) */
-.social-list {
-    display: flex;
-    flex: 1 1 auto;
-    border-top: var(--line-width) solid var(--line-color);
-
-    .link-row {
-        flex: 1 1 0;
-        min-height: 4.5rem;
-        padding-block: 0.5rem;
-
-        .link-name {
-            font-size: clamp(1.5rem, min(3vw, 4.2vh), 3rem);
-        }
-    }
-}
-
-/* left side: picture on top, name card below */
-.profile {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    min-width: 0;
-
-    /* the photo box: the picture with the symbol grid on top of it */
-    .profile-photo {
-        position: relative;
-        flex: 1 1 0;
-        min-height: 14rem;
-        overflow: hidden;
-        border-bottom: var(--line-width) solid var(--line-color);
-    }
-
-    img {
-        display: block;
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        filter: grayscale(1) contrast(1.35);
-    }
-
-    .profile-info {
-        flex: none;
-        padding: 0.625rem 0.875rem;
     }
 }
 
@@ -1226,177 +2216,6 @@ a {
     }
 }
 
-/* name card: lifts on hover and a spotlight follows the pointer */
-.profile-card {
-    position: relative;
-    overflow: hidden;
-    isolation: isolate;
-    transition: transform 0.3s, box-shadow 0.3s;
-    display: flex;
-    flex-direction: column;
-    gap: 0.375rem;
-    background: var(--card-background);
-    color: var(--foreground);
-    border-radius: 1.625rem;
-    padding: 0.875rem 1.125rem 1rem;
-
-    &::after {
-        content: "";
-        position: absolute;
-        inset: 0;
-        z-index: -1;
-        background: radial-gradient(circle 9rem at var(--x, 50%) var(--y, 50%), var(--glow), transparent);
-        opacity: 0;
-        transition: opacity 0.3s;
-    }
-
-    .card-label {
-        display: block;
-        font-size: 0.75rem;
-        opacity: 0.7;
-    }
-
-    .card-name {
-        font: 900 clamp(1.75rem, min(5vw, 6vh), 3.5rem) / 0.95 var(--font-display);
-        letter-spacing: -0.04em;
-    }
-
-    .card-asterisk {
-        display: inline-block;
-        margin-left: 0.05em;
-        font-size: 0.5em;
-        vertical-align: top;
-        transition: transform 0.6s;
-    }
-
-    .card-role {
-        font-size: 0.8125rem;
-        font-weight: 700;
-        opacity: 1;
-        text-wrap: balance;
-    }
-}
-
-/* hover: the card lifts with a hard shadow and a spotlight follows the cursor (cardSpotlight.js sets --x and --y) */
-@media (hover: hover) and (pointer: fine) {
-    .profile-card:hover {
-        transform: translate(-0.1875rem, -0.1875rem);
-        box-shadow: 0.375rem 0.375rem 0 var(--line-color);
-    }
-
-    .profile-card:hover::after {
-        opacity: 1;
-    }
-
-    .profile-card:hover .card-asterisk {
-        transform: rotate(180deg);
-    }
-}
-
-/* on the over screen the card is tall: label on top, the name in the middle, the role at the bottom */
-.content .profile-card {
-    min-height: clamp(10rem, 26vh, 20rem);
-    justify-content: space-between;
-
-    .card-name {
-        font-size: clamp(2.25rem, min(5vw, 7.5vh), 5rem);
-    }
-}
-
-/* touch: the same effect while a finger presses the card (cardSpotlight.js adds is-touched and keeps it a moment after the finger lifts) */
-.profile-card.is-touched {
-    transform: translate(-0.1875rem, -0.1875rem);
-    box-shadow: 0.375rem 0.375rem 0 var(--line-color);
-}
-
-/* same effect on a phone while the card is held */
-.profile-card.is-touched::after {
-    opacity: 1;
-}
-
-/* the asterisk spins on a touch too */
-.profile-card.is-touched .card-asterisk {
-    transform: rotate(180deg);
-}
-
-/* touch screens: no hover, so the hold effect is used instead */
-@media (hover: none) {
-    .profile-card {
-        -webkit-user-select: none;
-        user-select: none;
-        -webkit-touch-callout: none;
-    }
-}
-
-/* right side of over: the about text, then the skills */
-.about {
-    display: flex;
-    flex-direction: column;
-    min-width: 0;
-
-    .about-text {
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        gap: 1rem;
-        padding: clamp(1rem, 3vh, 2.5rem) clamp(0.875rem, 2vw, 1.75rem);
-
-        p {
-            margin: 0;
-            max-width: 44rem;
-            font: 600 clamp(1.125rem, 1.9vw, 1.75rem) / 1.25 var(--font-display);
-            letter-spacing: -0.01em;
-        }
-
-        p+p {
-            font-weight: 400;
-            opacity: 0.7;
-        }
-    }
-
-}
-
-/* skills: six numbered tiles in big type under the about text, they invert on hover like the buttons */
-.skill-grid {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    margin: 0;
-    padding: 0;
-    list-style: none;
-    border-top: var(--line-width) solid var(--line-color);
-
-    .skill {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        gap: 0.25rem;
-        min-width: 0;
-        padding: clamp(0.75rem, 2.2vh, 1.75rem) clamp(0.875rem, 2vw, 1.75rem);
-        transition: background 0.3s, color 0.3s;
-
-        /* lines between the tiles: left between columns, top from the second row */
-        &:not(:nth-child(3n + 1)) {
-            border-left: var(--line-width) solid var(--line-color);
-        }
-
-        &:nth-child(n + 4) {
-            border-top: var(--line-width) solid var(--line-color);
-        }
-
-        &:hover {
-            background: var(--foreground);
-            color: var(--background);
-        }
-    }
-
-    .skill-name {
-        overflow-wrap: anywhere;
-        font: 800 clamp(1.375rem, min(2.6vw, 4.4vh), 2.75rem) / 1 var(--font-display);
-        letter-spacing: -0.03em;
-    }
-}
-
 /* list of small rounded labels (skills, stack) */
 .chips {
     display: flex;
@@ -1406,18 +2225,14 @@ a {
     padding: 0;
     list-style: none;
 
-    li {
+    /* a list item, or a span inside a link (where a list can not go) */
+    :is(li, span) {
         padding: 0.125rem 0.75rem 0.1875rem;
         border: var(--line-width) solid var(--foreground);
         border-radius: 3.125rem;
         font-size: 0.8125rem;
         font-weight: 700;
     }
-}
-
-/* row of social icons (icons by Phosphor Icons) */
-.icon-row {
-    grid-template-columns: repeat(5, 1fr);
 }
 
 /* one icon button in an icon row */
@@ -1429,7 +2244,7 @@ a {
     height: 4.25rem;
     overflow: hidden;
     z-index: 0;
-    transition: color 0.6s;
+    transition: color var(--fill-time) var(--fill-ease);
 
     & + & {
         border-left: var(--line-width) solid var(--line-color);
@@ -1442,7 +2257,7 @@ a {
         background: var(--clr);
         clip-path: circle(0% at 50% 50%);
         -webkit-clip-path: circle(0% at 50% 50%);
-        transition: 0.6s;
+        transition: clip-path var(--fill-time) var(--fill-ease), -webkit-clip-path var(--fill-time) var(--fill-ease);
         z-index: -1;
     }
 
@@ -1468,562 +2283,6 @@ a {
     /* the name next to the icon, only shown in the big row on the contact screen */
     .icon-label {
         display: none;
-    }
-}
-
-/* project page: numbered feature rows */
-.feature-list {
-    margin: 0;
-    padding: 0;
-    list-style: none;
-
-    li {
-        display: grid;
-        grid-template-columns: 6rem 1fr;
-        align-items: baseline;
-        border-bottom: var(--line-width) solid var(--line-color);
-
-        &:last-child {
-            border-bottom: none;
-        }
-    }
-
-    .feature-number {
-        padding: 0.875rem;
-        text-align: center;
-        font-size: 0.75rem;
-        opacity: 0.6;
-    }
-
-    .feature-text {
-        padding: 0.75rem clamp(0.875rem, 2vw, 1.75rem);
-        border-left: var(--line-width) solid var(--line-color);
-        font: 600 clamp(1.0625rem, 1.8vw, 1.5rem) / 1.3 var(--font-display);
-        letter-spacing: -0.01em;
-    }
-}
-
-/* project page: the whole page is one screen, nothing scrolls */
-.sheet.project-page {
-    height: calc(100dvh - 2 * var(--page-gap));
-    overflow: hidden;
-
-    .title.compact {
-        flex: 0 0 clamp(7rem, 24vh, 15rem);
-    }
-}
-
-/* the body of a project: story + links / features / a visual of its own, sharing the height that is left */
-.project-body {
-    flex: 1 1 0;
-    min-height: 0;
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-    grid-template-rows: minmax(0, 1fr);
-
-    &>*+* {
-        border-left: var(--line-width) solid var(--line-color);
-    }
-}
-
-
-
-/* slashyos: the screenshot column gets the same shape as the screenshot (1.5 times as wide as it is high),
-   but never more than about two thirds of the page, so the whole picture shows without being cut */
-@media (min-width: 761px) {
-    .project-body.project-slashyos {
-        container-type: size;
-        display: flex;
-
-        /* only this story column is narrow, so only it gets the narrow layout (@container story) */
-        .project-story {
-            flex: 1 1 0;
-            container: story / inline-size;
-        }
-
-        .screenshot-frame {
-            flex: 0 0 min(100cqh * 1.5, 66cqw);
-        }
-    }
-
-    /* tall screens: the body is never higher than the screenshot needs, the title row takes the rest */
-    .sheet.project-page:has(.project-slashyos) .title.compact {
-        flex-grow: 1;
-    }
-
-    .project-body.project-slashyos {
-        flex: 0 1 calc((100vw - 2 * var(--page-gap)) * 0.44);
-    }
-}
-
-/* left: the text on top, the links at the bottom */
-.project-story {
-    display: flex;
-    flex-direction: column;
-    min-width: 0;
-    min-height: 0;
-
-    .project-text {
-        flex: none;
-        display: flex;
-        flex-direction: column;
-        gap: clamp(0.5rem, 1.6vh, 1rem);
-        min-height: 0;
-        overflow: hidden;
-        padding: clamp(0.875rem, 2.5vh, 1.75rem) clamp(0.875rem, 2vw, 1.75rem);
-
-        p {
-            margin: 0;
-            font: 600 clamp(1.0625rem, min(1.6vw, 2.6vh), 1.75rem) / 1.25 var(--font-display);
-            letter-spacing: -0.01em;
-        }
-
-        .lead-body {
-            font: 400 clamp(0.75rem, min(0.95vw, 1.6vh), 0.9375rem) / 1.6 var(--font-mono);
-            opacity: 0.8;
-        }
-
-        a {
-            text-decoration: underline;
-            text-underline-offset: 0.1875rem;
-        }
-    }
-
-    /* the links as a strip of cells along the bottom */
-    .project-links {
-        flex: none;
-        display: grid;
-        grid-auto-flow: column;
-        grid-auto-columns: minmax(0, 1fr);
-        border-top: var(--line-width) solid var(--line-color);
-
-        .link-row {
-            border-bottom: none;
-            grid-template-columns: minmax(0, 1fr) auto;
-            gap: 0.75rem;
-
-            & + .link-row {
-                border-left: var(--line-width) solid var(--line-color);
-            }
-            padding-block: clamp(0.375rem, 1.3vh, 0.875rem);
-        }
-
-        .link-name {
-            font-size: clamp(1.25rem, min(2.2vw, 3.6vh), 2.5rem);
-        }
-
-        /* long addresses end in ... so the GO button always fits */
-        .link-url {
-            display: block;
-            margin: 0.25rem 0 0;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-
-        .link-go {
-            padding: 0.25rem 1rem;
-            font-size: 1.0625rem;
-        }
-    }
-}
-
-/* the features: tiles in two columns that share the height between the text and the links */
-.project-features {
-    flex: 1 1 0;
-    display: flex;
-    flex-direction: column;
-    min-width: 0;
-    min-height: 0;
-    border-top: var(--line-width) solid var(--line-color);
-
-    .project-features-head {
-        padding: 0.625rem clamp(0.875rem, 2vw, 1.75rem);
-        border-bottom: var(--line-width) solid var(--line-color);
-    }
-
-    .feature-list {
-        flex: 1 1 auto;
-        display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        grid-auto-rows: minmax(0, 1fr);
-        min-height: 0;
-
-        li {
-            min-height: 0;
-            border-bottom: none;
-            grid-template-columns: 3.25rem 1fr;
-
-            &:nth-child(even) {
-                border-left: var(--line-width) solid var(--line-color);
-            }
-
-            &:nth-child(n + 3) {
-                border-top: var(--line-width) solid var(--line-color);
-            }
-
-            /* an odd one out at the end takes the whole width */
-            &:last-child:nth-child(odd) {
-                grid-column: span 2;
-            }
-
-            align-items: center;
-            transition: background 0.3s, color 0.3s;
-
-            &:hover {
-                background: var(--foreground);
-                color: var(--background);
-            }
-        }
-
-        .feature-number {
-            padding: 0.5rem;
-            font: 900 clamp(1rem, 1.6vw, 1.5rem) / 1 var(--font-display);
-            opacity: 0.4;
-        }
-
-        .feature-text {
-            align-self: stretch;
-            display: flex;
-            align-items: center;
-            padding: 0.5rem clamp(0.75rem, 1.4vw, 1.25rem);
-            font-size: clamp(0.9375rem, min(1.35vw, 2.3vh), 1.375rem);
-        }
-    }
-}
-
-/* right: the visual, different on every project */
-.project-visual {
-    position: relative;
-    min-width: 0;
-    min-height: 0;
-    overflow: hidden;
-}
-
-/* personal-website: the real home page in a small browser window, the pills on top jump it to a screen */
-.site-preview {
-    display: flex;
-    flex-direction: column;
-
-    .site-preview-bar {
-        display: flex;
-        flex-wrap: wrap;
-        align-items: center;
-        justify-content: space-between;
-        gap: 0.5rem 1rem;
-        padding: 0.625rem clamp(0.875rem, 2vw, 1.75rem);
-        border-bottom: var(--line-width) solid var(--line-color);
-    }
-
-    .site-preview-tabs {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.375rem;
-
-        .pill {
-            height: 1.75rem;
-            font-size: 0.8125rem;
-        }
-    }
-}
-
-/* the window: the page inside is drawn at laptop size and scaled down (sitePreview.js), it can not be clicked.
-   a framed window with some room around it, so it does not melt into the page around it */
-.site-preview-window {
-    --frame-gap: clamp(0.875rem, 2vw, 1.75rem);
-    position: relative;
-    flex: 1 1 0;
-    min-height: 0;
-    overflow: hidden;
-    margin: var(--frame-gap);
-    border: var(--line-width) solid var(--line-color);
-    border-radius: 1rem;
-
-    iframe {
-        position: absolute;
-        top: 0;
-        left: 0;
-        border: 0;
-        transform-origin: 0 0;
-        pointer-events: none;
-        transition: opacity 0.3s;
-    }
-
-    /* while it jumps to another screen the page is faded out (sitePreview.js) */
-    &.is-switching iframe {
-        opacity: 0;
-    }
-}
-
-/* personal-website: the numbers about the site, the same bar as on the landing page */
-.project-stats {
-    display: grid;
-    flex: none;
-    border-top: var(--line-width) solid var(--line-color);
-
-    &>*+* {
-        border-left: var(--line-width) solid var(--line-color);
-    }
-}
-
-/* personal-website: every feature tile shows its number big at the top and the text at the bottom */
-.project-personal-website .project-features .feature-list li {
-    grid-template-columns: 1fr;
-    grid-template-rows: auto 1fr;
-    align-items: stretch;
-
-    .feature-number {
-        padding: 0.875rem clamp(0.875rem, 1.6vw, 1.5rem) 0;
-        text-align: left;
-        font-size: clamp(1.75rem, 3vw, 3.5rem);
-        opacity: 0.25;
-    }
-
-    .feature-text {
-        align-items: flex-end;
-        padding: 0.5rem clamp(0.875rem, 1.6vw, 1.5rem) 0.875rem;
-        border-left: none;
-        font-size: clamp(1rem, min(1.5vw, 2.4vh), 1.5rem);
-    }
-
-    &:hover .feature-number {
-        opacity: 0.6;
-    }
-}
-
-/* shorter windows: the numbers go back next to the text, so the tiles fit */
-@media (max-height: 940px) {
-    .project-personal-website .project-features .feature-list li {
-        grid-template-columns: 3.25rem 1fr;
-        grid-template-rows: none;
-        align-items: center;
-
-        .feature-number {
-            padding: 0.25rem;
-            text-align: center;
-            font-size: 1rem;
-            opacity: 0.4;
-        }
-
-        .feature-text {
-            align-items: center;
-            padding-block: 0.25rem;
-            border-left: var(--line-width) solid var(--line-color);
-            font-size: clamp(0.8125rem, 1.8vh, 1rem);
-        }
-    }
-
-    .project-stats .status-item {
-        padding-block: 0.375rem;
-    }
-}
-
-/* slashyos: the screenshot fills the whole right half, with the possessed symbols on top */
-.screenshot-frame {
-    display: flex;
-}
-
-/* the screenshot itself, grey until you point at it */
-.project-screenshot {
-    position: relative;
-    flex: 1;
-    margin: 0;
-    overflow: hidden;
-
-    img {
-        display: block;
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        filter: grayscale(1) contrast(1.15);
-        transition: filter 0.6s;
-    }
-
-    &:hover img {
-        filter: none;
-    }
-
-    .tag {
-        z-index: 2;
-    }
-}
-
-/* blog: a markdown file on top, the page zola makes from it below */
-.blog-build {
-    display: flex;
-    flex-direction: column;
-    padding-top: 2rem;
-
-    .markdown-file {
-        flex: 1 1 0;
-        min-height: 0;
-        overflow: hidden;
-        margin: 0;
-        padding: 0.75rem clamp(0.875rem, 2vw, 1.75rem);
-        font: 400 clamp(0.6875rem, min(0.95vw, 1.55vh), 0.9375rem) / 1.45 var(--font-mono);
-        opacity: 0.8;
-    }
-
-    .build-command {
-        display: flex;
-        align-items: center;
-        gap: 0.25rem;
-        padding: 0.5rem clamp(0.875rem, 2vw, 1.75rem);
-        border-block: var(--line-width) solid var(--line-color);
-        font-weight: 700;
-
-        .build-arrow {
-            margin-left: auto;
-            font: 900 1.25rem / 1 var(--font-display);
-        }
-    }
-
-    /* the page that comes out: the inverted block, it rises in like the panels */
-    .built-page {
-        flex: 1 1 0;
-        min-height: 0;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        gap: 0.625rem;
-        overflow: hidden;
-        padding: 0.875rem clamp(0.875rem, 2vw, 1.75rem);
-        background: var(--foreground);
-        color: var(--background);
-        animation: rise 0.6s 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) both;
-
-        .chips li {
-            border-color: var(--background);
-        }
-
-        p {
-            margin: 0;
-            font-size: clamp(0.75rem, 1vw, 0.9375rem);
-        }
-    }
-
-    .built-page-title {
-        font: 900 clamp(1.5rem, min(3vw, 5vh), 3.25rem) / 0.95 var(--font-display);
-        letter-spacing: -0.03em;
-    }
-}
-
-/* short screens (laptops): a lower title and tighter rows, so the whole project still fits without scrolling */
-@media (max-height: 940px) and (min-width: 761px) {
-    .sheet.project-page .title.compact {
-        flex-basis: 17vh;
-    }
-
-    .project-story {
-        .project-text {
-            gap: 0.5rem;
-            padding-block: 0.75rem;
-
-            p {
-                font-size: clamp(1rem, 2.4vh, 1.25rem);
-            }
-
-            .lead-body {
-                font-size: 0.6875rem;
-                line-height: 1.5;
-            }
-        }
-
-        .project-links {
-            .link-row {
-                padding-block: 0.25rem;
-            }
-
-            .link-name {
-                font-size: 1.25rem;
-            }
-        }
-    }
-
-    .project-features .feature-list .feature-text {
-        font-size: clamp(0.8125rem, 1.8vh, 1rem);
-    }
-
-    .blog-build {
-        .markdown-file {
-            flex-grow: 1.3;
-            padding-block: 0.5rem;
-            font-size: 0.6875rem;
-            line-height: 1.35;
-        }
-
-        .built-page {
-            flex: none;
-            gap: 0.375rem;
-        }
-    }
-}
-
-/* very short screens (768p laptops): a bit smaller still */
-@media (max-height: 800px) and (min-width: 761px) {
-    .project-story .project-text {
-        gap: 0.375rem;
-
-        p {
-            font-size: 1rem;
-        }
-
-        .lead-body {
-            line-height: 1.4;
-        }
-    }
-
-    .blog-build .markdown-file {
-        font-size: 0.625rem;
-    }
-}
-
-/* a narrow story column (slashyos next to its big screenshot): the links stack as rows instead of a strip */
-@container story (max-width: 46rem) {
-    /* stacked links need height, so short screens keep the strip */
-    @media (min-height: 821px) {
-    .project-story .project-links {
-        grid-auto-flow: row;
-
-        .link-row {
-            padding-block: 0.375rem;
-        }
-
-        .link-row + .link-row {
-            border-left: none;
-            border-top: var(--line-width) solid var(--line-color);
-        }
-
-        .link-name {
-            font-size: clamp(1.125rem, 4cqi, 1.75rem);
-        }
-    }
-    }
-
-    .project-story .project-links .link-go {
-        padding-inline: 0.75rem;
-    }
-
-    /* the features in one column, each one a row */
-    .project-features .feature-list {
-        grid-template-columns: minmax(0, 1fr);
-
-        li:nth-child(n),
-        li:last-child:nth-child(odd) {
-            grid-column: auto;
-            border-left: none;
-        }
-
-        li:nth-child(n + 2) {
-            border-top: var(--line-width) solid var(--line-color);
-        }
-
-        .feature-text {
-            font-size: clamp(0.875rem, 3cqi, 1.25rem);
-        }
-    }
-
-    .project-story .project-text p {
-        font-size: clamp(1rem, 4.2cqi, 1.75rem);
     }
 }
 
@@ -2296,8 +2555,8 @@ a {
     left: 0;
     border-radius: 50%;
     z-index: 99;
-    mix-blend-mode: difference;
     will-change: transform;
+    transition: opacity 0.3s;
 }
 
 /* the negative margin centers them on the pointer, so the script only has to move them with transform */
@@ -2305,15 +2564,19 @@ a {
     width: 0.45rem;
     height: 0.45rem;
     margin: -0.225rem 0 0 -0.225rem;
-    background: #fff;
+    /* the colour of the text with a thin edge in the colour of the page, so it shows on light and on dark parts
+       (no blend mode: that makes a slow laptop redraw the whole page on every mouse move) */
+    background: var(--foreground);
+    box-shadow: 0 0 0 0.0625rem var(--background);
 }
 
-/* the ring that trails behind the dot */
+/* the ring that trails behind the dot (cursor.js also makes it bigger over a link and smaller on a click) */
 .cursor-outline {
     width: 1.875rem;
     height: 1.875rem;
     margin: -0.9375rem 0 0 -0.9375rem;
-    border: 0.125rem solid #fff;
+    border: 0.125rem solid var(--foreground);
+    box-shadow: 0 0 0 0.0625rem var(--background), inset 0 0 0 0.0625rem var(--background);
 }
 
 /* mouse only: hide the real cursor once the custom one has appeared */
@@ -2329,6 +2592,15 @@ a {
         .cursor-dot,
         .cursor-outline {
             display: block;
+        }
+    }
+
+    /* the mouse has left the window: the cursor fades out */
+    body.cursor-away {
+
+        .cursor-dot,
+        .cursor-outline {
+            opacity: 0;
         }
     }
 }
@@ -2416,76 +2688,6 @@ a {
     }
 }
 
-/* desktop: the social row above the copyright bar gets the names next to the icons */
-@media (min-width: 761px) {
-    .screen>.icon-row {
-        .icon-link {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.875rem;
-            height: clamp(4.5rem, 10vh, 7rem);
-        }
-
-        svg {
-            width: clamp(1.75rem, 2.4vw, 2.5rem);
-            height: clamp(1.75rem, 2.4vw, 2.5rem);
-        }
-
-        .icon-label {
-            display: inline;
-            font: 800 clamp(1.125rem, 2vw, 1.875rem) / 1 var(--font-display);
-            text-transform: uppercase;
-            letter-spacing: -0.02em;
-        }
-    }
-}
-
-/* tall screens: the projects and over screens fill their extra height with more of the real content */
-@media (min-height: 1000px) and (min-width: 761px) {
-    .project-browser .project-list .link-row {
-        .link-about {
-            display: block;
-        }
-
-        .link-name {
-            font-size: clamp(2rem, min(5vw, 7vh), 5.5rem);
-        }
-    }
-
-    .preview {
-        .preview-body {
-            display: block;
-        }
-
-        .preview-more {
-            display: grid;
-        }
-
-        .preview-shot {
-            display: block;
-        }
-
-        .preview-links {
-            display: none;
-        }
-
-        .preview-rows {
-            display: flex;
-        }
-
-        /* the screenshot sits above the rows, so they no longer push to the bottom on their own */
-        .preview-shot+.preview-links+.preview-rows {
-            margin-top: 0;
-        }
-    }
-
-
-    .about .about-text p {
-        font-size: clamp(1.25rem, 1.9vw, 2rem);
-    }
-}
-
 /* ------------------------------ */
 /* SHORT SCREENS (landing page)   */
 /* ------------------------------ */
@@ -2534,48 +2736,6 @@ a {
         .link-go {
             justify-self: start;
         }
-    }
-}
-
-/* screens up to 1000px high: the skill tiles, social rows and name card tighten up, so the over screen fits */
-@media (max-height: 1000px) and (min-width: 761px) {
-    .skill-grid {
-        .skill {
-            padding-block: 0.5rem;
-        }
-
-        .skill-name {
-            font-size: clamp(1.25rem, min(2.2vw, 3.6vh), 2.25rem);
-        }
-    }
-
-    .social-list .link-row {
-        min-height: 3.25rem;
-        padding-block: 0.25rem;
-    }
-
-    .content .profile-card {
-        min-height: clamp(8rem, 20vh, 12rem);
-    }
-}
-
-/* laptops: the over screen tightens up, so everything fits on one screen */
-@media (max-height: 820px) and (min-width: 761px) {
-    .about .about-text {
-        padding-block: 1rem;
-
-        p {
-            font-size: clamp(1rem, 1.5vw, 1.375rem);
-        }
-    }
-
-    .profile .profile-photo {
-        min-height: 11rem;
-    }
-
-    .icon-link,
-    .screen>.icon-row .icon-link {
-        height: 3.5rem;
     }
 }
 
@@ -2637,6 +2797,366 @@ a {
 }
 
 /* ------------------------------ */
+/* PROJECTS ON SHORT SCREENS      */
+/* ------------------------------ */
+/* screens up to 1000px high: the second paragraph of a project stops after three lines,
+   and only the first four features show, so every tile stays big enough to read */
+@media (max-height: 1000px) and (min-width: 761px) {
+    .project-text .project-more {
+        display: -webkit-box;
+        overflow: hidden;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 3;
+        line-clamp: 3;
+    }
+
+    .feature-list li:nth-child(n + 5) {
+        display: none;
+    }
+}
+
+/* screens up to 900px high: the second paragraph of a project steps aside,
+   and every number of the site sits on one line next to its label */
+@media (max-height: 900px) and (min-width: 761px) {
+    .project-text .project-more {
+        display: none;
+    }
+
+    .project-stats .status-item {
+        flex-direction: row;
+        justify-content: flex-start;
+        align-items: baseline;
+        gap: 0.5rem;
+        padding-block: 0.5rem;
+
+        .caption {
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+
+        .status-value {
+            flex: none;
+        }
+    }
+}
+
+/* laptops: the features get smaller */
+@media (max-height: 820px) and (min-width: 761px) {
+    .feature-list {
+        li {
+            padding-block: 0.25rem;
+        }
+
+        .feature-number {
+            width: 2.125rem;
+            border-radius: 0.5rem;
+            box-shadow: 0.1875rem 0.1875rem 0 var(--line-color);
+            font-size: 0.9375rem;
+        }
+
+        .feature-text {
+            font-size: clamp(0.8125rem, min(1.1vw, 2vh), 1.0625rem);
+        }
+    }
+
+    .project-card .project-card-about {
+        -webkit-line-clamp: 2;
+        line-clamp: 2;
+    }
+
+    .project-features .project-features-head {
+        padding-block: 0.375rem;
+    }
+}
+
+/* low windows (a 1080p screen at 150%): the numbers of the site and the project cards tighten up */
+@media (max-height: 680px) and (min-width: 761px) {
+    .project-stats .status-item {
+        padding-block: 0.25rem;
+    }
+
+    .project-text {
+        gap: 0.5rem;
+        padding-block: 0.75rem;
+    }
+
+    /* the folders keep their stack and number, the story waits for a taller window */
+    .project-card {
+        .project-card-about {
+            display: none;
+        }
+
+        .project-card-number {
+            font-size: 2.75rem;
+        }
+    }
+}
+
+/* the lowest windows (a 1080p screen at 175% and 200%): a project page scrolls instead of squeezing everything,
+   and the project cards drop their picture */
+@media (max-height: 560px) and (min-width: 761px) {
+    .sheet.project-page {
+        height: auto;
+        overflow: visible;
+    }
+
+    .project-body {
+        flex: none;
+        grid-template-rows: none;
+    }
+
+    .project-features,
+    .feature-list {
+        flex: none;
+    }
+
+    .feature-list {
+        grid-auto-rows: auto;
+
+        li {
+            padding-block: 0.625rem;
+        }
+    }
+
+    .project-visual {
+        min-height: 26rem;
+    }
+
+    .project-card .project-card-visual {
+        display: none;
+    }
+}
+
+/* ------------------------------ */
+/* OVER AND CONTACT ON SHORT SCREENS */
+/* ------------------------------ */
+/* screens up to 900px high: the status window keeps only the open line and the times */
+@media (max-height: 900px) and (min-width: 761px) {
+    .status-window {
+        gap: 0.5rem;
+        padding-block: 0.75rem;
+
+        .status-window-hint,
+        .status-window-lines div:nth-child(even) {
+            display: none;
+        }
+    }
+}
+
+/* low windows (a 1080p screen at 150%): the mail window drops the address it goes to and its fields get lower */
+@media (max-height: 680px) and (min-width: 761px) {
+    .mail-window {
+        .compose-to {
+            display: none;
+        }
+
+        .compose-field {
+            padding-block: 0.5rem;
+        }
+
+        input {
+            font-size: 1.5rem;
+        }
+    }
+
+    .stamp {
+        width: 4.25rem;
+
+        b {
+            font-size: 1.375rem;
+        }
+    }
+
+    .about-text .about-intro {
+        display: none;
+    }
+
+    .social-tile {
+        padding-block: 0.625rem;
+    }
+}
+
+/* the lowest windows (a 1080p screen at 175% and 200%): only what matters most stays on over and contact */
+@media (max-height: 560px) and (min-width: 761px) {
+    .profile-card.badge {
+        .badge-head {
+            padding: 1.125rem 0.75rem 0.25rem;
+        }
+
+        .badge-info {
+            padding: 0.5rem 0.75rem;
+        }
+
+        .card-label,
+        .badge-code {
+            display: none;
+        }
+
+        .card-name {
+            font-size: 1.5rem;
+        }
+    }
+
+    .badge-desk {
+        padding-top: 2rem;
+
+        .badge-strap {
+            height: 3rem;
+        }
+    }
+
+    .about-text {
+        gap: 0.5rem;
+        padding-block: 0.75rem;
+
+        .about-lead {
+            font-size: 1.75rem;
+        }
+    }
+
+    .about-points li {
+        padding-block: 0.375rem;
+    }
+
+    .skills {
+        gap: 0.5rem;
+        padding-block: 0.625rem;
+    }
+
+    .skill-stickers .skill {
+        padding: 0.25rem 0.75rem;
+        font-size: 1rem;
+    }
+
+    .social-tile {
+        padding-block: 0.5rem;
+
+        .social-text small {
+            display: none;
+        }
+    }
+
+    .mail-desk {
+        padding-block: 1rem 1.25rem;
+    }
+
+    .mail-window {
+        .mail-window-bar {
+            padding-block: 0.375rem;
+        }
+
+        .compose-message textarea {
+            min-height: 1.5rem;
+        }
+
+        .mail-window-foot {
+            padding-block: 0.5rem;
+        }
+
+        .compose-send {
+            padding-block: 0.25rem;
+        }
+    }
+
+    .mail-direct {
+        gap: 0.5rem;
+        padding-block: 0.75rem;
+    }
+
+    .status-window {
+        display: none;
+    }
+
+    .icon-row .icon-link {
+        height: 2.75rem;
+    }
+}
+
+/* ------------------------------ */
+/* UPRIGHT TABLETS                */
+/* ------------------------------ */
+/* an ipad standing up is too narrow for things side by side: the project cards and the project pages stack */
+@media (min-width: 761px) and (max-width: 1100px) and (orientation: portrait) {
+    .project-cards {
+        flex: none;
+        grid-template-columns: 1fr;
+
+        /* the folder gets the height of what is inside */
+        .project-card-sheet {
+            flex: none;
+        }
+
+        .project-card-visual {
+            flex: none;
+            height: 16rem;
+        }
+    }
+
+    .sheet.project-page {
+        height: auto;
+        overflow: visible;
+    }
+
+    .project-body {
+        flex: none;
+        grid-template-columns: 1fr;
+        grid-template-rows: none;
+
+        &>*+* {
+            border-left: none;
+            border-top: var(--line-width) solid var(--line-color);
+        }
+    }
+
+    .project-features,
+    .feature-list {
+        flex: none;
+    }
+
+    .feature-list {
+        grid-auto-rows: auto;
+
+        li {
+            padding-block: 0.875rem;
+        }
+    }
+
+    .project-visual {
+        height: 40rem;
+    }
+
+    /* over and contact stack: the badge above the story, the mail window above the address */
+    :is(.about-body, .contact-body) {
+        grid-template-columns: 1fr;
+
+        &>*+* {
+            border-left: none;
+            border-top: var(--line-width) solid var(--line-color);
+        }
+    }
+
+    .profile-card.badge {
+        flex: none;
+        max-height: none;
+
+        .badge-photo {
+            flex: none;
+            aspect-ratio: 1;
+        }
+    }
+
+    /* the window gets the height of its fields, so the message box keeps its own height */
+    .mail-window .compose-message {
+        flex: none;
+
+        textarea {
+            min-height: 8rem;
+        }
+    }
+}
+
+/* ------------------------------ */
 /* VERY SHORT WINDOWS             */
 /* ------------------------------ */
 /* a 1080p screen at 125% to 200% windows scaling (or a 1440p one at 175%+) leaves 450 to 780 pixels:
@@ -2668,120 +3188,14 @@ a {
         flex-basis: clamp(6.5rem, 17vh, 8rem);
     }
 
-    .project-browser .link-go,
-    .social-list .link-go {
-        padding: 0.125rem 0.875rem;
-        font-size: 0.9375rem;
-    }
-
     .marquee {
         font-size: 1rem;
         line-height: 1.3;
     }
 
-    .project-browser .project-list .link-row {
-        min-height: 0;
-        padding-block: 0.375rem;
-
-        .link-name {
-            font-size: clamp(1.25rem, 5.5vh, 2.75rem);
-        }
-
-        .link-url {
-            margin-top: 0.25rem;
-        }
-    }
-
-    .preview {
-        gap: 0.5rem;
-        padding-top: 1.75rem;
-
-        .preview-name {
-            font-size: clamp(1.25rem, 4.5vh, 2.5rem);
-        }
-
-        p {
-            font-size: 0.75rem;
-        }
-
-        .preview-features li {
-            padding-block: 0.25rem;
-            font-size: 0.875rem;
-        }
-    }
-
-    .profile .profile-photo {
-        min-height: 6rem;
-    }
-
-    .content .profile-card {
-        min-height: 0;
-        padding-block: 0.5rem;
-
-        .card-name {
-            font-size: clamp(1.5rem, 5vh, 2.5rem);
-        }
-    }
-
-    .about .about-text {
-        gap: 0.5rem;
-        padding-block: 0.625rem;
-
-        p {
-            font-size: clamp(0.875rem, 2.4vh, 1.25rem);
-        }
-    }
-
-    .skill-grid {
-        .skill {
-            padding-block: 0.25rem;
-        }
-
-        .skill-name {
-            font-size: clamp(1rem, 3.2vh, 1.75rem);
-        }
-    }
-
-    .social-list .link-row {
-        min-height: 0;
-        padding-block: 0.125rem;
-
-        .link-name {
-            font-size: clamp(1rem, 4vh, 2rem);
-        }
-    }
-
     .mail-title {
         flex-basis: 20vh;
         min-height: 5rem;
-    }
-
-    .compose {
-        min-height: 6rem;
-
-        .compose-field {
-            padding-block: 0.375rem;
-        }
-
-        input {
-            font-size: clamp(1.125rem, 4vh, 2rem);
-        }
-
-        .compose-message textarea {
-            min-height: 2.5rem;
-        }
-
-        .compose-send .arrow {
-            font-size: clamp(1.5rem, 6vh, 3rem);
-        }
-    }
-
-    .mail-bar .mail-bar-address {
-        font-size: clamp(1rem, 3.5vh, 1.5rem);
-    }
-
-    .screen>.icon-row .icon-link {
-        height: clamp(2.25rem, 7vh, 3.5rem);
     }
 
     .site-footer {
@@ -2792,24 +3206,6 @@ a {
         }
     }
 
-    .blog-build .markdown-file {
-        font-size: 0.5625rem;
-        line-height: 1.3;
-    }
-
-    /* project features: tighter tiles, so two lines still fit */
-    .project-features .feature-list {
-        .feature-number {
-            padding-block: 0.125rem;
-            font-size: 1rem;
-        }
-
-        .feature-text {
-            padding-block: 0.125rem;
-            font-size: 0.8125rem;
-            line-height: 1.15;
-        }
-    }
 }
 
 /* the very shortest (1080p at 175% and 200%): the title rows give up some more height */
@@ -2823,185 +3219,12 @@ a {
         min-height: 5.5rem;
     }
 
-    .compose {
-        min-height: 5rem;
-    }
-
-    .compose .compose-message textarea {
-        min-height: 1.5rem;
-    }
-
-    .compose .compose-send .arrow {
-        font-size: 1.5rem;
-    }
-
-    .about .about-text p+p {
-        display: none;
-    }
-
-    .preview .preview-features li:nth-child(n + 3),
-    .preview>p {
-        display: none;
-    }
-
-    /* the project pages have too much to fit this little height, so here (and only here) they scroll */
-    .sheet.project-page {
-        height: auto;
-        overflow: visible;
-
-        .title.compact {
-            flex: 0 0 7.5rem;
-        }
-    }
-
-    .project-body,
-    .project-body.project-slashyos {
-        flex: none;
-        display: grid;
-        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-        grid-template-rows: auto;
-        container-type: normal;
-    }
-
-    .project-story .project-text,
-    .project-features,
-    .project-features .feature-list {
-        flex: none;
-        overflow: visible;
-    }
-
-    .project-features .feature-list {
-        grid-auto-rows: auto;
-
-        li {
-            padding-block: 0.25rem;
-        }
-    }
-
-    .project-visual {
-        min-height: 20rem;
-    }
-
-    .screenshot-frame {
-        align-self: start;
-        aspect-ratio: 1600 / 1066;
-        min-height: 0;
-    }
-
-    /* the blog example: the markdown and the page side by side instead of stacked */
-    .blog-build {
-        flex-direction: row;
-        flex-wrap: wrap;
-        align-content: stretch;
-
-        .markdown-file,
-        .built-page {
-            flex: 1 1 50%;
-            min-width: 0;
-            height: calc(100% - 2.5rem);
-        }
-
-        .build-command {
-            order: -1;
-            flex: 1 1 100%;
-            border-top: none;
-        }
-
-        .markdown-file {
-            line-height: 1.2;
-        }
-
-        .built-page-title {
-            font-size: 1.5rem;
-        }
-    }
 }
 
 /* phones: the nav prompt drops the user name, so the command itself has room */
 @media (max-width: 480px) {
     .nav .nav-user {
         display: none;
-    }
-}
-
-/* touch screens: 16px text in the message box so the phone does not zoom in when you tap it */
-@media (hover: none) {
-    .compose textarea {
-        font-size: 1rem;
-    }
-}
-
-/* ------------------------------ */
-/* TABLETS HELD UPRIGHT           */
-/* ------------------------------ */
-/* an ipad standing up is too narrow for things side by side: the project list loses its preview (the rows show
-   their own text), and the project pages stack and scroll, like on a phone */
-@media (min-width: 761px) and (max-width: 1100px) and (orientation: portrait) {
-    .project-browser {
-        grid-template-columns: 1fr;
-
-        .preview-pane {
-            display: none;
-        }
-
-        .project-list .link-row .link-about {
-            display: block;
-        }
-    }
-
-    .project-list .link-row.is-current {
-        box-shadow: none;
-    }
-
-    .sheet.project-page {
-        height: auto;
-        overflow: visible;
-
-        .title.compact {
-            flex: 0 0 clamp(9rem, 18vh, 14rem);
-        }
-    }
-
-    .project-body,
-    .project-body.project-slashyos {
-        flex: none;
-        display: grid;
-        grid-template-columns: 1fr;
-        grid-template-rows: none;
-        container-type: normal;
-
-        &>*+* {
-            border-left: none;
-            border-top: var(--line-width) solid var(--line-color);
-        }
-    }
-
-    .project-story .project-text,
-    .project-features,
-    .project-features .feature-list {
-        flex: none;
-        overflow: visible;
-    }
-
-    .project-features .feature-list {
-        grid-auto-rows: auto;
-
-        li {
-            padding-block: 0.5rem;
-        }
-    }
-
-    .project-visual.site-preview {
-        height: 40rem;
-    }
-
-    .screenshot-frame {
-        aspect-ratio: 1600 / 1066;
-    }
-
-    .blog-build .markdown-file,
-    .blog-build .built-page {
-        flex: none;
     }
 }
 
@@ -3055,17 +3278,6 @@ a {
         flex: 0 0 clamp(8rem, 20dvh, 11rem);
     }
 
-    /* lead: only the text, the donut and the button need a wider screen */
-    .lead {
-        grid-template-columns: 1fr;
-        min-height: 0;
-
-        .lead-cta,
-        .ascii {
-            display: none;
-        }
-    }
-
     .title.hero {
         flex: 0 0 clamp(8rem, 20dvh, 11rem);
     }
@@ -3075,149 +3287,9 @@ a {
         min-height: 0;
     }
 
-    .project-browser {
-        grid-template-columns: 1fr;
-
-        .preview-pane {
-            display: none;
-        }
-
-        .project-list .link-row {
-            flex: none;
-            min-height: 0;
-            padding-block: 1rem;
-
-            .link-about {
-                display: block;
-            }
-        }
-    }
-
-    .project-list .link-row.is-current {
-        box-shadow: none;
-    }
-
-    .project-browser .project-list .link-row .link-number {
-        display: none;
-    }
-
     .mail-title {
         flex-basis: clamp(7rem, 18dvh, 10rem);
     }
-
-    .social-list {
-        display: none;
-    }
-
-    .skill-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-
-        .skill:nth-child(n) {
-            border-left: none;
-            border-top: none;
-        }
-
-        .skill:nth-child(even) {
-            border-left: var(--line-width) solid var(--line-color);
-        }
-
-        .skill:nth-child(n + 3) {
-            border-top: var(--line-width) solid var(--line-color);
-        }
-    }
-
-    .content .profile-card {
-        min-height: 0;
-    }
-
-    .sheet.project-page {
-        height: auto;
-        overflow: visible;
-    }
-
-    .project-body,
-    .project-body.project-slashyos,
-    .project-body.project-blog {
-        grid-template-columns: 1fr;
-        grid-template-rows: none;
-        flex: none;
-
-        &>*+* {
-            border-left: none;
-            border-top: var(--line-width) solid var(--line-color);
-        }
-    }
-
-    .project-story .project-text,
-    .project-features,
-    .project-features .feature-list {
-        flex: none;
-        overflow: visible;
-    }
-
-    .project-features .feature-list {
-        grid-template-columns: 1fr;
-
-        li:nth-child(n),
-        li:last-child:nth-child(odd) {
-            border-left: none;
-            grid-column: auto;
-        }
-
-        li:nth-child(n + 2) {
-            border-top: var(--line-width) solid var(--line-color);
-        }
-    }
-
-    .project-story .project-links {
-        grid-auto-flow: row;
-
-        .link-row + .link-row {
-            border-left: none;
-            border-top: var(--line-width) solid var(--line-color);
-        }
-    }
-
-    .project-features .feature-list li {
-        flex: none;
-        padding-block: 0.25rem;
-    }
-
-    .project-visual.site-preview {
-        height: 26rem;
-    }
-
-    .screenshot-frame {
-        height: 16rem;
-    }
-
-    .blog-build .markdown-file,
-    .blog-build .built-page {
-        flex: none;
-    }
-
-    .compose {
-        grid-template-columns: 1fr;
-
-        .compose-field {
-            grid-template-columns: 1fr;
-            gap: 0.375rem;
-        }
-
-        .compose-send {
-            min-height: 9rem;
-            border-top: var(--line-width) solid var(--line-color);
-        }
-    }
-
-    .mail-bar {
-        grid-template-columns: 1fr auto;
-
-        .mail-bar-label {
-            display: none;
-        }
-    }
-
 
     /* the intro stacks: the text, then the donut card on its paper */
     .intro {
@@ -3242,8 +3314,9 @@ a {
     .doors {
         grid-template-columns: 1fr;
 
+        /* the number is hidden on phones, so the text and the GO button share the line */
         .link-row {
-            grid-template-columns: auto minmax(0, 1fr) auto;
+            grid-template-columns: minmax(0, 1fr) auto;
             grid-template-rows: none;
             align-items: center;
             min-height: 0;
@@ -3254,10 +3327,6 @@ a {
                 align-self: center;
             }
         }
-    }
-
-    .lead>*+* {
-        border-top: var(--line-width) solid var(--line-color);
     }
 
     .status {
@@ -3288,63 +3357,17 @@ a {
         }
     }
 
-    .content {
-        grid-template-columns: 1fr;
-    }
-
-    :is(.nav, .lead, .content, .section-head, .status, .project-browser, .mail-bar, .compose)>*+* {
+    :is(.nav, .section-head, .status)>*+* {
         border-left: none;
     }
 
     .nav>*+*,
-    .section-head>*+*,
-    .mail-bar>*+* {
+    .section-head>*+* {
         border-left: var(--line-width) solid var(--line-color);
-    }
-
-    .content>*+* {
-        border-top: var(--line-width) solid var(--line-color);
-    }
-
-    /* the card decides the height, the photo follows it */
-    .profile {
-        flex-direction: row;
-        min-height: max(10rem, 22dvh);
-
-        .profile-photo {
-            flex: none;
-            width: 38%;
-            height: auto;
-            min-height: 0;
-            border-bottom: none;
-            border-right: var(--line-width) solid var(--line-color);
-        }
-
-        .profile-info {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-
-        .tag {
-            top: 0.25rem;
-            left: 0.25rem;
-            padding: 0.16rem;
-            font-size: 0.4rem;
-        }
     }
 
     .icon-link {
         height: 3.75rem;
-    }
-
-    .feature-list li {
-        grid-template-columns: 3rem 1fr;
-    }
-
-    .feature-list .feature-number {
-        padding: 0.875rem 0.25rem;
     }
 
     .link-row {
@@ -3368,7 +3391,178 @@ a {
         }
     }
 
-    .project-list .link-row .link-about {
-        font-size: 0.8125rem;
+}
+
+/* phones: the project cards and the project pages stack, the features and links become one column */
+@media (max-width: 760px) {
+    .project-cards {
+        flex: none;
+        grid-template-columns: 1fr;
+
+        /* the folder gets the height of what is inside */
+        .project-card-sheet {
+            flex: none;
+        }
+
+        .project-card-visual {
+            flex: none;
+            height: 15.5rem;
+        }
     }
+
+    .sheet.project-page {
+        height: auto;
+        overflow: visible;
+    }
+
+    .project-body {
+        flex: none;
+        grid-template-columns: 1fr;
+        grid-template-rows: none;
+
+        &>*+* {
+            border-left: none;
+            border-top: var(--line-width) solid var(--line-color);
+        }
+    }
+
+    .project-features,
+    .feature-list {
+        flex: none;
+    }
+
+    .feature-list {
+        grid-template-columns: 1fr;
+        grid-auto-rows: auto;
+
+        li {
+            padding-block: 0.75rem;
+
+            &:nth-child(even) {
+                border-left: none;
+            }
+
+            &:nth-child(n + 2) {
+                border-top: var(--line-width) solid var(--line-color);
+            }
+        }
+    }
+
+    .project-visual {
+        height: 28rem;
+        padding-inline: 1rem 1.5rem;
+    }
+
+    /* the pills of the screens get their own line under the caption */
+    .project-window .project-window-bar {
+        justify-content: flex-start;
+    }
+
+    .project-doors {
+        grid-auto-flow: row;
+        grid-auto-columns: auto;
+        grid-template-columns: 1fr;
+    }
+
+    .doors .link-row .link-go {
+        padding-inline: 1rem;
+    }
+
+    /* over and contact stack: the badge above the story, the mail window above the address */
+    :is(.about-body, .contact-body) {
+        grid-template-columns: 1fr;
+
+        &>*+* {
+            border-left: none;
+            border-top: var(--line-width) solid var(--line-color);
+        }
+    }
+
+    .profile-card.badge {
+        flex: none;
+        max-height: none;
+
+        .badge-photo {
+            flex: none;
+            aspect-ratio: 1;
+        }
+    }
+
+    /* the window gets the height of its fields, so the message box keeps its own height */
+    .mail-window .compose-message {
+        flex: none;
+
+        textarea {
+            min-height: 8rem;
+        }
+    }
+
+    .profile-card.badge {
+        width: min(100%, 20rem);
+    }
+
+    /* the socials and the field labels get a column of their own */
+    .social-grid {
+        grid-template-columns: 1fr;
+
+        .social-tile:nth-child(even) {
+            border-left: none;
+        }
+
+        .social-tile:nth-child(n + 2) {
+            border-top: var(--line-width) solid var(--line-color);
+        }
+    }
+
+    .mail-window {
+        .compose-field {
+            grid-template-columns: 1fr;
+            gap: 0.375rem;
+            padding-inline: 1rem;
+        }
+
+        .mail-window-foot {
+            padding-inline: 1rem;
+        }
+    }
+
+    .stamp {
+        right: 0.75rem;
+        width: 4.25rem;
+
+        b {
+            font-size: 1.375rem;
+        }
+    }
+
+    /* the row of socials is too narrow for the names, only the icons stay */
+    .icon-row .icon-link .icon-label {
+        display: none;
+    }
+
+    .status-window {
+        margin-top: 0;
+    }
+
+    /* the three points of the story stack */
+    .about-points {
+        grid-template-columns: 1fr;
+    }
+
+    /* the folder of the website is too low for the mini intro: the word and the doors stay */
+    .thumb-site .thumb-site-intro {
+        display: none;
+    }
+
+    /* the sticker on the donut card stays inside the screen */
+    .intro .sticker {
+        right: 0.5rem;
+        font-size: 0.6875rem;
+    }
+}
+
+/* inside the small live preview on the personal-website page nothing keeps moving, one moving site is enough
+   (asciiDonut.js adds is-preview when the page is shown in that preview) */
+.is-preview :is(.marquee span, .caret) {
+    animation-play-state: paused;
 }

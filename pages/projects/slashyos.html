@@ -131,43 +131,51 @@
             <h1>SLASHYOS</h1>
         </div>
 
-        <!-- story, features and links on the left, the visual of this project on the right -->
+        <!-- the story and features on the left, a window with the project on graph paper on the right -->
         <div class="row project-body project-slashyos">
             <div class="project-story">
                 <div class="project-text">
                     <span class="caption">cat slashyos.md</span>
                     <p>Omdat alles in één flake staat, is de config van beide machines altijd hetzelfde en makkelijk terug te vinden in git.</p>
-                    <p class="lead-body">Elke rebuild maakt een nieuwe generatie, dus als er iets stuk gaat kan ik gewoon terug naar de vorige.</p>
+                    <p class="project-more">Elke rebuild maakt een nieuwe generatie, dus als er iets stuk gaat kan ik gewoon terug naar de vorige.</p>
                     <ul class="chips" aria-label="Stack"><li>nix</li><li>linux</li></ul>
                 </div>
                 <div class="project-features">
                     <span class="caption project-features-head">ls ./features — 03</span>
                     <ol class="feature-list">
-                <li><span class="feature-number">01</span><span class="feature-text">multihost — laptop en desktop uit dezelfde flake</span></li>
-                <li><span class="feature-number">02</span><span class="feature-text">modulaire opbouw, per host in of uit te schakelen</span></li>
-                <li><span class="feature-number">03</span><span class="feature-text">rollbacks via NixOS-generaties</span></li>
+                        <li><span class="feature-number">01</span><span class="feature-text">multihost — laptop en desktop uit dezelfde flake</span></li>
+                        <li><span class="feature-number">02</span><span class="feature-text">modulaire opbouw, per host in of uit te schakelen</span></li>
+                        <li><span class="feature-number">03</span><span class="feature-text">rollbacks via NixOS-generaties</span></li>
                     </ol>
                 </div>
-                <nav class="link-list project-links" aria-label="Links">
-                <a class="link-row" href="https://gitlab.com/nixos-projects/slashyos" target="_blank" rel="noopener">
-                    <span><b class="link-name">Code</b><small class="link-url">gitlab.com/nixos-projects/slashyos</small></span><span class="link-go">GO &nearr;</span>
-                </a>
-                <a class="link-row" href="https://docs.errornoslash.be/slashyos/" target="_blank" rel="noopener">
-                    <span><b class="link-name">Docs</b><small class="link-url">docs.errornoslash.be/slashyos</small></span><span class="link-go">GO &nearr;</span>
-                </a>
-                <a class="link-row" href="../../index.html#projecten">
-                    <span><b class="link-name">Terug</b><small class="link-url">~/projecten</small></span><span class="link-go">GO &nearr;</span>
-                </a>
-                </nav>
             </div>
-            <div class="project-visual screenshot-frame">
-                <figure class="project-screenshot" data-symbols>
-                    <img src="../../images/slashyos.jpg" alt="SlashyOS-desktop: niri op Wayland met kitty, fastfetch en btop, blauw kleurenschema" width="1600" height="1066" decoding="async">
-                    <div class="symbol-grid" aria-hidden="true"></div>
-                    <figcaption class="caption tag">$ niri msg action screenshot</figcaption>
-                </figure>
+            <div class="project-visual">
+                <div class="project-window">
+                    <div class="project-window-bar">
+                        <span class="caption">$ niri msg action screenshot</span>
+                    </div>
+                    <!-- the desktop, with the possessed symbols on top (pictureSymbols.js) -->
+                    <figure class="project-window-body project-screenshot" data-symbols>
+                        <img src="../../images/slashyos.jpg" alt="SlashyOS-desktop: niri op Wayland met kitty, fastfetch en btop, blauw kleurenschema" width="1600" height="1066" decoding="async">
+                        <div class="symbol-grid" aria-hidden="true"></div>
+                    </figure>
+                    <span class="sticker">/1 flake, 2 machines/</span>
+                </div>
             </div>
         </div>
+
+        <!-- the links: cards that press in, like the doors on the landing -->
+        <nav class="row doors project-doors" aria-label="Links">
+                <a class="link-row" href="https://gitlab.com/nixos-projects/slashyos" target="_blank" rel="noopener">
+                    <span class="link-number">01</span><span><b class="link-name">Code</b><small class="link-url">gitlab.com/nixos-projects/slashyos</small></span><span class="link-go">GO &nearr;</span>
+                </a>
+                <a class="link-row" href="https://docs.errornoslash.be/slashyos/" target="_blank" rel="noopener">
+                    <span class="link-number">02</span><span><b class="link-name">Docs</b><small class="link-url">docs.errornoslash.be/slashyos</small></span><span class="link-go">GO &nearr;</span>
+                </a>
+                <a class="link-row" href="../../index.html#projecten">
+                    <span class="link-number">03</span><span><b class="link-name">Terug</b><small class="link-url">~/projecten</small></span><span class="link-go">GO &nearr;</span>
+                </a>
+        </nav>
 
         <footer class="row site-footer">
             <div>&copy;<span id="year"></span> - Dias Stas</div>

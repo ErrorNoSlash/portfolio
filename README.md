@@ -10,17 +10,18 @@ My portfolio, live at [hello.errornoslash.be](https://hello.errornoslash.be). Re
 - 📜 One page of full screens — you land on the intro, scroll on to the projects, the about screen and finally contact
 - 🚪 Neo-brutalist landing screen — the big title, a typed intro with one marked word, the ascii donut on a tilted card with a hard shadow and a sticker, on graph paper, and three "doors" (projecten, over, contact) as cards that press into their shadow
 - 💻 Nav that follows you — the prompt types the command of the screen you are on (`./portfolio`, `ls ./projecten`, `cat over.txt`), that pill lights up and a line under the nav fills while you scroll
-- 🗂️ Project browser — point at (or tab to) a project and a preview with its stack and features appears next to the list
-- 📐 Tall screens get more, not emptier — a bigger intro and donut card on the landing, the full project story with screenshot and links in the preview, and the socials as big link rows on the over screen
-- ✉️ Contact screen — a giant `ZEG HALLO` mail link, a small mail composer (subject + message) that builds the `$ mail -s "…"` command as you type and opens your own mail app, a button that copies the address, and the socials as a big labelled row above the copyright bar
+- 🗂️ Project folders — every project is a folder with a tab, a paper sticking out and its picture on top: the landing in small (its letters jump up one by one), the whole SlashyOS screenshot on a blurred copy of itself, and the home page of the blog with its real posts; pointing at one lifts it, pulls the paper out and fills in its big outlined number
+- 📐 Tall screens get more, not emptier — a bigger intro and donut card on the landing, bigger pictures on the project cards, the full project story on the project pages, and a bigger badge and story on the over screen
+- ✉️ Contact screen — a giant `ZEG HALLO` mail link, a mail window with a perforated stamp (subject + message) that builds the `$ mail -s "…"` command as you type and opens your own mail app, the address with a button that copies it, a `$ dias --status` window with my local time in Belgium, and the socials as a labelled row of icons above the copyright bar
 - 🎬 Everything animates in — rows, cells, tiles and links fade and rise in one after the other as they come into view, and it all replays on every load (also reloads and back / forward)
 - 🔠 Huge title with sliced echoes, letters spread across the row (any word length fits), rising in one letter after the other when they scroll into view
 - ⌨️ Typed hero line with a blinking terminal caret
 - 🍩 Spinning ASCII donut rendered live in JavaScript (no images, no canvas) that tilts towards your mouse
-- 🎨 Project rows with a circular clip-path fill on hover
+- 🎨 Links with a slow, soft circular fill on hover
+- 🧲 Soft snapping — stop scrolling close to the start of a screen and the page glides the rest of the way; it never pulls you back into a screen you are reading and stops the moment you scroll, on every OS (phones scroll freely)
 - 👾 Possessed portrait — moving over the photo turns the cells under the pointer into flickering terminal symbols that fade back into the picture
-- ✨ Profile card that lifts with a hard shadow on hover (or when pressed on a phone) while a spotlight follows the cursor or finger and the asterisk spins
-- 📂 A page per project that fits one screen: the story and links, the numbered features and a visual of its own (a live, scaled-down preview of the home page that tours its screens, the possessed SlashyOS screenshot, a markdown-to-page example for the blog)
+- 🪪 Over screen — the portrait on a pass that hangs from a strap (it swings on hover or when held on a phone, a spotlight follows the cursor or finger and the asterisk spins), the story with marked words, a taped-on `~/now.txt` note under the pass with what I am busy with right now, the skills as leaning stickers and the socials as tiles whose arrow turns
+- 📂 A page per project that fits one screen, all in the same neo-brutalist layout: the story with the features as numbered tiles on the left, a window on graph paper with a sticker on the right (a live, scaled-down preview of the home page that tours its screens, the possessed SlashyOS screenshot, a markdown-to-page example for the blog), and the links as cards that press in
 - 📱 Mobile menu — a `menu` pill opens a terminal-style panel with every page and the socials as an icon row
 - 🎞️ Clean page transition — a curtain wipes up between the pages
 - ⏳ Quick terminal-style preloader with a progress bar
@@ -62,7 +63,8 @@ My portfolio, live at [hello.errornoslash.be](https://hello.errornoslash.be). Re
 │   └── homelab-logo.*  # artwork, not used on the site yet
 ├── images/
 │   ├── pfp.jpg         # profile picture
-│   ├── slashyos.jpg    # screenshot on the SlashyOS page
+│   ├── slashyos.jpg    # screenshot on the SlashyOS page and its folder
+│   ├── blog.jpg        # screenshot of the blog home page, on its folder
 │   ├── favicon.svg     # tab icon (dot-matrix DS)
 │   ├── apple-touch-icon.png
 │   └── og-image.png    # link preview image (1200×630)
@@ -81,13 +83,14 @@ My portfolio, live at [hello.errornoslash.be](https://hello.errornoslash.be). Re
     ├── marquee.js      # endless scrolling text (every marquee on the page)
     ├── typedIntro.js   # typed line on the landing page
     ├── asciiDonut.js   # spinning ascii donut that follows the mouse
+    ├── scrollSnap.js   # soft snapping to the start of a screen when you stop scrolling near it
     ├── navOnScroll.js  # nav prompt, active pill and progress line while scrolling
-    ├── projectPreview.js # preview next to the project list
     ├── copyMail.js     # copy button next to the mail address
     ├── mailComposer.js # mail composer on the contact screen
     ├── menu.js         # menu panel on phones
     ├── cardSpotlight.js # spotlight on the profile card
     ├── sitePreview.js  # live preview of the home page on the personal-website page
+    ├── localTime.js    # my local time in the status window (contact screen)
     ├── pictureSymbols.js # possessed pictures (portrait, slashyos screenshot): symbols flicker where you move
     └── notFound.js     # shows the missing path on the 404 page
 ```
@@ -112,7 +115,7 @@ Served with GitHub Pages on a subdomain:
 
 ## Customize
 
-- **Projects** — the `<a class="link-row">` blocks and their `<article class="preview">` in the `#projecten` screen of `index.html`, a page in `pages/projects/` (copy one of the others)
+- **Projects** — the `<a class="project-card">` blocks in the `#projecten` screen of `index.html`, and a page in `pages/projects/` (copy one of the others)
 - **About / skills** — the `.about` block in the `#over` screen of `index.html`
 - **Typed line** — the `data-text` on `#typed-line` in `index.html`
 - **Landing intro** — the `.intro` block in the `#home` screen of `index.html`
