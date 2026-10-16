@@ -2,102 +2,92 @@
   <img src="assets/banner.svg" alt="Dias Stas — portfolio. Front-end developer" width="100%">
 </p>
 
-My portfolio, live at [hello.errornoslash.be](https://hello.errornoslash.be). Rebuilt in the same style as my [contact page](https://contact.errornoslash.be): one big grid of lines, two fonts, black and white. Vanilla HTML, CSS and JavaScript — no frameworks, no build step.
+<p align="center">
+  <b>My portfolio — who I am, what I build and how to reach me.</b><br>
+  Live at <a href="https://hello.errornoslash.be">hello.errornoslash.be</a> · same style as my <a href="https://contact.errornoslash.be">contact page</a>
+</p>
 
-## Features
+|            |                                                         |
+| ---------- | ------------------------------------------------------- |
+| **Stack**  | vanilla HTML, CSS and JavaScript                        |
+| **Build**  | none — open `index.html` and it runs                    |
+| **Look**   | one big grid of lines, two fonts, black and white       |
+| **Hosted** | GitHub Pages, on a subdomain                            |
 
-- 🧱 Brutalist sheet layout — every part of the page is a bordered row, with a sticky nav row on top
-- 📜 One page of full screens — you land on the intro, scroll on to the projects, the about screen and finally contact
-- 🚪 Neo-brutalist landing screen — the big title, a typed intro with one marked word, the ascii donut on a tilted card with a hard shadow and a sticker, on graph paper, and three "doors" (projecten, over, contact) as cards that press into their shadow
-- 💻 Nav that follows you — the prompt types the command of the screen you are on (`./portfolio`, `ls ./projecten`, `cat over.txt`), that pill lights up and a line under the nav fills while you scroll
-- 🗂️ Project folders — every project is a folder with a tab, a paper sticking out and its picture on top: the landing in small (its letters jump up one by one), the whole SlashyOS screenshot on a blurred copy of itself, and the home page of the blog with its real posts; pointing at one lifts it, pulls the paper out and fills in its big outlined number
-- 📐 Tall screens get more, not emptier — a bigger intro and donut card on the landing, bigger pictures on the project cards, the full project story on the project pages, and a bigger badge and story on the over screen
-- ✉️ Contact screen — a giant `ZEG HALLO` mail link, a mail window with a perforated stamp (subject + message) that builds the `$ mail -s "…"` command as you type and opens your own mail app, the address with a button that copies it, a `$ dias --status` window with my local time in Belgium, and the socials as a labelled row of icons above the copyright bar
-- 🎬 Everything animates in — rows, cells, tiles and links fade and rise in one after the other as they come into view, and it all replays on every load (also reloads and back / forward)
-- 🔠 Huge title with sliced echoes, letters spread across the row (any word length fits), rising in one letter after the other when they scroll into view
-- ⌨️ Typed hero line with a blinking terminal caret
-- 🍩 Spinning ASCII donut rendered live in JavaScript (no images, no canvas) that tilts towards your mouse
-- 🎨 Links with a slow, soft circular fill on hover
-- 🧲 Soft snapping — stop scrolling close to the start of a screen and the page glides the rest of the way; it never pulls you back into a screen you are reading and stops the moment you scroll, on every OS (phones scroll freely)
-- 👾 Possessed portrait — moving over the photo turns the cells under the pointer into flickering terminal symbols that fade back into the picture
-- 🪪 Over screen — the portrait on a pass that hangs from a strap (it swings on hover or when held on a phone, a spotlight follows the cursor or finger and the asterisk spins), the story with marked words, a taped-on `~/now.txt` note under the pass with what I am busy with right now, the skills as leaning stickers and the socials as tiles whose arrow turns
-- 📂 A page per project that fits one screen, all in the same neo-brutalist layout: the story with the features as numbered tiles on the left, a window on graph paper with a sticker on the right (a live, scaled-down preview of the home page that tours its screens, the possessed SlashyOS screenshot, a markdown-to-page example for the blog), and the links as cards that press in
-- 📱 Mobile menu — a `menu` pill opens a terminal-style panel with every page and the socials as an icon row
-- 🎞️ Clean page transition — a curtain wipes up between the pages
-- ⏳ Quick terminal-style preloader with a progress bar
-- ⌨️ Browser tab title types and deletes terminal commands, like a shell prompt
-- 📱 Rotate notice — a phone turned sideways gets an animated "draai je telefoon rechtop" screen (pure CSS)
-- 🚫 JavaScript-off page — visitors without JavaScript are sent to `noscript.html`, a single terminal-style window that keeps every link working
-- 🔍 404 page in the same window style that shows the path you tried
-- 🌗 Light and dark theme that follows the system
-- 🖱️ Custom cursor (dot + trailing outline), disabled on touch devices
-- 🔗 Link preview — Open Graph and Twitter tags with a 1200×630 image, so shared links show a card
-- 📅 Footer year updates automatically via JavaScript
-- 🖥️ Tested on 4K, 1440p and 1080p screens at every Windows scale from 25% to 200% — very wide windows scale the whole page up, very short ones tighten every screen so it still fits
-- 📱 Tested on phones from 320px (iPhone SE) to 430px (Pro Max), Android sizes and iPads — the nav prompt shortens, cards grow with their text, and upright tablets stack the project pages
-- 📱 Fully responsive
+---
+
+## The site
+
+The home page is one page of four full screens. You land on the intro and scroll on from there.
+
+| #  | screen        | what is on it                                                                 |
+| -- | ------------- | ----------------------------------------------------------------------------- |
+| 01 | **landing**   | big title, typed intro, the spinning ASCII donut and three "doors"            |
+| 02 | **projecten** | the projects as folders with a picture of each                               |
+| 03 | **over**      | the portrait on a pass, the story, skills, a `now.txt` note and the socials   |
+| 04 | **contact**   | `ZEG HALLO`, a mail window, the address, a status window and the socials      |
+
+Plus a page per project, a 404 page and a page for visitors without JavaScript.
 
 ## Projects
 
-| project          | page |
-| ---------------- | ---- |
-| personal-website | [pages/projects/personal-website.html](pages/projects/personal-website.html) |
-| SlashyOS         | [pages/projects/slashyos.html](pages/projects/slashyos.html) |
-| blog             | [pages/projects/blog.html](pages/projects/blog.html) |
+| project          | page                                                                       | on the page                                       |
+| ---------------- | -------------------------------------------------------------------------- | ------------------------------------------------- |
+| personal-website | [personal-website.html](pages/projects/personal-website.html)             | a live, scaled-down preview that tours the site  |
+| SlashyOS         | [slashyos.html](pages/projects/slashyos.html)                             | the desktop screenshot, possessed by symbols      |
+| blog             | [blog.html](pages/projects/blog.html)                                     | a markdown file turning into a page              |
 
-## Structure
+Every project page fits one screen: the story and numbered features on the left, a window with the project on the right, and the links as cards at the bottom.
 
-```
-.
-├── index.html          # the one page: landing, projects, over + mail screens
-├── 404.html            # page not found (paths start at / so it works on any url)
-├── noscript.html       # shown when JavaScript is turned off
-├── pages/projects/     # one page per project
-├── CNAME               # custom domain for GitHub Pages
-├── robots.txt
-├── sitemap.xml
-├── favicon.ico         # tab icon (16, 32, 48)
-├── assets/
-│   ├── banner.svg      # banner at the top of this README
-│   ├── og-image.svg    # source of the link preview image
-│   └── homelab-logo.*  # artwork, not used on the site yet
-├── images/
-│   ├── pfp.jpg         # profile picture
-│   ├── slashyos.jpg    # screenshot on the SlashyOS page and its folder
-│   ├── blog.jpg        # screenshot of the blog home page, on its folder
-│   ├── favicon.svg     # tab icon (dot-matrix DS)
-│   ├── apple-touch-icon.png
-│   └── og-image.png    # link preview image (1200×630)
-├── styles/
-│   ├── normalize.css
-│   ├── window.css      # the single window of noscript.html and 404.html
-│   └── style.css       # colors, layout, transitions
-└── scripts/
-    ├── preloader.js    # preloader with progress bar
-    ├── pageTransition.js # curtain wipe between the pages
-    ├── cursor.js       # custom cursor
-    ├── getYear.js      # dynamic footer year
-    ├── tabTitle.js     # typing and deleting text in the browser tab
-    ├── title.js        # spreads the big title letters and times their rise
-    ├── reveal.js       # rows, tiles and links fade and rise in when they come into view, on every load
-    ├── marquee.js      # endless scrolling text (every marquee on the page)
-    ├── typedIntro.js   # typed line on the landing page
-    ├── asciiDonut.js   # spinning ascii donut that follows the mouse
-    ├── scrollSnap.js   # soft snapping to the start of a screen when you stop scrolling near it
-    ├── navOnScroll.js  # nav prompt, active pill and progress line while scrolling
-    ├── copyMail.js     # copy button next to the mail address
-    ├── mailComposer.js # mail composer on the contact screen
-    ├── menu.js         # menu panel on phones
-    ├── cardSpotlight.js # spotlight on the profile card
-    ├── sitePreview.js  # live preview of the home page on the personal-website page
-    ├── localTime.js    # my local time in the status window (contact screen)
-    ├── pictureSymbols.js # possessed pictures (portrait, slashyos screenshot): symbols flicker where you move
-    └── notFound.js     # shows the missing path on the 404 page
-```
+## Features
+
+### 🎨 Look
+
+- **Brutalist sheet** — every part of the page is a bordered row, with a sticky nav on top
+- **Neo-brutalist touches** — cards with hard shadows, tilted stickers, graph paper and tape
+- **Huge titles** — letters spread across the row with two sliced echoes, any word length fits
+- **Light and dark** — follows the system theme
+
+### 🖱️ Moving around
+
+- **Nav that follows you** — the prompt types the command of the screen you are on, its pill lights up and a line fills while you scroll
+- **Soft snapping** — stop scrolling near the start of a screen and the page glides the rest of the way (never pulls you back, phones scroll freely)
+- **Everything animates in** — rows, tiles and links rise in one after the other, on every load
+- **Link rows** fill with a soft circle on hover
+- **Custom cursor** — a dot with a gliding ring that inverts on light and dark parts; over a link it becomes a filled disc
+- **Possessed pictures** — moving over the portrait or the SlashyOS screenshot turns them into flickering terminal symbols
+- **Curtain** wipes up between the pages, after a short terminal-style preloader
+- **Tab title** types and deletes small commands, like a shell prompt
+
+### ✨ Small details
+
+| where        | detail                                                                         |
+| ------------ | ------------------------------------------------------------------------------ |
+| landing      | the ASCII donut is drawn live in JavaScript and tilts towards your mouse       |
+| projecten    | a folder lifts, pulls its paper out and fills in its big number on hover      |
+| over         | the pass swings, a spotlight follows the pointer and the asterisk spins        |
+| contact      | the mail window builds the `$ mail -s "…"` command as you type                 |
+| contact      | a `$ dias --status` window shows my local time in Belgium                      |
+| contact      | a button copies the mail address                                               |
+
+### 📱 Every screen
+
+- **Desktop** — tested on 4K, 1440p and 1080p at every Windows scale from 25% to 200%
+- **Phones** — tested from 320px (iPhone SE) to 430px (Pro Max), Android sizes and iPads
+- **Menu pill** on phones opens a terminal-style panel with every page and the socials
+- **Rotate notice** — a phone turned sideways gets a "draai je telefoon rechtop" screen
+- **Light on slow laptops** — the donut and marquees rest when you cannot see them
+
+### 🧩 Extras
+
+- **No JavaScript?** Visitors are sent to `noscript.html`, a single terminal window that keeps every link working
+- **404 page** in the same window style, showing the path you tried
+- **Link preview** — Open Graph and Twitter tags with a 1200×630 image
+- **Footer year** updates itself
 
 ## Run locally
 
-No build step — just open `index.html`, or serve the folder (needed for the 404 page):
+No build step. Serve the folder (needed for the 404 page and the live preview):
 
 ```bash
 python3 -m http.server 8000
@@ -110,27 +100,88 @@ Then visit `http://localhost:8000`.
 Served with GitHub Pages on a subdomain:
 
 1. Push to the published branch
-2. `CNAME` record at the DNS provider: `hello` → `errornoslash.github.io`
-3. The `CNAME` file in this repo keeps the custom domain set — don't delete it
+2. Add a `CNAME` record at the DNS provider: `hello` → `errornoslash.github.io`
+3. Keep the `CNAME` file in this repo — it holds the custom domain
 
 ## Customize
 
-- **Projects** — the `<a class="project-card">` blocks in the `#projecten` screen of `index.html`, and a page in `pages/projects/` (copy one of the others)
-- **About / skills** — the `.about` block in the `#over` screen of `index.html`
-- **Typed line** — the `data-text` on `#typed-line` in `index.html`
-- **Landing intro** — the `.intro` block in the `#home` screen of `index.html`
-- **Tab title** — the `tabCommands` list at the top of `scripts/tabTitle.js`
-- **Donut speed / size** — the constants at the top of `scripts/asciiDonut.js`
-- **Link preview** — edit the Open Graph tags in the `<head>` of every page; to change the image, edit `assets/og-image.svg` and export it as `images/og-image.png` (1200×630, PNG)
-- **Profile picture** — replace `images/pfp.jpg`
-- **Colors** — the CSS variables at the top of `styles/style.css` (the same palette as the contact page):
-  ```css
-  :root {
-      --black: #040507;
-      --grey: #AEB5B8;
-      --border: #525252;
-  }
-  ```
+| to change           | edit                                                                                      |
+| ------------------- | ----------------------------------------------------------------------------------------- |
+| a project           | its `<a class="project-card">` in the `#projecten` screen, and its page in `pages/projects/` |
+| the landing intro   | the `.intro` block in the `#home` screen (the typed line is `data-text` on `#typed-line`) |
+| the story / skills  | the `.about` block in the `#over` screen                                                  |
+| the tab title       | the `tabCommands` list at the top of `scripts/tabTitle.js`                                |
+| the donut           | the constants at the top of `scripts/asciiDonut.js`                                       |
+| the hover speed     | `--fill-time` at the top of `styles/style.css`                                            |
+| the profile picture | replace `images/pfp.jpg`                                                                  |
+| the link preview    | the Open Graph tags in every page, and `assets/og-image.svg` → `images/og-image.png`     |
+| the colours         | the CSS variables at the top of `styles/style.css`                                        |
+
+The main colours, the same as the contact page:
+
+```css
+:root {
+    --black: #040507;
+    --grey: #AEB5B8;
+    --border: #525252;
+}
+```
+
+## Structure
+
+<details>
+<summary>Show the file tree</summary>
+
+```
+.
+├── index.html          # the one page: landing, projecten, over and contact
+├── 404.html            # page not found (paths start at / so it works on any url)
+├── noscript.html       # shown when JavaScript is turned off
+├── pages/projects/     # one page per project
+├── CNAME               # custom domain for GitHub Pages
+├── robots.txt
+├── sitemap.xml
+├── favicon.ico         # tab icon (16, 32, 48)
+├── assets/
+│   ├── banner.svg      # banner at the top of this README
+│   ├── og-image.svg    # source of the link preview image
+│   └── homelab-logo.*  # artwork, not used on the site yet
+├── images/
+│   ├── pfp.jpg              # profile picture
+│   ├── slashyos.jpg         # screenshot on the SlashyOS page and its folder
+│   ├── slashyos-blur.jpg    # tiny blurred copy, behind the screenshot on its folder
+│   ├── blog.jpg             # screenshot of the blog home page, on its folder
+│   ├── favicon.svg          # tab icon (dot-matrix DS)
+│   ├── apple-touch-icon.png
+│   └── og-image.png         # link preview image (1200×630)
+├── styles/
+│   ├── normalize.css
+│   ├── window.css      # the single window of noscript.html and 404.html
+│   └── style.css       # colours, layout, transitions
+└── scripts/
+    ├── preloader.js      # preloader with progress bar
+    ├── pageTransition.js # curtain wipe between the pages
+    ├── cursor.js         # custom cursor
+    ├── getYear.js        # dynamic footer year
+    ├── tabTitle.js       # typing and deleting text in the browser tab
+    ├── title.js          # spreads the big title letters and times their rise
+    ├── reveal.js         # rows, tiles and links rise in when they come into view
+    ├── marquee.js        # endless scrolling text
+    ├── typedIntro.js     # typed line on the landing
+    ├── asciiDonut.js     # spinning ascii donut that follows the mouse
+    ├── scrollSnap.js     # soft snapping to the start of a screen
+    ├── navOnScroll.js    # nav prompt, active pill and progress line
+    ├── copyMail.js       # copy button next to the mail address
+    ├── mailComposer.js   # mail window on the contact screen
+    ├── localTime.js      # my local time in the status window
+    ├── menu.js           # menu panel on phones
+    ├── cardSpotlight.js  # spotlight on the pass
+    ├── pictureSymbols.js # possessed pictures (portrait, SlashyOS screenshot)
+    ├── sitePreview.js    # live preview on the personal-website page
+    └── notFound.js       # shows the missing path on the 404 page
+```
+
+</details>
 
 ## License
 
@@ -138,4 +189,6 @@ MIT. Icons are from [Phosphor Icons](https://phosphoricons.com) (MIT).
 
 ---
 
-`©Dias Stas` · [Contact](https://contact.errornoslash.be) · [Blog](https://blog.errornoslash.be) · [GitHub](https://github.com/ErrorNoSlash) · [Mastodon](https://mastodon.social/@slashy)
+<p align="center">
+  <code>©Dias Stas</code> · <a href="https://contact.errornoslash.be">Contact</a> · <a href="https://blog.errornoslash.be">Blog</a> · <a href="https://github.com/ErrorNoSlash">GitHub</a> · <a href="https://mastodon.social/@slashy">Mastodon</a>
+</p>
