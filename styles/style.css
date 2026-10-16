@@ -2555,6 +2555,8 @@ a {
     left: 0;
     border-radius: 50%;
     z-index: 99;
+    /* white with "difference": the cursor turns black on white parts of the page and white on dark parts */
+    mix-blend-mode: difference;
     will-change: transform;
     transition: opacity 0.3s;
 }
@@ -2564,10 +2566,7 @@ a {
     width: 0.45rem;
     height: 0.45rem;
     margin: -0.225rem 0 0 -0.225rem;
-    /* the colour of the text with a thin edge in the colour of the page, so it shows on light and on dark parts
-       (no blend mode: that makes a slow laptop redraw the whole page on every mouse move) */
-    background: var(--foreground);
-    box-shadow: 0 0 0 0.0625rem var(--background);
+    background: #fff;
 }
 
 /* the ring that trails behind the dot (cursor.js also makes it bigger over a link and smaller on a click) */
@@ -2575,8 +2574,21 @@ a {
     width: 1.875rem;
     height: 1.875rem;
     margin: -0.9375rem 0 0 -0.9375rem;
-    border: 0.125rem solid var(--foreground);
-    box-shadow: 0 0 0 0.0625rem var(--background), inset 0 0 0 0.0625rem var(--background);
+    border: 0.125rem solid #fff;
+    transition: background-color 0.25s, opacity 0.3s;
+}
+
+/* over a link or button (cursor.js adds cursor-on-link): the ring fills in and, with the blend mode,
+   inverts whatever is under it, while the dot fades out. It is clear at a glance what you can click */
+body.cursor-on-link {
+
+    .cursor-outline {
+        background-color: #fff;
+    }
+
+    .cursor-dot {
+        opacity: 0;
+    }
 }
 
 /* mouse only: hide the real cursor once the custom one has appeared */

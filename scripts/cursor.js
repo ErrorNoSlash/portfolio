@@ -4,9 +4,9 @@
 const cursorDot = document.querySelector("[data-cursor-dot]");
 const cursorOutline = document.querySelector("[data-cursor-outline]");
 const cursorFollow = 0.2;
-const cursorGrow = 1.6;
+const cursorGrow = 2;
 const cursorPress = 0.8;
-const cursorLinks = "a, button, label, input, textarea, [data-symbols], .profile-card";
+const cursorLinks = "a, button, label, input, textarea";
 
 let pointerX = -100;
 let pointerY = -100;
@@ -63,7 +63,10 @@ window.addEventListener("pointermove", function (e) {
 
     pointerX = e.clientX;
     pointerY = e.clientY;
-    isOverLink = Boolean(e.target.closest && e.target.closest(cursorLinks));
+    // over something you can click: the ring fills in (the css turns it into an inverting disc)
+    const isNowOverLink = Boolean(e.target.closest && e.target.closest(cursorLinks));
+    if (isNowOverLink !== isOverLink) document.body.classList.toggle("cursor-on-link", isNowOverLink);
+    isOverLink = isNowOverLink;
     document.body.classList.add("cursor-visible");
     document.body.classList.remove("cursor-away");
     wakeCursor();
