@@ -3,6 +3,7 @@ const veil = document.querySelector("#veil");
 const sheet = document.querySelector(".sheet");
 const menuPill = document.querySelector(".nav-tabs a[href='#menu']");
 let wasOpenedByPill = false;
+let lastPressPoint = null;
 
 // opens or closes the menu: the blur, the page behind it and the focus go along
 function showMenu(isOpen) {
@@ -25,9 +26,30 @@ function closeMenu() {
     if (location.hash === "#menu") history.replaceState(null, "", location.pathname + location.search);
 }
 
-/* the menu pill opens it */
+/* remember where the finger or mouse really went down, phones move the click to the nearest button */
+document.addEventListener("pointerdown", function (e) {
+    lastPressPoint = { x: e.clientX, y: e.clientY };
+});
+
+/* a key press has no point, so it is always allowed */
+document.addEventListener("keydown", function () {
+    lastPressPoint = null;
+});
+
+// was the last press really on this element (not just close to it)?
+function isPressInside(element) {
+    if (!lastPressPoint) return true;
+
+    const box = element.getBoundingClientRect();
+    return lastPressPoint.x >= box.left && lastPressPoint.x <= box.right
+        && lastPressPoint.y >= box.top && lastPressPoint.y <= box.bottom;
+}
+
+/* the menu pill opens it, but only when the press really was on the pill: a tap next to it does nothing */
 menuPill.addEventListener("click", function (e) {
     e.preventDefault();
+    if (!isPressInside(menuPill)) return;
+
     wasOpenedByPill = true;
     showMenu(true);
     history.replaceState(null, "", "#menu");
