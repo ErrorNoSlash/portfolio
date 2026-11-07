@@ -1,4 +1,4 @@
-/*controles the typed line in the lead: types the text letter by letter in front of the caret*/
+/*controls the typed line in the lead: types the text letter by letter in front of the caret*/
 const introLine = document.querySelector("#typed-line");
 const introCaret = introLine.querySelector(".caret");
 const introText = introLine.dataset.text;

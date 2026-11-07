@@ -5,12 +5,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Dias Stas - 404</title>
-    <meta name="description" content="Pagina niet gevonden — Dias Stas.">
+    <meta name="description" content="Deze pagina bestaat niet. Alle links naar Dias Stas staan hier.">
     <meta name="robots" content="noindex">
 
     <meta name="theme-color" content="#e4e4e4" media="(prefers-color-scheme: light)">
     <meta name="theme-color" content="#040507" media="(prefers-color-scheme: dark)">
 
+    <!-- GitHub Pages shows this page for any missing address, even a deep one like /a/b/c, so every file starts from the root -->
     <link rel="icon" href="/favicon.ico" sizes="48x48">
     <link rel="icon" href="/images/favicon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="/images/apple-touch-icon.png">
@@ -25,15 +26,22 @@
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800;900&family=Space+Mono:wght@400;700&display=swap"
         rel="stylesheet">
 
-    <!--Unami analytics-->
+    <!--Umami analytics-->
     <script defer src="https://stats.errornoslash.be/script.js" data-website-id="be928998-99b4-4bfb-baf1-b84b52186ba8"></script>
 
     <!-- JS scripts -->
+    <script src="/scripts/cursor.js" defer></script>
+    <script src="/scripts/getYear.js" defer></script>
     <script src="/scripts/notFound.js" defer></script>
 </head>
 
 <body>
 
+    <!-- custom cursor, mouse only (cursor.js) -->
+    <div class="cursor-dot" data-cursor-dot></div>
+    <div class="cursor-outline" data-cursor-outline></div>
+
+    <!-- shown on a phone held sideways (pure css) -->
     <div class="rotate-notice">
         <div class="rotate-notice-frame">
             <div class="rotate-notice-icon" aria-hidden="true"><span></span></div>
@@ -45,27 +53,69 @@
         </div>
     </div>
 
-    <main class="window-page">
+    <main class="window-page not-found-page">
 
         <section class="window-window" aria-labelledby="window-title">
 
             <header class="window-head">
-                <span class="window-prompt">dias@stas:~$ cd <span id="missing-path">./deze-pagina</span><span class="caret"></span></span>
+                <span class="window-prompt">dias@stas:~$ cd <span class="window-path" id="missing-path">./deze-pagina</span><span class="caret"></span></span>
                 <span class="window-badge">404</span>
             </header>
 
             <div class="window-body">
-                <p class="window-code" aria-hidden="true">404</p>
+                <svg class="window-logo" viewBox="0 0 77 42" aria-hidden="true">
+                    <circle cx="3.5" cy="3.5" r="3.2"/>
+                    <circle cx="10.5" cy="3.5" r="3.2"/>
+                    <circle cx="17.5" cy="3.5" r="3.2"/>
+                    <circle cx="24.5" cy="3.5" r="3.2"/>
+                    <circle cx="52.5" cy="3.5" r="3.2"/>
+                    <circle cx="59.5" cy="3.5" r="3.2"/>
+                    <circle cx="66.5" cy="3.5" r="3.2"/>
+                    <circle cx="73.5" cy="3.5" r="3.2"/>
+                    <circle cx="3.5" cy="10.5" r="3.2"/>
+                    <circle cx="10.5" cy="10.5" r="3.2"/>
+                    <circle cx="24.5" cy="10.5" r="3.2"/>
+                    <circle cx="31.5" cy="10.5" r="3.2"/>
+                    <circle cx="45.5" cy="10.5" r="3.2"/>
+                    <circle cx="52.5" cy="10.5" r="3.2"/>
+                    <circle cx="3.5" cy="17.5" r="3.2"/>
+                    <circle cx="10.5" cy="17.5" r="3.2"/>
+                    <circle cx="31.5" cy="17.5" r="3.2"/>
+                    <circle cx="45.5" cy="17.5" r="3.2"/>
+                    <circle cx="52.5" cy="17.5" r="3.2"/>
+                    <circle cx="59.5" cy="17.5" r="3.2"/>
+                    <circle cx="66.5" cy="17.5" r="3.2"/>
+                    <circle cx="3.5" cy="24.5" r="3.2"/>
+                    <circle cx="10.5" cy="24.5" r="3.2"/>
+                    <circle cx="31.5" cy="24.5" r="3.2"/>
+                    <circle cx="52.5" cy="24.5" r="3.2"/>
+                    <circle cx="59.5" cy="24.5" r="3.2"/>
+                    <circle cx="66.5" cy="24.5" r="3.2"/>
+                    <circle cx="73.5" cy="24.5" r="3.2"/>
+                    <circle cx="3.5" cy="31.5" r="3.2"/>
+                    <circle cx="10.5" cy="31.5" r="3.2"/>
+                    <circle cx="31.5" cy="31.5" r="3.2"/>
+                    <circle cx="66.5" cy="31.5" r="3.2"/>
+                    <circle cx="73.5" cy="31.5" r="3.2"/>
+                    <circle cx="3.5" cy="38.5" r="3.2"/>
+                    <circle cx="10.5" cy="38.5" r="3.2"/>
+                    <circle cx="17.5" cy="38.5" r="3.2"/>
+                    <circle cx="24.5" cy="38.5" r="3.2"/>
+                    <circle cx="45.5" cy="38.5" r="3.2"/>
+                    <circle cx="52.5" cy="38.5" r="3.2"/>
+                    <circle cx="59.5" cy="38.5" r="3.2"/>
+                    <circle cx="66.5" cy="38.5" r="3.2"/>
+                </svg>
 
-                <h1 class="window-title" id="window-title">pagina <span class="window-off">weg</span></h1>
+                <h1 class="window-title" id="window-title">404 <span class="window-off">niet gevonden</span></h1>
 
                 <div class="window-log">
                     <p>$ cd <span id="missing-path-log">./deze-pagina</span></p>
-                    <p class="window-error">bash: cd: geen bestand of map</p>
+                    <p class="window-error">error: geen bestand of map</p>
                     <p>deze pagina bestaat niet (meer). misschien is de link verouderd of verkeerd getypt.</p>
                 </div>
 
-                <a class="window-reload" href="/">~ terug naar home</a>
+                <a class="window-reload" href="/">cd ~ (terug naar home)</a>
 
                 <p class="window-or">of ga meteen naar</p>
                 <nav class="window-links" aria-label="Links">
@@ -73,12 +123,16 @@
                     <a class="window-chip" href="/#over">Over</a>
                     <a class="window-chip" href="/#contact">Contact</a>
                     <a class="window-chip" href="https://blog.errornoslash.be/" target="_blank" rel="noopener">Blog</a>
+                    <a class="window-chip" href="https://github.com/ErrorNoSlash" target="_blank" rel="noopener">GitHub</a>
+                    <a class="window-chip" href="https://gitlab.com/ErrorN0Slash/" target="_blank" rel="noopener">GitLab</a>
+                    <a class="window-chip" href="https://mastodon.social/@slashy" target="_blank" rel="me noopener">Mastodon</a>
+                    <a class="window-chip" href="mailto:dias.stas@pm.me">Mail</a>
                 </nav>
             </div>
 
         </section>
 
-        <p class="window-footer">&copy;2026 - Dias Stas</p>
+        <p class="window-footer">&copy;<span id="year">2026</span> - Dias Stas</p>
 
     </main>
 

@@ -1,4 +1,4 @@
-/*controles my local time in the status window on the contact screen: the time in belgium, so you know if I am awake*/
+/*controls my local time in the status window on the contact screen: the time in belgium, so you know if I am awake*/
 const localTimeField = document.querySelector("#local-time");
 const localTimeZone = "Europe/Brussels";
 const localTickTime = 1000;

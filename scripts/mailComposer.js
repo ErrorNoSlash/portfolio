@@ -1,4 +1,4 @@
-/*controles the mail composer on the contact screen: the command updates while you type the subject,
+/*controls the mail composer on the contact screen: the command updates while you type the subject,
   and sending opens your own mail app with the subject and message already filled in*/
 const mailForm = document.querySelector("#mail-composer");
 const subjectField = mailForm.querySelector("[name='subject']");

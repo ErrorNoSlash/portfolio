@@ -1,4 +1,4 @@
-/*controles the curtain between the home page and the project pages*/
+/*controls the curtain between the home page and the project pages*/
 const pageTransition = document.querySelector("#page-transition");
 const htmlElement = document.documentElement;
 const storageKey = "pageTransition";

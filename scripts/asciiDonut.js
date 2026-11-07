@@ -1,4 +1,4 @@
-/*controles the spinning ascii donut on the landing page: it spins on its own and tilts towards the mouse*/
+/*controls the spinning ascii donut on the landing page: it spins on its own and tilts towards the mouse*/
 const donutElement = document.querySelector("#ascii-art");
 const donutColumns = 60;
 const donutRows = 30;

@@ -1,4 +1,4 @@
-/*controles custom cursor: the dot sits on the pointer, the ring glides after it.
+/*controls custom cursor: the dot sits on the pointer, the ring glides after it.
   One animation loop moves both, timed by the real time between frames, so it feels the same
   on a 60hz laptop, a 144hz monitor or a 4k screen at any windows scale*/
 const cursorDot = document.querySelector("[data-cursor-dot]");

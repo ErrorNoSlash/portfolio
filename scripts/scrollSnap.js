@@ -1,4 +1,4 @@
-/*controles the soft snapping on the one page: when you stop scrolling close to the start of a screen,
+/*controls the soft snapping on the one page: when you stop scrolling close to the start of a screen,
   the page glides the rest of the way so that screen fits the window. It never pulls you back into a screen
   you are reading, and any new scroll, key or touch stops it at once (the same on windows, mac, linux and phones)*/
 const snapScreens = [...document.querySelectorAll(".screen")];

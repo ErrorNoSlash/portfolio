@@ -1,7 +1,8 @@
-/*controles the preloader*/
+/*controls the preloader*/
 const preloader = document.querySelector("#preloader");
 const preloaderFill = document.querySelector("#preloader-fill");
 const preloaderCount = document.querySelector("#preloader-count");
+const preloaderSeenKey = "preloaderSeen";
 
 const minimumTime = 900;
 const maximumTime = 3000;
@@ -15,11 +16,15 @@ window.addEventListener("load", function () {
     isPageLoaded = true;
 })
 
-// the preloader plays once per visit: the tab remembers it (window.name also works when the site is opened from files)
+// the preloader plays once per browser: the tab remembers it for this visit (window.name also works when the site
+// is opened from files), and localStorage remembers it for the next visits
 function rememberPreloader() {
-    window.name = "preloaderSeen";
+    window.name = preloaderSeenKey;
     try {
-        sessionStorage.setItem("preloaderSeen", "true");
+        sessionStorage.setItem(preloaderSeenKey, "true");
+    } catch (error) { }
+    try {
+        localStorage.setItem(preloaderSeenKey, "true");
     } catch (error) { }
 }
 
@@ -49,7 +54,7 @@ function updateProgress() {
     else hidePreloader();
 }
 
-/* skip the preloader when it already played this visit or when arriving from another page, otherwise start counting */
+/* skip the preloader when it already played in this browser or when arriving from another page, otherwise start counting */
 const hasSeenPreloader = document.documentElement.classList.contains("has-loaded");
 
 if (hasSeenPreloader || document.documentElement.classList.contains("is-arriving")) {

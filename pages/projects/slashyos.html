@@ -29,7 +29,7 @@
 
     <!-- page transition and preloader: runs first.
         ?via=curtain (added by pageTransition.js) means we came through the curtain: no preloader, and it leaves the address bar again.
-        back / forward never shows the preloader either. Storage is only a backup, some browsers keep it apart per file -->
+        back / forward and a return visit (localStorage) never show the preloader either. Storage is only a backup, some browsers keep it apart per file -->
     <script>
         try {
             const html = document.documentElement;
@@ -44,6 +44,7 @@
             if (navigation && navigation.type === "back_forward") html.classList.add("has-loaded");
             if (window.name === "preloaderSeen" || sessionStorage.getItem("preloaderSeen")) html.classList.add("has-loaded");
             if (sessionStorage.getItem("pageTransition")) html.classList.add("is-arriving");
+            if (localStorage.getItem("preloaderSeen")) html.classList.add("has-loaded");
         } catch (error) { }
     </script>
 
@@ -65,7 +66,7 @@
         <style>.preloader { display: none; }</style>
     </noscript>
 
-    <!--Unami analytics-->
+    <!--Umami analytics-->
     <script defer src="https://stats.errornoslash.be/script.js" data-website-id="be928998-99b4-4bfb-baf1-b84b52186ba8"></script>
 
     <!-- JS scripts -->
@@ -81,7 +82,7 @@
 
 <body>
 
-    <!-- preloader: only on the first page of a visit (preloader.js) -->
+    <!-- preloader: only the first time in this browser (preloader.js) -->
     <div class="preloader" id="preloader" aria-hidden="true">
         <div class="preloader-frame">
             <div class="preloader-box">
@@ -169,15 +170,15 @@
 
         <!-- the links: cards that press in, like the doors on the landing -->
         <nav class="row doors project-doors" aria-label="Links">
-                <a class="link-row" href="https://gitlab.com/nixos-projects/slashyos" target="_blank" rel="noopener">
-                    <span class="link-number">01</span><span><b class="link-name">Code</b><small class="link-url">gitlab.com/nixos-projects/slashyos</small></span><span class="link-go">GO &nearr;</span>
-                </a>
-                <a class="link-row" href="https://docs.errornoslash.be/slashyos/" target="_blank" rel="noopener">
-                    <span class="link-number">02</span><span><b class="link-name">Docs</b><small class="link-url">docs.errornoslash.be/slashyos</small></span><span class="link-go">GO &nearr;</span>
-                </a>
-                <a class="link-row" href="../../index.html#projecten">
-                    <span class="link-number">03</span><span><b class="link-name">Terug</b><small class="link-url">~/projecten</small></span><span class="link-go">GO &nearr;</span>
-                </a>
+            <a class="link-row" href="https://gitlab.com/nixos-projects/slashyos" target="_blank" rel="noopener">
+                <span class="link-number">01</span><span><b class="link-name">Code</b><small class="link-url">gitlab.com/nixos-projects/slashyos</small></span><span class="link-go">GO &nearr;</span>
+            </a>
+            <a class="link-row" href="https://docs.errornoslash.be/slashyos/" target="_blank" rel="noopener">
+                <span class="link-number">02</span><span><b class="link-name">Docs</b><small class="link-url">docs.errornoslash.be/slashyos</small></span><span class="link-go">GO &nearr;</span>
+            </a>
+            <a class="link-row" href="../../index.html#projecten">
+                <span class="link-number">03</span><span><b class="link-name">Terug</b><small class="link-url">~/projecten</small></span><span class="link-go">GO &nearr;</span>
+            </a>
         </nav>
 
         <footer class="row site-footer">
@@ -217,7 +218,7 @@
                 <a class="icon-link" href="https://gitlab.com/ErrorN0Slash/" target="_blank" rel="noopener" aria-label="GitLab" title="GitLab">
                     <svg viewBox="0 0 256 256" aria-hidden="true"><path d="M230.15,117.1,210.25,41a11.94,11.94,0,0,0-22.79-1.11L169.78,88H86.22L68.54,39.87A11.94,11.94,0,0,0,45.75,41L25.85,117.1a57.19,57.19,0,0,0,22,61l73.27,51.76a11.91,11.91,0,0,0,13.74,0l73.27-51.76A57.19,57.19,0,0,0,230.15,117.1ZM58,57.5,73.13,98.76A8,8,0,0,0,80.64,104h94.72a8,8,0,0,0,7.51-5.24L198,57.5l13.07,50L128,166.21,44.9,107.5ZM40.68,124.11,114.13,176,93.41,190.65,57.09,165A41.06,41.06,0,0,1,40.68,124.11Zm87.32,91-20.73-14.65L128,185.8l20.73,14.64ZM198.91,165l-36.32,25.66L141.87,176l73.45-51.9A41.06,41.06,0,0,1,198.91,165Z"/></svg><span class="icon-label">GitLab</span>
                 </a>
-                <a class="icon-link" href="https://mastodon.social/@slashy" target="_blank" rel="noopener" aria-label="Mastodon" title="Mastodon">
+                <a class="icon-link" href="https://mastodon.social/@slashy" target="_blank" rel="me noopener" aria-label="Mastodon" title="Mastodon">
                     <svg viewBox="0 0 256 256" aria-hidden="true"><path d="M184,32H72A40,40,0,0,0,32,72V192a40,40,0,0,0,40,40h88a8,8,0,0,0,0-16H72a24,24,0,0,1-24-24v-8H184a40,40,0,0,0,40-40V72A40,40,0,0,0,184,32Zm24,112a24,24,0,0,1-24,24H48V72A24,24,0,0,1,72,48H184a24,24,0,0,1,24,24Zm-24-40v32a8,8,0,0,1-16,0V104a16,16,0,0,0-32,0v32a8,8,0,0,1-16,0V104a16,16,0,0,0-32,0v32a8,8,0,0,1-16,0V104a32,32,0,0,1,56-21.13A32,32,0,0,1,184,104Z"/></svg><span class="icon-label">Mastodon</span>
                 </a>
                 <a class="icon-link" href="mailto:dias.stas@pm.me" aria-label="Mail" title="Mail">

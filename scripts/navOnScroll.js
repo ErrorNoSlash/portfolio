@@ -1,4 +1,4 @@
-/*controles the nav while scrolling: the prompt types the command of the screen you are on,
+/*controls the nav while scrolling: the prompt types the command of the screen you are on,
   its pill lights up and a line under the nav fills with how far you scrolled*/
 const navBar = document.querySelector(".nav");
 const navCommand = document.querySelector("#nav-command");

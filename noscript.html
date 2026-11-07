@@ -24,6 +24,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800;900&family=Space+Mono:wght@400;700&display=swap"
         rel="stylesheet">
+
+    <!-- footer year: updates itself when JavaScript runs, otherwise the year written in the footer shows -->
+    <script src="scripts/getYear.js" defer></script>
 </head>
 
 <body>
@@ -113,14 +116,14 @@
                     <a class="window-chip" href="https://blog.errornoslash.be/" target="_blank" rel="noopener">Blog</a>
                     <a class="window-chip" href="https://github.com/ErrorNoSlash" target="_blank" rel="noopener">GitHub</a>
                     <a class="window-chip" href="https://gitlab.com/ErrorN0Slash/" target="_blank" rel="noopener">GitLab</a>
-                    <a class="window-chip" href="https://mastodon.social/@slashy" target="_blank" rel="noopener">Mastodon</a>
+                    <a class="window-chip" href="https://mastodon.social/@slashy" target="_blank" rel="me noopener">Mastodon</a>
                     <a class="window-chip" href="mailto:dias.stas@pm.me">Mail</a>
                 </nav>
             </div>
 
         </section>
 
-        <p class="window-footer">&copy;2026 - Dias Stas</p>
+        <p class="window-footer">&copy;<span id="year">2026</span> - Dias Stas</p>
 
     </main>
 

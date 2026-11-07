@@ -56,7 +56,7 @@ Every project page fits one screen: the story and numbered features on the left,
 - **Link rows** fill with a soft circle on hover
 - **Custom cursor** — a dot with a gliding ring that inverts on light and dark parts; over a link it becomes a filled disc
 - **Possessed pictures** — moving over the portrait or the SlashyOS screenshot turns them into flickering terminal symbols
-- **Curtain** wipes up between the pages, after a short terminal-style preloader
+- **Curtain** wipes up between the pages, after a short terminal-style preloader (shown once per browser, return visits skip it)
 - **Tab title** types and deletes small commands, like a shell prompt
 
 ### ✨ Small details
@@ -80,8 +80,9 @@ Every project page fits one screen: the story and numbered features on the left,
 
 ### 🧩 Extras
 
+- **Verified on Mastodon** — the Mastodon links carry `rel="me"`, so the profile shows this site with a check mark
 - **No JavaScript?** Visitors are sent to `noscript.html`, a single terminal window that keeps every link working
-- **404 page** in the same window style, showing the path you tried
+- **404 page** — a missing address gets a terminal window with the path that was typed, `geen bestand of map` and every link
 - **Link preview** — Open Graph and Twitter tags with a 1200×630 image
 - **Footer year** updates itself
 
@@ -135,7 +136,7 @@ The main colours, the same as the contact page:
 ```
 .
 ├── index.html          # the one page: landing, projecten, over and contact
-├── 404.html            # page not found (paths start at / so it works on any url)
+├── 404.html            # shown by GitHub Pages for a missing address (paths start at / so it works on any url)
 ├── noscript.html       # shown when JavaScript is turned off
 ├── pages/projects/     # one page per project
 ├── CNAME               # custom domain for GitHub Pages
@@ -178,14 +179,14 @@ The main colours, the same as the contact page:
     ├── cardSpotlight.js  # spotlight on the pass
     ├── pictureSymbols.js # possessed pictures (portrait, SlashyOS screenshot)
     ├── sitePreview.js    # live preview on the personal-website page
-    └── notFound.js       # shows the missing path on the 404 page
+    └── notFound.js       # shows the missing address on 404.html
 ```
 
 </details>
 
-## License
+## Credits
 
-MIT. Icons are from [Phosphor Icons](https://phosphoricons.com) (MIT).
+Icons are from [Phosphor Icons](https://phosphoricons.com).
 
 ---
 

@@ -62,13 +62,6 @@
         letter-spacing: -0.04em;
     }
 
-    /* the big 404 above the title */
-    .window-code {
-        margin: 0;
-        font: 900 clamp(5rem, 26vw, 9rem) / 0.85 var(--font-display);
-        letter-spacing: -0.06em;
-    }
-
     .window-off {
         display: inline-block;
         padding: 0 0.22em 0.08em;
@@ -114,11 +107,11 @@
         font-size: 0.8125rem;
         line-height: 1.6;
 
-        p {
+        & p {
             margin: 0;
         }
 
-        p+p {
+        & p+p {
             margin-top: 0.375rem;
         }
     }
@@ -186,6 +179,64 @@
     margin: 0;
     font-size: 0.75rem;
     opacity: 0.7;
+}
+
+/* 404.html: the same window, with the address that was not found in the prompt and the log,
+   a smaller pill in the title and eight chips in two even rows */
+.not-found-page {
+
+    /* a long address is cut off with ... instead of pushing the badge out */
+    .window-prompt {
+        display: flex;
+        align-items: center;
+
+        .caret {
+            flex: none;
+        }
+    }
+
+    .window-path {
+        min-width: 0;
+        margin-left: 0.6em;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .window-title {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 0.1em 0.25em;
+    }
+
+    .window-off {
+        font-size: 0.6em;
+    }
+
+    /* a long address in the log breaks onto the next line */
+    .window-log {
+        overflow-wrap: anywhere;
+    }
+
+    /* on phones they wrap as they fit (see the bottom of this file) */
+    .window-links {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        flex-wrap: wrap;
+    }
+
+    .window-chip {
+        min-width: auto;
+        padding: 0 0.625rem 0.125rem;
+        font: 700 0.8125rem / 1 var(--font-mono);
+    }
+}
+
+/* phones: four chips of the 404 page do not fit next to each other, so they wrap and fill each row */
+@media (max-width: 440px) {
+    .not-found-page .window-links {
+        display: flex;
+    }
 }
 
 @media (max-width: 360px) {

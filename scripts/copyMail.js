@@ -1,4 +1,4 @@
-/*controles the copy button next to the mail address*/
+/*controls the copy button next to the mail address*/
 const copyButton = document.querySelector("#copy-mail");
 const copyLabel = copyButton.textContent;
 const copyResetTime = 1600;

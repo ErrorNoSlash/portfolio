@@ -29,7 +29,7 @@
 
     <!-- page transition and preloader: runs first.
          ?via=curtain (added by pageTransition.js) means we came through the curtain: no preloader, and it leaves the address bar again.
-         back / forward never shows the preloader either. Storage is only a backup, some browsers keep it apart per file -->
+         back / forward and a return visit (localStorage) never show the preloader either. Storage is only a backup, some browsers keep it apart per file -->
     <script>
         try {
             const html = document.documentElement;
@@ -44,6 +44,7 @@
             if (navigation && navigation.type === "back_forward") html.classList.add("has-loaded");
             if (window.name === "preloaderSeen" || sessionStorage.getItem("preloaderSeen")) html.classList.add("has-loaded");
             if (sessionStorage.getItem("pageTransition")) html.classList.add("is-arriving");
+            if (localStorage.getItem("preloaderSeen")) html.classList.add("has-loaded");
         } catch (error) { }
     </script>
 
@@ -65,7 +66,7 @@
         <style>.preloader { display: none; }</style>
     </noscript>
 
-    <!--Unami analytics-->
+    <!--Umami analytics-->
     <script defer src="https://stats.errornoslash.be/script.js" data-website-id="be928998-99b4-4bfb-baf1-b84b52186ba8"></script>
 
     <!-- JS scripts -->
@@ -91,7 +92,7 @@
 
 <body>
 
-    <!-- preloader: only on the first page of a visit (preloader.js) -->
+    <!-- preloader: only the first time in this browser (preloader.js) -->
     <div class="preloader" id="preloader" aria-hidden="true">
         <div class="preloader-frame">
             <div class="preloader-box">
@@ -196,48 +197,48 @@
             </div>
             <!-- the projects as three folders side by side, they lift when you point at them -->
             <nav class="row project-cards" aria-label="Projecten">
-            <a class="project-card" href="pages/projects/personal-website.html">
-                <span class="project-card-tab"><span class="caption">type /</span><b>website</b></span>
-                <span class="project-card-sheet">
-                    <span class="project-card-visual" aria-hidden="true"><span class="thumb thumb-site"><span class="thumb-site-nav">ds/<span>~$ ./portfolio</span></span><span class="thumb-site-title"><span class="thumb-site-echo thumb-site-echo-far"><span style="--letter: 0">P</span><span style="--letter: 1">O</span><span style="--letter: 2">R</span><span style="--letter: 3">T</span><span style="--letter: 4">F</span><span style="--letter: 5">O</span><span style="--letter: 6">L</span><span style="--letter: 7">I</span><span style="--letter: 8">O</span></span><span class="thumb-site-echo thumb-site-echo-near"><span style="--letter: 0">P</span><span style="--letter: 1">O</span><span style="--letter: 2">R</span><span style="--letter: 3">T</span><span style="--letter: 4">F</span><span style="--letter: 5">O</span><span style="--letter: 6">L</span><span style="--letter: 7">I</span><span style="--letter: 8">O</span></span><b class="thumb-site-word"><span style="--letter: 0">P</span><span style="--letter: 1">O</span><span style="--letter: 2">R</span><span style="--letter: 3">T</span><span style="--letter: 4">F</span><span style="--letter: 5">O</span><span style="--letter: 6">L</span><span style="--letter: 7">I</span><span style="--letter: 8">O</span></b></span><span class="thumb-site-intro"><span class="caption">{ whoami }</span><b>hey, ik ben dias stas</b><span>front-end developer — ik bouw <mark>websites</mark>, mobiele apps &amp; software.</span></span><span class="thumb-site-doors"><span>projecten</span><span>over</span><span>contact</span></span></span></span>
-                    <span class="project-card-label"><b class="project-card-name">personal-website/</b><span class="link-go">GO &nearr;</span></span>
-                    <span class="project-card-body">
-                        <span class="project-card-info">
-                            <span class="chips"><span>html</span><span>css</span><span>js</span></span>
-                            <span class="project-card-about">Deze site. Vanilla HTML, CSS en JavaScript met een live gerenderde ASCII-donut.</span>
+                <a class="project-card" href="pages/projects/personal-website.html">
+                    <span class="project-card-tab"><span class="caption">type /</span><b>website</b></span>
+                    <span class="project-card-sheet">
+                        <span class="project-card-visual" aria-hidden="true"><span class="thumb thumb-site"><span class="thumb-site-nav">ds/<span>~$ ./portfolio</span></span><span class="thumb-site-title"><span class="thumb-site-echo thumb-site-echo-far"><span style="--letter: 0">P</span><span style="--letter: 1">O</span><span style="--letter: 2">R</span><span style="--letter: 3">T</span><span style="--letter: 4">F</span><span style="--letter: 5">O</span><span style="--letter: 6">L</span><span style="--letter: 7">I</span><span style="--letter: 8">O</span></span><span class="thumb-site-echo thumb-site-echo-near"><span style="--letter: 0">P</span><span style="--letter: 1">O</span><span style="--letter: 2">R</span><span style="--letter: 3">T</span><span style="--letter: 4">F</span><span style="--letter: 5">O</span><span style="--letter: 6">L</span><span style="--letter: 7">I</span><span style="--letter: 8">O</span></span><b class="thumb-site-word"><span style="--letter: 0">P</span><span style="--letter: 1">O</span><span style="--letter: 2">R</span><span style="--letter: 3">T</span><span style="--letter: 4">F</span><span style="--letter: 5">O</span><span style="--letter: 6">L</span><span style="--letter: 7">I</span><span style="--letter: 8">O</span></b></span><span class="thumb-site-intro"><span class="caption">{ whoami }</span><b>hey, ik ben dias stas</b><span>front-end developer — ik bouw <mark>websites</mark>, mobiele apps &amp; software.</span></span><span class="thumb-site-doors"><span>projecten</span><span>over</span><span>contact</span></span></span></span>
+                        <span class="project-card-label"><b class="project-card-name">personal-website/</b><span class="link-go">GO &nearr;</span></span>
+                        <span class="project-card-body">
+                            <span class="project-card-info">
+                                <span class="chips"><span>html</span><span>css</span><span>js</span></span>
+                                <span class="project-card-about">Deze site. Vanilla HTML, CSS en JavaScript met een live gerenderde ASCII-donut.</span>
+                            </span>
+                            <span class="project-card-number" aria-hidden="true">01</span>
                         </span>
-                        <span class="project-card-number" aria-hidden="true">01</span>
                     </span>
-                </span>
-            </a>
-            <a class="project-card" href="pages/projects/slashyos.html">
-                <span class="project-card-tab"><span class="caption">type /</span><b>besturingssysteem</b></span>
-                <span class="project-card-sheet">
-                    <span class="project-card-visual" aria-hidden="true"><span class="thumb thumb-shot"><img src="images/slashyos.jpg" alt="" width="1600" height="1066" loading="lazy" decoding="async"></span></span>
-                    <span class="project-card-label"><b class="project-card-name">SlashyOS/</b><span class="link-go">GO &nearr;</span></span>
-                    <span class="project-card-body">
-                        <span class="project-card-info">
-                            <span class="chips"><span>nix</span><span>linux</span></span>
-                            <span class="project-card-about">SlashyOS is een van mijn grotere projecten. Dit is het systeem dat ik gebruik op mijn laptop en desktop.</span>
+                </a>
+                <a class="project-card" href="pages/projects/slashyos.html">
+                    <span class="project-card-tab"><span class="caption">type /</span><b>besturingssysteem</b></span>
+                    <span class="project-card-sheet">
+                        <span class="project-card-visual" aria-hidden="true"><span class="thumb thumb-shot"><img src="images/slashyos.jpg" alt="" width="1600" height="1066" loading="lazy" decoding="async"></span></span>
+                        <span class="project-card-label"><b class="project-card-name">SlashyOS/</b><span class="link-go">GO &nearr;</span></span>
+                        <span class="project-card-body">
+                            <span class="project-card-info">
+                                <span class="chips"><span>nix</span><span>linux</span></span>
+                                <span class="project-card-about">SlashyOS is een van mijn grotere projecten. Dit is het systeem dat ik gebruik op mijn laptop en desktop.</span>
+                            </span>
+                            <span class="project-card-number" aria-hidden="true">02</span>
                         </span>
-                        <span class="project-card-number" aria-hidden="true">02</span>
                     </span>
-                </span>
-            </a>
-            <a class="project-card" href="pages/projects/blog.html">
-                <span class="project-card-tab"><span class="caption">type /</span><b>blog</b></span>
-                <span class="project-card-sheet">
-                    <span class="project-card-visual" aria-hidden="true"><span class="thumb thumb-page"><img src="images/blog.jpg" alt="" width="870" height="1114" loading="lazy" decoding="async"></span></span>
-                    <span class="project-card-label"><b class="project-card-name">blog/</b><span class="link-go">GO &nearr;</span></span>
-                    <span class="project-card-body">
-                        <span class="project-card-info">
-                            <span class="chips"><span>zola</span><span>rust</span></span>
-                            <span class="project-card-about">Mijn blog is ook een van mijn projecten. De blog maakt gebruik van zola &amp; pagescms voor een gui voor het maken van posts.</span>
+                </a>
+                <a class="project-card" href="pages/projects/blog.html">
+                    <span class="project-card-tab"><span class="caption">type /</span><b>blog</b></span>
+                    <span class="project-card-sheet">
+                        <span class="project-card-visual" aria-hidden="true"><span class="thumb thumb-page"><img src="images/blog.jpg" alt="" width="870" height="1114" loading="lazy" decoding="async"></span></span>
+                        <span class="project-card-label"><b class="project-card-name">blog/</b><span class="link-go">GO &nearr;</span></span>
+                        <span class="project-card-body">
+                            <span class="project-card-info">
+                                <span class="chips"><span>zola</span><span>rust</span></span>
+                                <span class="project-card-about">Mijn blog is ook een van mijn projecten. De blog maakt gebruik van zola &amp; pagescms voor een gui voor het maken van posts.</span>
+                            </span>
+                            <span class="project-card-number" aria-hidden="true">03</span>
                         </span>
-                        <span class="project-card-number" aria-hidden="true">03</span>
                     </span>
-                </span>
-            </a>
+                </a>
             </nav>
 
             <div class="row marquee is-inverted" aria-hidden="true"><span>HTML · CSS · JS * NIX · LINUX * ZOLA · RUST * </span></div>
@@ -326,7 +327,7 @@
                             <span class="social-text"><b>GitLab</b><small>gitlab.com/ErrorN0Slash</small></span>
                             <span class="social-arrow" aria-hidden="true">&nearr;</span>
                         </a>
-                        <a class="social-tile" href="https://mastodon.social/@slashy" target="_blank" rel="noopener">
+                        <a class="social-tile" href="https://mastodon.social/@slashy" target="_blank" rel="me noopener">
                             <svg viewBox="0 0 256 256" aria-hidden="true"><path d="M184,32H72A40,40,0,0,0,32,72V192a40,40,0,0,0,40,40h88a8,8,0,0,0,0-16H72a24,24,0,0,1-24-24v-8H184a40,40,0,0,0,40-40V72A40,40,0,0,0,184,32Zm24,112a24,24,0,0,1-24,24H48V72A24,24,0,0,1,72,48H184a24,24,0,0,1,24,24Zm-24-40v32a8,8,0,0,1-16,0V104a16,16,0,0,0-32,0v32a8,8,0,0,1-16,0V104a16,16,0,0,0-32,0v32a8,8,0,0,1-16,0V104a32,32,0,0,1,56-21.13A32,32,0,0,1,184,104Z"/></svg>
                             <span class="social-text"><b>Mastodon</b><small>@slashy@mastodon.social</small></span>
                             <span class="social-arrow" aria-hidden="true">&nearr;</span>
@@ -412,7 +413,7 @@
                 <a class="icon-link" href="https://gitlab.com/ErrorN0Slash/" target="_blank" rel="noopener" aria-label="GitLab" title="GitLab">
                     <svg viewBox="0 0 256 256" aria-hidden="true"><path d="M230.15,117.1,210.25,41a11.94,11.94,0,0,0-22.79-1.11L169.78,88H86.22L68.54,39.87A11.94,11.94,0,0,0,45.75,41L25.85,117.1a57.19,57.19,0,0,0,22,61l73.27,51.76a11.91,11.91,0,0,0,13.74,0l73.27-51.76A57.19,57.19,0,0,0,230.15,117.1ZM58,57.5,73.13,98.76A8,8,0,0,0,80.64,104h94.72a8,8,0,0,0,7.51-5.24L198,57.5l13.07,50L128,166.21,44.9,107.5ZM40.68,124.11,114.13,176,93.41,190.65,57.09,165A41.06,41.06,0,0,1,40.68,124.11Zm87.32,91-20.73-14.65L128,185.8l20.73,14.64ZM198.91,165l-36.32,25.66L141.87,176l73.45-51.9A41.06,41.06,0,0,1,198.91,165Z"/></svg><span class="icon-label">GitLab</span>
                 </a>
-                <a class="icon-link" href="https://mastodon.social/@slashy" target="_blank" rel="noopener" aria-label="Mastodon" title="Mastodon">
+                <a class="icon-link" href="https://mastodon.social/@slashy" target="_blank" rel="me noopener" aria-label="Mastodon" title="Mastodon">
                     <svg viewBox="0 0 256 256" aria-hidden="true"><path d="M184,32H72A40,40,0,0,0,32,72V192a40,40,0,0,0,40,40h88a8,8,0,0,0,0-16H72a24,24,0,0,1-24-24v-8H184a40,40,0,0,0,40-40V72A40,40,0,0,0,184,32Zm24,112a24,24,0,0,1-24,24H48V72A24,24,0,0,1,72,48H184a24,24,0,0,1,24,24Zm-24-40v32a8,8,0,0,1-16,0V104a16,16,0,0,0-32,0v32a8,8,0,0,1-16,0V104a16,16,0,0,0-32,0v32a8,8,0,0,1-16,0V104a32,32,0,0,1,56-21.13A32,32,0,0,1,184,104Z"/></svg><span class="icon-label">Mastodon</span>
                 </a>
                 <a class="icon-link" href="mailto:dias.stas@pm.me" aria-label="Mail" title="Mail">
@@ -458,7 +459,7 @@
                 <a class="icon-link" href="https://gitlab.com/ErrorN0Slash/" target="_blank" rel="noopener" aria-label="GitLab" title="GitLab">
                     <svg viewBox="0 0 256 256" aria-hidden="true"><path d="M230.15,117.1,210.25,41a11.94,11.94,0,0,0-22.79-1.11L169.78,88H86.22L68.54,39.87A11.94,11.94,0,0,0,45.75,41L25.85,117.1a57.19,57.19,0,0,0,22,61l73.27,51.76a11.91,11.91,0,0,0,13.74,0l73.27-51.76A57.19,57.19,0,0,0,230.15,117.1ZM58,57.5,73.13,98.76A8,8,0,0,0,80.64,104h94.72a8,8,0,0,0,7.51-5.24L198,57.5l13.07,50L128,166.21,44.9,107.5ZM40.68,124.11,114.13,176,93.41,190.65,57.09,165A41.06,41.06,0,0,1,40.68,124.11Zm87.32,91-20.73-14.65L128,185.8l20.73,14.64ZM198.91,165l-36.32,25.66L141.87,176l73.45-51.9A41.06,41.06,0,0,1,198.91,165Z"/></svg><span class="icon-label">GitLab</span>
                 </a>
-                <a class="icon-link" href="https://mastodon.social/@slashy" target="_blank" rel="noopener" aria-label="Mastodon" title="Mastodon">
+                <a class="icon-link" href="https://mastodon.social/@slashy" target="_blank" rel="me noopener" aria-label="Mastodon" title="Mastodon">
                     <svg viewBox="0 0 256 256" aria-hidden="true"><path d="M184,32H72A40,40,0,0,0,32,72V192a40,40,0,0,0,40,40h88a8,8,0,0,0,0-16H72a24,24,0,0,1-24-24v-8H184a40,40,0,0,0,40-40V72A40,40,0,0,0,184,32Zm24,112a24,24,0,0,1-24,24H48V72A24,24,0,0,1,72,48H184a24,24,0,0,1,24,24Zm-24-40v32a8,8,0,0,1-16,0V104a16,16,0,0,0-32,0v32a8,8,0,0,1-16,0V104a16,16,0,0,0-32,0v32a8,8,0,0,1-16,0V104a32,32,0,0,1,56-21.13A32,32,0,0,1,184,104Z"/></svg><span class="icon-label">Mastodon</span>
                 </a>
                 <a class="icon-link" href="mailto:dias.stas@pm.me" aria-label="Mail" title="Mail">

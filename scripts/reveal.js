@@ -1,4 +1,4 @@
-/*controles the reveal animations: rows, cells, tiles and links fade and rise in, one after the other, when they come into view.
+/*controls the reveal animations: rows, cells, tiles and links fade and rise in, one after the other, when they come into view.
   They play on every load (also a reload, and when the browser brings the page back from its cache)*/
 const revealTargets = [
     ".section-head > *",

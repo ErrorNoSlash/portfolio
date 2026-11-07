@@ -1,4 +1,4 @@
-/*controles the live preview on the personal-website page: the real home page in a small window, drawn at desktop size
+/*controls the live preview on the personal-website page: the real home page in a small window, drawn at desktop size
   and scaled down to fit. The pills jump it to a screen, and on its own it goes through the screens one by one*/
 const previewWindow = document.querySelector(".site-preview-window");
 const previewFrame = previewWindow.querySelector("iframe");
