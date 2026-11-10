@@ -223,10 +223,17 @@ a {
     cursor: pointer;
     transition: 0.3s;
 
-    &:hover,
+    /* hover only where there is a mouse, so a tap beside the button does not leave it filled on a phone */
     &.is-active {
         background: var(--foreground);
         color: var(--background);
+    }
+
+    @media (hover: hover) and (pointer: fine) {
+        &:hover {
+            background: var(--foreground);
+            color: var(--background);
+        }
     }
 }
 
