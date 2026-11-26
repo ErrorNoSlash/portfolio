@@ -1660,48 +1660,34 @@ a {
         letter-spacing: -0.04em;
     }
 
-    /* the marked word: selected, like in the editor this page looks like. the inverted block has a
-       handle at each end (a thin line with a round knob, the way an editor or a phone shows a
-       selection), and the selection sweeps over the word when it comes in and when you point at it */
+    /* the marked word: a thick bar under it with a hard shadow, like the numbered blocks on the
+       project pages. the bar sits under the word in its own line's space, so it never touches the line
+       above or the text below, whatever the size. it draws in from the left when the line comes in and
+       when you point at it */
     & mark {
-        --handle: max(0.125rem, 0.035em);
-        --knob: max(0.625rem, 0.16em);
         position: relative;
-        padding: 0 0.12em;
-        background: linear-gradient(var(--foreground), var(--foreground)) 0 0 / 100% 100% no-repeat;
-        color: var(--background);
+        background: none;
+        color: inherit;
 
-        /* the handles: the knob on top of the first, under the last */
-        &::before,
         &::after {
             content: "";
             position: absolute;
-            top: calc(var(--knob) * -0.75);
-            bottom: calc(var(--knob) * -0.75);
-            width: var(--knob);
-            background:
-                radial-gradient(circle closest-side, var(--foreground) 85%, transparent) 50% var(--knob-at) / var(--knob) var(--knob) no-repeat,
-                linear-gradient(var(--foreground), var(--foreground)) 50% 50% / var(--handle) calc(100% - var(--knob)) no-repeat;
-        }
-
-        &::before {
-            --knob-at: 0;
-            left: calc(var(--knob) / -2);
-        }
-
-        &::after {
-            --knob-at: 100%;
-            right: calc(var(--knob) / -2);
+            left: 0.02em;
+            right: 0.02em;
+            bottom: 0;
+            height: max(0.25rem, 0.09em);
+            background: var(--foreground);
+            box-shadow: 0.06em 0.06em 0 color-mix(in srgb, var(--foreground) 35%, transparent);
+            transform-origin: left;
         }
     }
 
-    /* selecting: the block sweeps over the word, the letters turn as it passes */
-    .about-lead:hover mark,
-    .about-lead.is-revealed mark {
-        animation: select 0.45s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+    .about-lead:hover mark::after,
+    .about-lead.is-revealed mark::after {
+        animation: underline 0.45s cubic-bezier(0.2, 0.8, 0.2, 1) both;
     }
 
-    .about-lead.is-revealed mark {
+    .about-lead.is-revealed mark::after {
         animation-delay: calc(var(--reveal-i, 0) * 70ms + 0.25s);
     }
 
@@ -2881,11 +2867,10 @@ body.cursor-on-link {
     }
 }
 
-/* select: a selection sweeping over a word from left to right */
-@keyframes select {
+/* underline: a bar drawing itself under a word from left to right */
+@keyframes underline {
     from {
-        background-size: 0 100%;
-        color: var(--foreground);
+        transform: scaleX(0);
     }
 }
 

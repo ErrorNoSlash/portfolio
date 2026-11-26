@@ -3,6 +3,10 @@
 
 <head>
     <meta charset="UTF-8">
+    <!-- security: only load scripts, styles, fonts and pictures from this site and the few places named here,
+         always over https; links to other sites only tell them which site you came from -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://stats.errornoslash.be; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://stats.errornoslash.be; frame-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self' mailto:; upgrade-insecure-requests">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Dias Stas - 404</title>
     <meta name="description" content="Deze pagina bestaat niet. Alle links naar Dias Stas staan hier.">
@@ -25,6 +29,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800;900&family=Space+Mono:wght@400;700&display=swap"
         rel="stylesheet">
+
+    <!-- runs first: sends a plain http visit to https (firstPaint.js) -->
+    <script src="/scripts/firstPaint.js"></script>
 
     <!--Umami analytics-->
     <script defer src="https://stats.errornoslash.be/script.js" data-website-id="be928998-99b4-4bfb-baf1-b84b52186ba8"></script>

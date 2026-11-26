@@ -3,6 +3,10 @@
 
 <head>
     <meta charset="UTF-8">
+    <!-- security: only load scripts, styles, fonts and pictures from this site and the few places named here,
+         always over https; links to other sites only tell them which site you came from -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://stats.errornoslash.be; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://stats.errornoslash.be; frame-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self' mailto:; upgrade-insecure-requests">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>dias@stas:~/projecten/blog</title>
     <meta name="description" content="Mijn blog — statisch gegenereerd met Zola, live op blog.errornoslash.be.">
@@ -27,26 +31,8 @@
     <meta name="twitter:description" content="Mijn blog — statisch gegenereerd met Zola, live op blog.errornoslash.be.">
     <meta name="twitter:image" content="https://hello.errornoslash.be/images/og-image.png">
 
-    <!-- page transition and preloader: runs first.
-        ?via=curtain (added by pageTransition.js) means we came through the curtain: no preloader, and it leaves the address bar again.
-        back / forward and a return visit (localStorage) never show the preloader either. Storage is only a backup, some browsers keep it apart per file -->
-    <script>
-        try {
-            const html = document.documentElement;
-            const pageUrl = new URL(location.href);
-            const navigation = performance.getEntriesByType("navigation")[0];
-
-            if (pageUrl.searchParams.get("via") === "curtain") {
-                html.classList.add("is-arriving");
-                pageUrl.searchParams.delete("via");
-                history.replaceState(history.state, "", pageUrl.pathname + pageUrl.search + pageUrl.hash);
-            }
-            if (navigation && navigation.type === "back_forward") html.classList.add("has-loaded");
-            if (window.name === "preloaderSeen" || sessionStorage.getItem("preloaderSeen")) html.classList.add("has-loaded");
-            if (sessionStorage.getItem("pageTransition")) html.classList.add("is-arriving");
-            if (localStorage.getItem("preloaderSeen")) html.classList.add("has-loaded");
-        } catch (error) { }
-    </script>
+    <!-- runs first, before the page is drawn: https, and whether to show the preloader or the curtain (firstPaint.js) -->
+    <script src="../../scripts/firstPaint.js"></script>
 
     <link rel="icon" href="../../favicon.ico" sizes="48x48">
     <link rel="icon" href="../../images/favicon.svg" type="image/svg+xml">
