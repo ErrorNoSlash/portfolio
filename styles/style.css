@@ -2050,22 +2050,10 @@ a {
         font-weight: 700;
     }
 
-    /* open for projects, with a dot that pulses */
+    /* open for projects: the headline of the status */
     .status-open {
-        display: flex;
-        align-items: center;
-        gap: 0.625rem;
         font: 800 clamp(1.125rem, min(1.7vw, 3vh), 1.75rem) / 1.15 var(--font-display);
         letter-spacing: -0.01em;
-    }
-
-    .status-dot {
-        flex: none;
-        width: 0.75rem;
-        aspect-ratio: 1;
-        border-radius: 50%;
-        background: var(--foreground);
-        animation: blink 1.4s infinite;
     }
 
     .status-window-hint {
