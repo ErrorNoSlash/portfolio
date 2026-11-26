@@ -387,6 +387,12 @@ a {
         color: var(--background);
         transform: rotate(-2deg);
     }
+
+    /* the stack: a quiet footnote under the sentence, a little space above it so it reads as its own thing */
+    .chips {
+        margin-top: 0.375rem;
+        opacity: 0.65;
+    }
 }
 
 /* graph paper: faint lines every 1.5rem, behind the cards on the landing and the windows of the project pages */
@@ -469,25 +475,28 @@ a {
     gap: clamp(0.875rem, 2vw, 1.75rem);
     padding: clamp(0.875rem, 2.2vh, 1.5rem) calc(clamp(0.875rem, 2vw, 1.75rem) + 0.375rem) calc(clamp(0.875rem, 2.2vh, 1.5rem) + 0.375rem) clamp(0.875rem, 2vw, 1.75rem);
 
+    /* quiet at rest (thin line, no shadow) so the title and the intro stay the loudest things on the screen;
+       pointing at a door makes it loud: it lifts onto a hard shadow and fills in */
     .link-row {
         grid-template-columns: minmax(0, 1fr) auto;
         grid-template-rows: auto 1fr;
         align-items: end;
         min-height: clamp(6.5rem, 15vh, 10rem);
-        border: 0.125rem solid var(--foreground);
+        border: var(--line-width) solid var(--line-color);
         border-radius: 1rem;
-        box-shadow: 0.375rem 0.375rem 0 var(--foreground);
-        transition: color var(--fill-time) var(--fill-ease), transform 0.2s, box-shadow 0.2s;
+        transition: color var(--fill-time) var(--fill-ease), transform 0.2s, box-shadow 0.2s, border-color 0.2s;
 
         &:last-child {
-            border-bottom: 0.125rem solid var(--foreground);
+            border-bottom: var(--line-width) solid var(--line-color);
         }
 
-        /* pressed: the card moves onto its shadow */
+        /* the shadow is grey, not the text color: the card fills with the text color, so a shadow
+           in that same color would melt into it (white on white in dark mode) */
         &:hover,
         &:focus-visible {
-            transform: translate(0.375rem, 0.375rem);
-            box-shadow: 0 0 0 var(--foreground);
+            border-color: var(--foreground);
+            transform: translate(-0.25rem, -0.25rem);
+            box-shadow: 0.25rem 0.25rem 0 var(--line-color);
         }
 
         /* the number on top, the name and the GO button at the bottom */
@@ -499,7 +508,16 @@ a {
 
         .link-name {
             display: block;
-            font-size: clamp(1.375rem, min(2.5vw, 4.5vh), 2.75rem);
+            font-size: clamp(1.25rem, min(1.9vw, 3.4vh), 2.125rem);
+        }
+
+        /* GO only outlined until you point at the door */
+        .link-go {
+            padding: 0.1875rem 1rem;
+            border: var(--line-width) solid currentColor;
+            background: none;
+            color: inherit;
+            font-size: 1rem;
         }
 
         /* the address on one line under the name */
@@ -531,6 +549,8 @@ a {
     min-width: 0;
     min-height: 0;
     transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+    /* drawn once on its own layer, so lifting it on hover is only a move */
+    will-change: transform;
 
     &:hover,
     &:focus-visible {
@@ -650,13 +670,13 @@ a {
         min-width: 0;
     }
 
-    /* the story stops after three lines, the project page tells the rest */
+    /* the story stops after two lines, so the three folders line up; the project page tells the rest */
     .project-card-about {
         display: -webkit-box;
         overflow: hidden;
         -webkit-box-orient: vertical;
-        -webkit-line-clamp: 3;
-        line-clamp: 3;
+        -webkit-line-clamp: 2;
+        line-clamp: 2;
         font-size: 0.8125rem;
         line-height: 1.5;
         opacity: 0.8;
@@ -667,14 +687,16 @@ a {
         flex: none;
         margin-bottom: -0.12em;
         color: transparent;
-        -webkit-text-stroke: 0.09375rem var(--foreground);
-        font: 900 clamp(3rem, min(5.5vw, 9vh), 6.5rem) / 0.8 var(--font-display);
+        -webkit-text-stroke: 0.0625rem var(--foreground);
+        font: 900 clamp(2.25rem, min(4vw, 7vh), 4.5rem) / 0.8 var(--font-display);
         letter-spacing: -0.05em;
-        transition: color 0.3s;
+        opacity: 0.35;
+        transition: color 0.3s, opacity 0.3s;
     }
 
     &:is(:hover, :focus-visible) .project-card-number {
         color: var(--foreground);
+        opacity: 1;
     }
 }
 
@@ -684,6 +706,7 @@ a {
     inset: 0;
     display: block;
     transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+    will-change: transform;
 }
 
 /* pointing at a project zooms its picture in a little */
@@ -813,21 +836,25 @@ a {
 }
 
 /* slashyos: the whole screenshot, on a blurred and darker copy of itself that fills the rest of the folder.
-   grey until you point at the project */
+   grey until you point at the project: a grey copy is drawn once, the colour copy on top only fades in
+   (animating the filter itself redrew the big screenshot on every frame, which lagged on windows) */
 .thumb-shot {
     display: grid;
     place-items: center;
     padding: 1rem;
     overflow: hidden;
-    filter: grayscale(1) contrast(1.15);
-    transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1), filter 0.6s;
 
+    /* a tiny copy that is already blurred and darker, stretched out: it looks soft and costs nothing to draw */
     &::before {
         content: "";
         position: absolute;
         inset: 0;
-        /* a tiny copy that is already blurred and darker, stretched out: it looks soft and costs nothing to draw */
         background: url("../images/slashyos-blur.jpg") center / cover;
+        filter: grayscale(1) contrast(1.15);
+    }
+
+    &>img {
+        filter: grayscale(1) contrast(1.15);
     }
 
     & img {
@@ -840,26 +867,46 @@ a {
         border: var(--line-width) solid var(--line-color);
         border-radius: 0.5rem;
     }
+
+    /* the same picture in colour, on top, hidden until you point at the project */
+    .thumb-shot-colour {
+        position: absolute;
+        inset: 0;
+        display: grid;
+        place-items: center;
+        padding: 1rem;
+        background: url("../images/slashyos-blur.jpg") center / cover;
+        opacity: 0;
+        transition: opacity 0.6s;
+        will-change: opacity;
+    }
 }
 
 /* pointing at the project brings the colour back */
-.project-card:is(:hover, :focus-visible) .thumb-shot {
-    filter: none;
+.project-card:is(:hover, :focus-visible) .thumb-shot-colour {
+    opacity: 1;
 }
 
-/* blog: a screenshot of the home page of the blog, it scrolls down slowly when you point at the project */
-.thumb-page img {
-    display: block;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: 50% 0%;
-    transition: object-position 2.4s ease-in-out;
+/* blog: a screenshot of the home page of the blog, it scrolls down slowly when you point at the project.
+   it moves with transform (the graphics card slides it), not object-position (which redrew it on every frame) */
+.thumb-page {
+    container-type: size;
+    overflow: hidden;
+
+    & img {
+        display: block;
+        width: 100%;
+        height: auto;
+        min-height: 100cqh;
+        object-fit: cover;
+        object-position: 50% 0%;
+        transition: transform 2.4s ease-in-out;
+    }
 }
 
 /* pointing at the project scrolls the screenshot of the blog down to its footer */
 .project-card:is(:hover, :focus-visible) .thumb-page img {
-    object-position: 50% 100%;
+    transform: translateY(min(0px, calc(100cqh - 100%)));
 }
 
 /* project page: one screen, the body takes the height between the title and the link cards */
@@ -1078,19 +1125,29 @@ a {
     opacity: 0;
 }
 
-/* slashyos: the screenshot, grey until you point at it, with the possessed symbols on top */
+/* slashyos: the screenshot, grey until you point at it, with the possessed symbols on top.
+   the grey copy is drawn once and a colour copy fades in over it (animating the filter redrew the whole picture on every frame) */
 .project-screenshot img {
     display: block;
     width: 100%;
     height: 100%;
     object-fit: cover;
     filter: grayscale(1) contrast(1.15);
-    transition: filter 0.6s;
+}
+
+/* the same picture in colour, on top, hidden until you point at the screenshot */
+.project-screenshot .project-screenshot-colour {
+    position: absolute;
+    inset: 0;
+    filter: none;
+    opacity: 0;
+    transition: opacity 0.6s;
+    will-change: opacity;
 }
 
 /* pointing at the screenshot brings its colour back */
-.project-screenshot:hover img {
-    filter: none;
+.project-screenshot:hover .project-screenshot-colour {
+    opacity: 1;
 }
 
 /* blog: a markdown file on top, the page zola makes from it below */
@@ -1245,12 +1302,16 @@ a {
     &::after {
         content: "";
         position: absolute;
-        inset: 0;
+        top: 50%;
+        left: 50%;
+        width: 150%;
+        min-height: 150%;
+        aspect-ratio: 1;
+        border-radius: 50%;
         z-index: -1;
         background: var(--foreground);
-        clip-path: circle(0% at 50% 50%);
-        -webkit-clip-path: circle(0% at 50% 50%);
-        transition: clip-path var(--fill-time) var(--fill-ease), -webkit-clip-path var(--fill-time) var(--fill-ease);
+        transform: translate(-50%, -50%) scale(0);
+        transition: transform var(--fill-time) var(--fill-ease);
     }
 
     &:hover,
@@ -1260,8 +1321,7 @@ a {
 
     &:hover::after,
     &:focus-visible::after {
-        clip-path: circle(100% at 50% 50%);
-        -webkit-clip-path: circle(100% at 50% 50%);
+        transform: translate(-50%, -50%) scale(1);
     }
 }
 
@@ -1527,18 +1587,52 @@ a {
     min-height: 0;
 }
 
-/* the story: a caption, one big line with a marked word, a calm paragraph and three numbered points */
+/* the story: a caption, one big line with a marked word, a calm paragraph and three numbered points.
+   it is read like the file it is named after: faint line numbers down the left (cat -n) and (END) at the bottom */
 .about-text {
+    --gutter: 2.75rem;
+    position: relative;
     flex: 1 1 auto;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: flex-start;
     gap: clamp(0.875rem, 2.4vh, 1.75rem);
-    padding: clamp(1rem, 3vh, 2.5rem) clamp(0.875rem, 2vw, 1.75rem);
+    overflow: hidden;
+    /* room on the left for the line numbers and at the bottom for (END) */
+    padding: clamp(1rem, 3vh, 2.5rem) clamp(0.875rem, 2vw, 1.75rem) calc(clamp(1rem, 3vh, 2.5rem) + 1.75rem) calc(var(--gutter) + clamp(0.875rem, 2vw, 1.75rem));
 
     & p {
         margin: 0;
+    }
+
+    /* the line numbers: quiet enough to read past, they only fill the empty height */
+    &::before {
+        content: "1\A 2\A 3\A 4\A 5\A 6\A 7\A 8\A 9\A 10\A 11\A 12\A 13\A 14\A 15\A 16\A 17\A 18\A 19\A 20\A 21\A 22\A 23\A 24\A 25\A 26\A 27\A 28\A 29\A 30\A 31\A 32\A 33\A 34\A 35\A 36\A 37\A 38\A 39\A 40";
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        width: var(--gutter);
+        padding: 0.875rem 0.625rem 0 0;
+        border-right: var(--line-width) solid color-mix(in srgb, var(--line-color) 35%, transparent);
+        font: 400 0.6875rem / 1.75rem var(--font-mono);
+        text-align: right;
+        white-space: pre;
+        opacity: 0.3;
+        pointer-events: none;
+    }
+
+    /* the end of the file, like a pager shows it */
+    &::after {
+        content: "(END)";
+        position: absolute;
+        bottom: clamp(0.75rem, 2vh, 1.25rem);
+        left: calc(var(--gutter) + clamp(0.875rem, 2vw, 1.75rem));
+        font: 700 0.6875rem / 1 var(--font-mono);
+        letter-spacing: 0.04em;
+        opacity: 0.45;
+        pointer-events: none;
     }
 
     /* the big line */
@@ -1561,31 +1655,25 @@ a {
     }
 }
 
-/* what I care about: three boxes side by side, the number in a black block, the important word in bold */
+/* what I care about: three short points side by side. no boxes: the space between them is enough,
+   a small number above and the important word in bold, so they support the sentence instead of competing with it */
 .about-points {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: clamp(0.625rem, 1.2vw, 1rem);
-    width: min(100%, 52rem);
+    gap: clamp(1rem, 2.4vw, 2.5rem);
+    width: min(100%, 46rem);
     margin: 0;
     padding: 0;
     list-style: none;
 
     & li {
         display: flex;
-        align-items: center;
-        gap: 0.75rem;
+        flex-direction: column;
+        gap: 0.375rem;
         min-width: 0;
-        padding: 0.625rem 0.875rem 0.625rem 0.625rem;
-        border: 0.125rem solid var(--foreground);
-        border-radius: 0.75rem;
-        font: 400 clamp(0.9375rem, min(1.2vw, 2vh), 1.25rem) / 1.15 var(--font-display);
-        transition: transform 0.2s, box-shadow 0.2s;
-
-        &:hover {
-            transform: translate(-0.1875rem, -0.1875rem);
-            box-shadow: 0.375rem 0.375rem 0 var(--foreground);
-        }
+        padding-top: 0.625rem;
+        border-top: var(--line-width) solid var(--line-color);
+        font: 400 clamp(0.9375rem, min(1.15vw, 2vh), 1.125rem) / 1.2 var(--font-display);
 
         & b {
             display: block;
@@ -1594,19 +1682,12 @@ a {
     }
 
     .about-point-number {
-        flex: none;
-        display: grid;
-        place-items: center;
-        width: 2.25rem;
-        aspect-ratio: 1;
-        border-radius: 0.5rem;
-        background: var(--foreground);
-        color: var(--background);
-        font: 900 1rem / 1 var(--font-display);
+        font: 700 0.75rem / 1 var(--font-mono);
+        opacity: 0.6;
     }
 }
 
-/* the skills: stickers that lean a little, every third one inverted */
+/* the skills: outlined stickers that lean a little */
 .skills {
     display: flex;
     flex-direction: column;
@@ -1625,22 +1706,17 @@ a {
     list-style: none;
 
     .skill {
-        padding: 0.375rem 1.125rem 0.4375rem;
-        border: 0.125rem solid var(--foreground);
+        padding: 0.3125rem 1rem 0.375rem;
+        border: var(--line-width) solid var(--foreground);
         border-radius: 3.125rem;
         background: var(--background);
-        font: 800 clamp(1.125rem, min(1.9vw, 3.2vh), 2rem) / 1.1 var(--font-display);
+        font: 700 clamp(1rem, min(1.4vw, 2.6vh), 1.5rem) / 1.1 var(--font-display);
         letter-spacing: -0.02em;
         transform: rotate(-2deg);
         transition: transform 0.3s, box-shadow 0.3s;
 
         &:nth-child(even) {
             transform: rotate(1.5deg);
-        }
-
-        &:nth-child(3n) {
-            background: var(--foreground);
-            color: var(--background);
         }
 
         /* pointing at one: it stands up straight and lifts off the page */
@@ -1678,9 +1754,10 @@ a {
     }
 
     & svg {
-        width: clamp(1.75rem, 2.4vw, 2.5rem);
-        height: clamp(1.75rem, 2.4vw, 2.5rem);
+        width: clamp(1.375rem, 1.8vw, 1.875rem);
+        height: clamp(1.375rem, 1.8vw, 1.875rem);
         fill: currentColor;
+        opacity: 0.8;
     }
 
     .social-text {
@@ -1690,9 +1767,8 @@ a {
         min-width: 0;
 
         & b {
-            font: 800 clamp(1.25rem, min(2vw, 3.4vh), 2.125rem) / 1 var(--font-display);
-            letter-spacing: -0.02em;
-            text-transform: uppercase;
+            font: 700 clamp(1.0625rem, min(1.4vw, 2.6vh), 1.5rem) / 1 var(--font-display);
+            letter-spacing: -0.01em;
         }
 
         & small {
@@ -1705,8 +1781,9 @@ a {
     }
 
     .social-arrow {
-        font: 900 clamp(1.5rem, 2.2vw, 2.25rem) / 1 var(--font-display);
-        transition: transform 0.3s;
+        font: 700 clamp(1.125rem, 1.6vw, 1.5rem) / 1 var(--font-display);
+        opacity: 0.6;
+        transition: transform 0.3s, opacity 0.3s;
     }
 
     /* pointing at one inverts it and turns the arrow to the right */
@@ -1887,7 +1964,7 @@ a {
     }
 }
 
-/* the stamp on the corner of the window: its edge has holes like a real stamp */
+/* the stamp on the corner of the window: its edge has holes like a real stamp, grey so the send button stays the loud thing */
 .stamp {
     position: absolute;
     top: -1.25rem;
@@ -1896,23 +1973,23 @@ a {
     place-items: center;
     align-content: center;
     gap: 0.25rem;
-    width: 5.5rem;
+    width: 4.5rem;
     aspect-ratio: 4 / 5;
-    border: 0.3125rem dotted var(--background);
-    outline: 0.125rem solid var(--foreground);
-    background: var(--foreground);
-    color: var(--background);
+    border: 0.25rem dotted var(--background);
+    outline: var(--line-width) solid var(--line-color);
+    background: var(--card-background);
+    color: var(--foreground);
     transform: rotate(6deg);
     transition: transform 0.4s;
     pointer-events: none;
 
     & b {
-        font: 900 1.75rem / 1 var(--font-display);
+        font: 900 1.375rem / 1 var(--font-display);
         letter-spacing: -0.04em;
     }
 
     & span {
-        font-size: 0.75rem;
+        font-size: 0.6875rem;
         font-weight: 700;
     }
 }
@@ -2031,19 +2108,19 @@ a {
         display: flex;
         justify-content: center;
         align-items: center;
-        gap: 0.875rem;
-        height: clamp(3.5rem, 8vh, 5.5rem);
+        gap: 0.625rem;
+        height: clamp(3rem, 6.5vh, 4.5rem);
 
         & svg {
-            width: clamp(1.5rem, 2vw, 2.25rem);
-            height: clamp(1.5rem, 2vw, 2.25rem);
+            width: clamp(1.25rem, 1.5vw, 1.625rem);
+            height: clamp(1.25rem, 1.5vw, 1.625rem);
         }
 
+        /* the names smaller and in normal case: the address above is what this screen is about */
         .icon-label {
             display: inline;
-            font: 800 clamp(1rem, 1.6vw, 1.625rem) / 1 var(--font-display);
-            text-transform: uppercase;
-            letter-spacing: -0.02em;
+            font: 700 clamp(0.9375rem, 1.1vw, 1.1875rem) / 1 var(--font-display);
+            letter-spacing: -0.01em;
         }
     }
 }
@@ -2141,11 +2218,15 @@ a {
     &::after {
         content: "";
         position: absolute;
-        inset: 0;
+        top: 50%;
+        left: 50%;
+        width: 150%;
+        min-height: 150%;
+        aspect-ratio: 1;
+        border-radius: 50%;
         background: var(--clr);
-        clip-path: circle(0% at 50% 50%);
-        -webkit-clip-path: circle(0% at 50% 50%);
-        transition: clip-path var(--fill-time) var(--fill-ease), -webkit-clip-path var(--fill-time) var(--fill-ease);
+        transform: translate(-50%, -50%) scale(0);
+        transition: transform var(--fill-time) var(--fill-ease);
         z-index: -1;
     }
 
@@ -2156,8 +2237,7 @@ a {
 
     &:hover::after,
     &:focus-visible::after {
-        clip-path: circle(100% at 50% 50%);
-        -webkit-clip-path: circle(100% at 50% 50%);
+        transform: translate(-50%, -50%) scale(1);
     }
 
     .link-number {
@@ -2200,35 +2280,14 @@ a {
 }
 
 /* possessed portrait: moving over the photo turns the cells under the pointer into flickering symbols
-   that fade back into the picture (pictureSymbols.js builds the grid and wakes the cells) */
+   that fade back into the picture (pictureSymbols.js draws them on this one canvas) */
 .symbol-grid {
     position: absolute;
     inset: 0;
-    display: grid;
-    justify-content: start;
-    align-content: start;
+    width: 100%;
+    height: 100%;
     pointer-events: none;
     font: 700 0.9375rem / 1 var(--font-mono);
-
-    & span {
-        display: grid;
-        place-items: center;
-        background: var(--background);
-        color: var(--foreground);
-        opacity: 0;
-        transition: opacity 0.45s;
-    }
-
-    /* a woken cell shows at once, then fades out slowly when it goes back to sleep */
-    & span.is-on {
-        opacity: 1;
-        transition: none;
-    }
-
-    & span.is-inverted {
-        background: var(--foreground);
-        color: var(--background);
-    }
 }
 
 /* list of small rounded labels (skills, stack) */
@@ -2268,11 +2327,15 @@ a {
     &::after {
         content: "";
         position: absolute;
-        inset: 0;
+        top: 50%;
+        left: 50%;
+        width: 150%;
+        min-height: 150%;
+        aspect-ratio: 1;
+        border-radius: 50%;
         background: var(--clr);
-        clip-path: circle(0% at 50% 50%);
-        -webkit-clip-path: circle(0% at 50% 50%);
-        transition: clip-path var(--fill-time) var(--fill-ease), -webkit-clip-path var(--fill-time) var(--fill-ease);
+        transform: translate(-50%, -50%) scale(0);
+        transition: transform var(--fill-time) var(--fill-ease);
         z-index: -1;
     }
 
@@ -2285,8 +2348,7 @@ a {
     &:hover::after,
     &:focus-visible::after,
     &:active::after {
-        clip-path: circle(100% at 50% 50%);
-        -webkit-clip-path: circle(100% at 50% 50%);
+        transform: translate(-50%, -50%) scale(1);
     }
 
     & svg {
@@ -2301,7 +2363,7 @@ a {
     }
 }
 
-/* overlay: blurred veil + panel (the menu on phones) */
+/* overlay: dimmed veil + panel (the menu on phones) */
 .veil {
     position: fixed;
     inset: 0;
@@ -2309,9 +2371,9 @@ a {
     display: grid;
     place-items: center;
     padding: clamp(0.75rem, 3vw, 2rem);
-    background: color-mix(in srgb, var(--background) 50%, transparent);
-    -webkit-backdrop-filter: blur(1rem);
-    backdrop-filter: blur(1rem);
+    /* no live blur: blurring the whole window was redone on every frame and lagged badly on windows.
+       a strong tint keeps the panel easy to read and costs nothing */
+    background: color-mix(in srgb, var(--background) 86%, transparent);
     /* pointer-events off keeps the hidden close button from being tapped */
     visibility: hidden;
     opacity: 0;
@@ -2324,6 +2386,11 @@ a {
         pointer-events: auto;
         transition: opacity 0.35s;
     }
+}
+
+/* while the veil is open nothing behind it moves (title, marquee, carets): no work is spent on a page nobody can see */
+body.overlay-open .sheet :is(*, *::before, *::after) {
+    animation-play-state: paused !important;
 }
 
 /* the box inside the veil */
@@ -2570,8 +2637,10 @@ a {
     left: 0;
     border-radius: 50%;
     z-index: 99;
-    /* white with "difference": the cursor turns black on white parts of the page and white on dark parts */
-    mix-blend-mode: difference;
+    /* inverts what is under it: the cursor is black on white parts of the page and white on dark parts.
+       a filter on its own few pixels, not a blend mode: blending made the browser redraw the whole page on every frame */
+    -webkit-backdrop-filter: invert(1);
+    backdrop-filter: invert(1);
     will-change: transform;
     transition: opacity 0.3s;
 }
@@ -2581,24 +2650,33 @@ a {
     width: 0.45rem;
     height: 0.45rem;
     margin: -0.225rem 0 0 -0.225rem;
-    background: #fff;
 }
 
-/* the ring that trails behind the dot (cursor.js also makes it bigger over a link and smaller on a click) */
+/* how much of the middle of the ring is left alone (only the 0.125rem edge inverts), animated when it fills in */
+@property --cursor-hole {
+    syntax: "<length-percentage>";
+    inherits: false;
+    initial-value: 0%;
+}
+
+/* the ring that trails behind the dot (cursor.js also makes it bigger over a link and smaller on a click).
+   the mask keeps only its edge, so only the edge inverts */
 .cursor-outline {
+    --cursor-hole: calc(100% - 0.125rem);
     width: 1.875rem;
     height: 1.875rem;
     margin: -0.9375rem 0 0 -0.9375rem;
-    border: 0.125rem solid #fff;
-    transition: background-color 0.25s, opacity 0.3s;
+    -webkit-mask: radial-gradient(closest-side, transparent var(--cursor-hole), #000 calc(var(--cursor-hole) + 0.05rem));
+    mask: radial-gradient(closest-side, transparent var(--cursor-hole), #000 calc(var(--cursor-hole) + 0.05rem));
+    transition: --cursor-hole 0.25s, opacity 0.3s;
 }
 
-/* over a link or button (cursor.js adds cursor-on-link): the ring fills in and, with the blend mode,
-   inverts whatever is under it, while the dot fades out. It is clear at a glance what you can click */
+/* over a link or button (cursor.js adds cursor-on-link): the ring fills in and inverts everything
+   under it, while the dot fades out. It is clear at a glance what you can click */
 body.cursor-on-link {
 
     .cursor-outline {
-        background-color: #fff;
+        --cursor-hole: 0%;
     }
 
     .cursor-dot {
@@ -3040,6 +3118,11 @@ body.cursor-on-link {
         .about-lead {
             font-size: 1.75rem;
         }
+
+        /* no room under the points for (END) */
+        &::after {
+            display: none;
+        }
     }
 
     .about-points li {
@@ -3259,6 +3342,15 @@ body.cursor-on-link {
 /* MOBILE (up to ~760px width)    */
 /* ------------------------------ */
 @media (max-width: 760px) {
+
+    /* a phone is too narrow for the line numbers, the text gets the whole width */
+    .about-text {
+        --gutter: 0rem;
+
+        &::before {
+            display: none;
+        }
+    }
     :root {
         --nav-height: 3.125rem;
     }

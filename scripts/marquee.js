@@ -35,7 +35,7 @@ window.addEventListener("resize", function () {
     marquees.forEach(function (marquee) {
         if (marquee.row.clientWidth !== marquee.lastRowWidth) fillMarquee(marquee);
     });
-})
+});
 
 /* a marquee only runs while it can be seen, so a slow laptop does not keep drawing rows you scrolled past */
 const marqueeWatcher = new IntersectionObserver(function (entries) {

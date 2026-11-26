@@ -1,13 +1,15 @@
-/*the menu pill (phones) blurs the page and opens the menu panel*/
+/*the menu pill (phones) dims the page and opens the menu panel*/
 const veil = document.querySelector("#veil");
 const sheet = document.querySelector(".sheet");
 const menuPill = document.querySelector(".nav-tabs a[href='#menu']");
 let wasOpenedByPill = false;
 let lastPressPoint = null;
 
-// opens or closes the menu: the blur, the page behind it and the focus go along
+// opens or closes the menu: the veil, the page behind it and the focus go along
 function showMenu(isOpen) {
     veil.classList.toggle("is-open", isOpen);
+    // the page behind holds still while the menu is open, so no work is spent on what nobody can see
+    document.body.classList.toggle("overlay-open", isOpen);
     veil.setAttribute("aria-hidden", String(!isOpen));
     sheet.toggleAttribute("inert", isOpen);
     menuPill.classList.toggle("is-active", isOpen);
@@ -55,7 +57,7 @@ menuPill.addEventListener("click", function (e) {
     history.replaceState(null, "", "#menu");
 });
 
-/* a click on the blur, the close button or a link closes the menu */
+/* a click on the veil, the close button or a link closes the menu */
 veil.addEventListener("click", function (e) {
     if (e.target === veil || e.target.closest("[data-close]")) closeMenu();
     else if (e.target.closest("a")) {

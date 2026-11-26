@@ -14,7 +14,9 @@ function showLocalTime() {
     if (hour >= 12) partOfDay = "middag";
     if (hour >= 18) partOfDay = "avond";
 
-    localTimeField.textContent = `${time} (${partOfDay})`;
+    // only touch the page when the minute changed, not every second
+    const text = `${time} (${partOfDay})`;
+    if (localTimeField.textContent !== text) localTimeField.textContent = text;
 }
 
 /* show it once, then keep the clock running */

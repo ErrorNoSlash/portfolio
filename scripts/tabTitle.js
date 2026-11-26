@@ -54,5 +54,5 @@ function tick() {
     setTimeout(tick, delay);
 }
 
-/* start typing in the tab title */
-tick();
+/* start typing in the tab title (not inside the small live preview: that page has no tab of its own) */
+if (window.self === window.top) tick();

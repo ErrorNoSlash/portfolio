@@ -31,7 +31,7 @@ function markPreviewTab(index) {
 // jumps the page inside straight to a screen, without its smooth scroll sliding two screens over each other
 function jumpPreviewTo(screenId) {
     try {
-        const screen = previewFrame.contentDocument.getElementById(screenId);
+        const screen = previewFrame.contentDocument.querySelector(`#${screenId}`);
         previewFrame.contentWindow.scrollTo({ top: screen.offsetTop, behavior: "instant" });
     } catch (error) {
         // the browser does not let us in (opened as a file): load the page again at that screen
@@ -73,10 +73,27 @@ previewTabs.forEach(function (tab, index) {
 /* scale again when the window changes size */
 new ResizeObserver(scalePreview).observe(previewWindow);
 
+// the tour only runs while the preview can be seen: not when it is scrolled away or the tab is hidden
+let isPreviewInView = true;
+function updatePreviewTour() {
+    const shouldRun = isPreviewLoaded && isPreviewInView && !document.hidden;
+    if (shouldRun && previewTimer === null) startPreviewTour();
+    if (!shouldRun && previewTimer !== null) {
+        clearInterval(previewTimer);
+        previewTimer = null;
+    }
+}
+
+new IntersectionObserver(function (entries) {
+    isPreviewInView = entries[0].isIntersecting;
+    updatePreviewTour();
+}).observe(previewWindow);
+document.addEventListener("visibilitychange", updatePreviewTour);
+
 /* start at the landing, the tour waits until the page inside has loaded */
 markPreviewTab(0);
 previewFrame.addEventListener("load", function () {
     if (isPreviewLoaded) return;
     isPreviewLoaded = true;
-    startPreviewTour();
+    updatePreviewTour();
 });

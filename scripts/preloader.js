@@ -14,7 +14,7 @@ let isPageLoaded = document.readyState === "complete";
 /* the page has loaded: the bar may go to 100% */
 window.addEventListener("load", function () {
     isPageLoaded = true;
-})
+});
 
 // the preloader plays once per browser: the tab remembers it for this visit (window.name also works when the site
 // is opened from files), and localStorage remembers it for the next visits

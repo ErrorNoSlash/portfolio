@@ -9,6 +9,7 @@
     min-width: 0;
 }
 
+/* the window: a rounded, bordered box, never wider than 36rem */
 .window-window {
     width: min(36rem, 100%);
     border: var(--line-width) solid var(--foreground);
@@ -16,6 +17,7 @@
     overflow: hidden;
 }
 
+/* the title bar along the top of the window */
 .window-head {
     display: flex;
     justify-content: space-between;
@@ -43,6 +45,7 @@
     }
 }
 
+/* what is inside the window, stacked with room between */
 .window-body {
     display: flex;
     flex-direction: column;
@@ -175,6 +178,7 @@
     }
 }
 
+/* the small line under the window */
 .window-footer {
     margin: 0;
     font-size: 0.75rem;
@@ -239,6 +243,7 @@
     }
 }
 
+/* very narrow phones: a smaller title bar */
 @media (max-width: 360px) {
     .window-head {
         padding-left: 0.875rem;

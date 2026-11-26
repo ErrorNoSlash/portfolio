@@ -1,6 +1,7 @@
-/*controls the possessed pictures (the portrait, the slashyos screenshot): every [data-symbols] picture is split into a grid
-  of cells, moving the mouse (or a finger) over it wakes the cells under the pointer, they flicker through terminal symbols
-  for a moment and then fade back into the picture*/
+/*controls the possessed pictures (the portrait, the slashyos screenshot): moving the mouse (or a finger) over a [data-symbols] picture wakes the cells
+  under the pointer, they flicker through terminal symbols for a moment and then fade back into the picture.
+  everything is drawn on one canvas over the photo, and only while a cell is awake, so it costs almost nothing
+  (the old version faded hundreds of separate boxes, which lagged on windows)*/
 const symbolCharacters = "!@#$%&*+=?/\\<>{}[]~^:;|01ds";
 // the cell size grows with the page on very wide screens (26 pixels at 100%)
 const symbolCellSize = 26 * parseFloat(getComputedStyle(document.documentElement).fontSize) / 16;
@@ -9,49 +10,89 @@ const neighbourWakeChance = 0.55;
 const invertedCellChance = 0.3;
 const flickerDelay = 70;
 const cellAwakeTime = 650;
+const cellFadeTime = 450;
 
-// one random character from the list
-function randomSymbol() {
-    return symbolCharacters[Math.floor(Math.random() * symbolCharacters.length)];
-}
-
-// one picture: its own grid, its own cells
+// one picture: its own canvas, its own cells
 function addSymbolEffect(picture) {
-    const symbolGrid = picture.querySelector(".symbol-grid");
+    const canvas = picture.querySelector(".symbol-grid");
+    const context = canvas.getContext("2d");
     let gridColumns = 0;
     let gridRows = 0;
     let cells = [];
+    let awakeCells = new Set();
+    let drawFrame = null;
+    // every symbol drawn once, plain and inverted, so a frame only copies little squares (much faster than drawing text)
+    const symbolSheet = document.createElement("canvas");
+    const sheetContext = symbolSheet.getContext("2d");
+    let sheetCellSize = 0;
 
     // one cell for every 26 x 26 pixels of the photo, rebuilt when the photo changes size
     function buildSymbolGrid() {
         const box = picture.getBoundingClientRect();
+        const ratio = window.devicePixelRatio || 1;
         gridColumns = Math.ceil(box.width / symbolCellSize);
         gridRows = Math.ceil(box.height / symbolCellSize);
 
-        symbolGrid.style.gridTemplateColumns = `repeat(${gridColumns}, ${symbolCellSize}px)`;
-        symbolGrid.style.gridAutoRows = `${symbolCellSize}px`;
+        canvas.width = Math.round(box.width * ratio);
+        canvas.height = Math.round(box.height * ratio);
+        context.setTransform(ratio, 0, 0, ratio, 0, 0);
 
         cells = [];
-        const spans = [];
         for (let index = 0; index < gridColumns * gridRows; index++) {
-            const span = document.createElement("span");
-            spans.push(span);
-            cells.push({ element: span, awakeUntil: 0, isAwake: false });
+            cells.push({ column: index % gridColumns, row: Math.floor(index / gridColumns), awakeUntil: 0, nextFlicker: 0, symbol: 0, isInverted: false });
         }
-        symbolGrid.replaceChildren(...spans);
+        awakeCells = new Set();
     }
 
-    // a cell keeps flickering until its time is up, then it falls asleep and fades out (the css does the fade)
-    function flickerCell(cell) {
-        if (performance.now() > cell.awakeUntil) {
-            cell.isAwake = false;
-            cell.element.classList.remove("is-on");
-            return;
-        }
-        cell.element.textContent = randomSymbol();
-        setTimeout(function () {
-            flickerCell(cell);
-        }, flickerDelay);
+    // draws the sheet of symbols in the page colors and font (again every time the effect starts: the theme can change)
+    function drawSymbolSheet() {
+        const style = getComputedStyle(canvas);
+        const background = style.getPropertyValue("--background").trim() || "#000";
+        const foreground = style.getPropertyValue("--foreground").trim() || "#fff";
+        const ratio = window.devicePixelRatio || 1;
+
+        sheetCellSize = Math.ceil(symbolCellSize * ratio);
+        symbolSheet.width = sheetCellSize * symbolCharacters.length;
+        symbolSheet.height = sheetCellSize * 2;
+        sheetContext.font = `${style.fontWeight} ${parseFloat(style.fontSize) * ratio}px ${style.fontFamily}`;
+        sheetContext.textAlign = "center";
+        sheetContext.textBaseline = "middle";
+
+        // row 0: dark on light, row 1: inverted
+        [[background, foreground], [foreground, background]].forEach(function ([fill, ink], row) {
+            sheetContext.fillStyle = fill;
+            sheetContext.fillRect(0, row * sheetCellSize, symbolSheet.width, sheetCellSize);
+            sheetContext.fillStyle = ink;
+            [...symbolCharacters].forEach(function (character, index) {
+                sheetContext.fillText(character, (index + 0.5) * sheetCellSize, (row + 0.5) * sheetCellSize);
+            });
+        });
+    }
+
+    // one frame: every awake cell flickers, a cell that fell asleep fades out, then it is forgotten
+    function drawCells(now) {
+        context.clearRect(0, 0, canvas.width, canvas.height);
+
+        awakeCells.forEach(function (cell) {
+            const fade = now <= cell.awakeUntil ? 1 : 1 - (now - cell.awakeUntil) / cellFadeTime;
+            if (fade <= 0) {
+                awakeCells.delete(cell);
+                return;
+            }
+
+            if (now <= cell.awakeUntil && now >= cell.nextFlicker) {
+                cell.symbol = Math.floor(Math.random() * symbolCharacters.length);
+                cell.nextFlicker = now + flickerDelay;
+            }
+
+            context.globalAlpha = fade;
+            context.drawImage(symbolSheet,
+                cell.symbol * sheetCellSize, cell.isInverted ? sheetCellSize : 0, sheetCellSize, sheetCellSize,
+                cell.column * symbolCellSize, cell.row * symbolCellSize, symbolCellSize, symbolCellSize);
+        });
+        context.globalAlpha = 1;
+
+        drawFrame = awakeCells.size > 0 ? requestAnimationFrame(drawCells) : null;
     }
 
     // wakes one cell: it shows symbols for a moment (some cells inverted)
@@ -59,13 +100,10 @@ function addSymbolEffect(picture) {
         if (column < 0 || row < 0 || column >= gridColumns || row >= gridRows) return;
 
         const cell = cells[row * gridColumns + column];
-        cell.awakeUntil = performance.now() + cellAwakeTime;
-        if (cell.isAwake) return;
-
-        cell.isAwake = true;
-        cell.element.classList.add("is-on");
-        cell.element.classList.toggle("is-inverted", Math.random() < invertedCellChance);
-        flickerCell(cell);
+        const now = performance.now();
+        if (now > cell.awakeUntil) cell.isInverted = Math.random() < invertedCellChance;
+        cell.awakeUntil = now + cellAwakeTime;
+        awakeCells.add(cell);
     }
 
     /* the cell under the pointer always wakes, the ones around it only some of the time, so the trail looks ragged */
@@ -81,7 +119,12 @@ function addSymbolEffect(picture) {
                 if (isCenter || (isClose && Math.random() < neighbourWakeChance)) wakeCell(column + x, row + y);
             }
         }
-    });
+
+        if (drawFrame === null && awakeCells.size > 0) {
+            drawSymbolSheet();
+            drawFrame = requestAnimationFrame(drawCells);
+        }
+    }, { passive: true });
 
     new ResizeObserver(buildSymbolGrid).observe(picture);
 }

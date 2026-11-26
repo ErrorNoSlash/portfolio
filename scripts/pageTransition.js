@@ -58,7 +58,7 @@ document.addEventListener("click", function (e) {
 
     e.preventDefault();
     goToPage(url.href);
-})
+});
 
 /* coming back with the back button: make sure the curtain is not stuck */
 window.addEventListener("pageshow", function (e) {
@@ -68,7 +68,7 @@ window.addEventListener("pageshow", function (e) {
     try {
         sessionStorage.removeItem(storageKey);
     } catch (error) { }
-})
+});
 
 /* arriving through the curtain: lift it once the fonts are ready (or after a short wait) */
 if (htmlElement.classList.contains("is-arriving")) {
