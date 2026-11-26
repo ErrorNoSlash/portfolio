@@ -385,7 +385,10 @@
                     <div class="mail-direct">
                         <span class="caption">of mail direct</span>
                         <b class="mail-address">dias.stas@pm.me</b>
-                        <button class="pill" id="copy-mail" type="button" data-mail="dias.stas@pm.me">kopieer</button>
+                        <div class="mail-actions">
+                            <button class="pill" id="copy-mail" type="button" data-mail="dias.stas@pm.me">kopieer</button>
+                            <a class="pill" href="mailto:dias.stas@pm.me">open mail &nearr;</a>
+                        </div>
                     </div>
                     <div class="status-window">
                         <p class="status-window-command">$ dias --status</p>
@@ -396,6 +399,11 @@
                             <div><dt>mijn tijd</dt><dd id="local-time">--:--</dd></div>
                             <div><dt>talen</dt><dd>nl · en</dd></div>
                         </dl>
+                        <!-- the day in belgium in four parts, the dot is now (localTime.js moves it) -->
+                        <div class="day-bar" aria-hidden="true">
+                            <span class="day-track"><span class="day-now" id="day-now"></span></span>
+                            <span class="day-parts"><span>nacht</span><span>ochtend</span><span>middag</span><span>avond</span></span>
+                        </div>
                         <p class="status-window-hint">&gt; schrijf gerust, ik lees alles<span class="caret"></span></p>
                     </div>
                 </aside>
