@@ -48,9 +48,6 @@
 
 /* keeps Windows settings (scrollbars, text size, high contrast) from changing the site */
 html {
-    /* very wide windows (a 4k or 2k screen at 25% to 75% windows scaling): everything grows with the width,
-       so the page looks like it does at 100%, only sharper. Under ~3800 pixels wide this stays 100% */
-    font-size: max(100%, 0.42vw);
     scroll-behavior: smooth;
     /* jumps to a section land under the sticky nav */
     scroll-padding-top: var(--nav-height);
@@ -63,6 +60,16 @@ html {
 /* hides the classic Windows scrollbar in Chrome and Edge, the page still scrolls */
 html::-webkit-scrollbar {
     display: none;
+}
+
+/* browser zoom (ctrl + scroll) and Windows display scaling (75 %, 125 %, 150 %...) change how many
+   css pixels a window has. on desktop-sized windows everything is sized from the window width instead,
+   so the page looks the same at any zoom or scaling: 1920 px wide = the designed 16 px text, a 4k
+   screen just sharper. phones keep 16 px. (like the mc site) */
+@media (min-width: 1200px) {
+    html {
+        font-size: clamp(13px, calc(100vw / 120), 26px);
+    }
 }
 
 /* Main body: the sheet fills the whole page, and grows when the content is longer */
