@@ -843,6 +843,7 @@ a {
     place-items: center;
     padding: 1rem;
     overflow: hidden;
+    container-type: size;
 
     /* a tiny copy that is already blurred and darker, stretched out: it looks soft and costs nothing to draw */
     &::before {
@@ -857,13 +858,12 @@ a {
         filter: grayscale(1) contrast(1.15);
     }
 
+    /* as big as fits in the folder in its own shape (1600 × 1066), so it is never cut off or stretched */
     & img {
         position: relative;
         display: block;
-        width: 100%;
+        width: min(100cqw, 100cqh * 1600 / 1066);
         height: auto;
-        max-height: 100%;
-        object-fit: contain;
         border: var(--line-width) solid var(--line-color);
         border-radius: 0.5rem;
     }
@@ -1148,6 +1148,25 @@ a {
 /* pointing at the screenshot brings its colour back */
 .project-screenshot:hover .project-screenshot-colour {
     opacity: 1;
+}
+
+/* slashyos: the window takes the shape of the screenshot and is as big as fits in the column, so the
+   whole picture always shows: never cut off, stretched or framed differently on another screen */
+.project-visual:has(.project-screenshot) {
+    container-type: size;
+    align-items: center;
+    justify-content: center;
+
+    .project-window {
+        flex: none;
+        /* the picture is 1600 × 1066; the bar (2.75rem) and the window's two lines sit around it */
+        width: min(100%, (100cqh - 3rem) * 1600 / 1066 + 0.25rem);
+    }
+
+    .project-screenshot {
+        flex: none;
+        aspect-ratio: 1600 / 1066;
+    }
 }
 
 /* blog: a markdown file on top, the page zola makes from it below */
@@ -1641,10 +1660,49 @@ a {
         letter-spacing: -0.04em;
     }
 
+    /* the marked word: selected, like in the editor this page looks like. the inverted block has a
+       handle at each end (a thin line with a round knob, the way an editor or a phone shows a
+       selection), and the selection sweeps over the word when it comes in and when you point at it */
     & mark {
-        padding: 0 0.15em;
-        background: var(--foreground);
+        --handle: max(0.125rem, 0.035em);
+        --knob: max(0.625rem, 0.16em);
+        position: relative;
+        padding: 0 0.12em;
+        background: linear-gradient(var(--foreground), var(--foreground)) 0 0 / 100% 100% no-repeat;
         color: var(--background);
+
+        /* the handles: the knob on top of the first, under the last */
+        &::before,
+        &::after {
+            content: "";
+            position: absolute;
+            top: calc(var(--knob) * -0.75);
+            bottom: calc(var(--knob) * -0.75);
+            width: var(--knob);
+            background:
+                radial-gradient(circle closest-side, var(--foreground) 85%, transparent) 50% var(--knob-at) / var(--knob) var(--knob) no-repeat,
+                linear-gradient(var(--foreground), var(--foreground)) 50% 50% / var(--handle) calc(100% - var(--knob)) no-repeat;
+        }
+
+        &::before {
+            --knob-at: 0;
+            left: calc(var(--knob) / -2);
+        }
+
+        &::after {
+            --knob-at: 100%;
+            right: calc(var(--knob) / -2);
+        }
+    }
+
+    /* selecting: the block sweeps over the word, the letters turn as it passes */
+    .about-lead:hover mark,
+    .about-lead.is-revealed mark {
+        animation: select 0.45s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+    }
+
+    .about-lead.is-revealed mark {
+        animation-delay: calc(var(--reveal-i, 0) * 70ms + 0.25s);
     }
 
     /* the paragraph: lighter and with room between the lines, so it reads easily */
@@ -2823,6 +2881,14 @@ body.cursor-on-link {
     }
 }
 
+/* select: a selection sweeping over a word from left to right */
+@keyframes select {
+    from {
+        background-size: 0 100%;
+        color: var(--foreground);
+    }
+}
+
 /* rise: panel slides up while it fades in */
 @keyframes rise {
     from {
@@ -3066,6 +3132,17 @@ body.cursor-on-link {
         min-height: 26rem;
     }
 
+    /* slashyos: the window as wide as the column, the paper as tall as it needs */
+    .project-visual:has(.project-screenshot) {
+        height: auto;
+        min-height: 0;
+        container-type: normal;
+
+        .project-window {
+            width: 100%;
+        }
+    }
+
     .project-card .project-card-visual {
         display: none;
     }
@@ -3273,6 +3350,17 @@ body.cursor-on-link {
 
     .project-visual {
         height: 40rem;
+    }
+
+    /* slashyos: the window as wide as the column, the paper as tall as it needs */
+    .project-visual:has(.project-screenshot) {
+        height: auto;
+        min-height: 0;
+        container-type: normal;
+
+        .project-window {
+            width: 100%;
+        }
     }
 
     /* over and contact stack: the badge above the story, the mail window above the address */
@@ -3609,6 +3697,17 @@ body.cursor-on-link {
     .project-visual {
         height: 28rem;
         padding-inline: 1rem 1.5rem;
+    }
+
+    /* slashyos: the window as wide as the column, the paper as tall as it needs */
+    .project-visual:has(.project-screenshot) {
+        height: auto;
+        min-height: 0;
+        container-type: normal;
+
+        .project-window {
+            width: 100%;
+        }
     }
 
     /* the pills of the screens get their own line under the caption */
