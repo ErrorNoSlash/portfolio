@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="nl">
+
+<head>
+    <meta charset="UTF-8">
+    <!-- security: only load scripts, styles, fonts and pictures from this site and the few places named here,
+         always over https; links to other sites only tell them which site you came from -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://stats.errornoslash.be; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://stats.errornoslash.be; frame-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self' mailto:; upgrade-insecure-requests">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Dias Stas - Geen mail-app?</title>
+    <meta name="description" content="Opende er niets toen je op mijn mailadres klikte? Zo bereik je me toch, met een paar gratis, open-source mail-apps.">
+    <meta name="robots" content="noindex">
+
+    <meta name="color-scheme" content="dark">
+    <meta name="theme-color" content="#040507">
+
+    <link rel="icon" href="favicon.ico" sizes="48x48">
+    <link rel="icon" href="images/favicon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+
+    <link rel="stylesheet" href="styles/normalize.css">
+    <link rel="stylesheet" href="styles/style.css">
+    <link rel="stylesheet" href="styles/window.css">
+    <link rel="stylesheet" href="styles/mail.css">
+
+    <!--Google Fonts-->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800;900&family=Space+Mono:wght@400;700&display=swap"
+        rel="stylesheet">
+
+    <!-- footer year: updates itself when JavaScript runs, otherwise the year written in the footer shows -->
+    <script src="scripts/getYear.js" defer></script>
+
+    <!-- the saved light / dark choice, and the copy button -->
+    <script src="scripts/mailPage.js"></script>
+</head>
+
+<body>
+
+    <div class="rotate-notice">
+        <div class="rotate-notice-frame">
+            <div class="rotate-notice-icon" aria-hidden="true"><span></span></div>
+            <div class="rotate-notice-text">
+                <p class="rotate-notice-prompt">dias@stas:~$ rotate<span class="caret"></span></p>
+                <p class="rotate-notice-title">draai je telefoon rechtop</p>
+                <p class="rotate-notice-hint">[ deze site is gemaakt voor staand ]</p>
+            </div>
+        </div>
+    </div>
+
+    <main class="window-page">
+
+        <section class="window-window" aria-labelledby="window-title">
+
+            <header class="window-head">
+                <span class="window-prompt">dias@stas:~$ mail --help<span class="caret"></span></span>
+                <span class="window-badge">geen app</span>
+            </header>
+
+            <div class="window-body">
+                <svg class="window-logo" viewBox="0 0 77 42" aria-hidden="true">
+                <circle cx="3.5" cy="3.5" r="3.2"/>
+                <circle cx="10.5" cy="3.5" r="3.2"/>
+                <circle cx="17.5" cy="3.5" r="3.2"/>
+                <circle cx="24.5" cy="3.5" r="3.2"/>
+                <circle cx="52.5" cy="3.5" r="3.2"/>
+                <circle cx="59.5" cy="3.5" r="3.2"/>
+                <circle cx="66.5" cy="3.5" r="3.2"/>
+                <circle cx="73.5" cy="3.5" r="3.2"/>
+                <circle cx="3.5" cy="10.5" r="3.2"/>
+                <circle cx="10.5" cy="10.5" r="3.2"/>
+                <circle cx="24.5" cy="10.5" r="3.2"/>
+                <circle cx="31.5" cy="10.5" r="3.2"/>
+                <circle cx="45.5" cy="10.5" r="3.2"/>
+                <circle cx="52.5" cy="10.5" r="3.2"/>
+                <circle cx="3.5" cy="17.5" r="3.2"/>
+                <circle cx="10.5" cy="17.5" r="3.2"/>
+                <circle cx="31.5" cy="17.5" r="3.2"/>
+                <circle cx="45.5" cy="17.5" r="3.2"/>
+                <circle cx="52.5" cy="17.5" r="3.2"/>
+                <circle cx="59.5" cy="17.5" r="3.2"/>
+                <circle cx="66.5" cy="17.5" r="3.2"/>
+                <circle cx="3.5" cy="24.5" r="3.2"/>
+                <circle cx="10.5" cy="24.5" r="3.2"/>
+                <circle cx="31.5" cy="24.5" r="3.2"/>
+                <circle cx="52.5" cy="24.5" r="3.2"/>
+                <circle cx="59.5" cy="24.5" r="3.2"/>
+                <circle cx="66.5" cy="24.5" r="3.2"/>
+                <circle cx="73.5" cy="24.5" r="3.2"/>
+                <circle cx="3.5" cy="31.5" r="3.2"/>
+                <circle cx="10.5" cy="31.5" r="3.2"/>
+                <circle cx="31.5" cy="31.5" r="3.2"/>
+                <circle cx="66.5" cy="31.5" r="3.2"/>
+                <circle cx="73.5" cy="31.5" r="3.2"/>
+                <circle cx="3.5" cy="38.5" r="3.2"/>
+                <circle cx="10.5" cy="38.5" r="3.2"/>
+                <circle cx="17.5" cy="38.5" r="3.2"/>
+                <circle cx="24.5" cy="38.5" r="3.2"/>
+                <circle cx="45.5" cy="38.5" r="3.2"/>
+                <circle cx="52.5" cy="38.5" r="3.2"/>
+                <circle cx="59.5" cy="38.5" r="3.2"/>
+                <circle cx="66.5" cy="38.5" r="3.2"/>
+                </svg>
+
+                <h1 class="window-title" id="window-title">Geen mail-<span class="window-off">app</span>?</h1>
+
+                <div class="window-log">
+                    <p>$ open mailto:dias.stas@pm.me</p>
+                    <p class="window-error">error: geen mail-app gaf antwoord</p>
+                    <p>je browser probeerde een mail-app te openen, maar op dit toestel is er geen ingesteld. je kunt me nog steeds mailen:</p>
+                </div>
+
+                <div class="mail-address">
+                    <span class="mail-address-text" id="mail-address">dias.stas@pm.me</span>
+                    <button class="mail-copy" type="button" data-copied="gekopieerd!" hidden>kopieer</button>
+                </div>
+
+                <p class="window-or">plak het in de webmail die je al gebruikt (Gmail, Outlook, Proton…), of installeer een gratis, open-source mail-app:</p>
+                <nav class="mail-clients" aria-label="Open-source mail-apps">
+                    <a class="mail-client" href="https://www.thunderbird.net/" target="_blank" rel="noopener">
+                        <span class="mail-client-name">Thunderbird</span>
+                        <span class="mail-client-where">Windows · macOS · Linux · Android</span>
+                        <span class="mail-client-note">van Mozilla, de bekendste</span>
+                    </a>
+                    <a class="mail-client" href="https://proton.me/mail/download" target="_blank" rel="noopener">
+                        <span class="mail-client-name">Proton Mail</span>
+                        <span class="mail-client-where">iOS · Android · Windows · macOS · Linux</span>
+                        <span class="mail-client-note">open-source apps; mijn adres zit ook bij Proton</span>
+                    </a>
+                    <a class="mail-client" href="https://email.faircode.eu/" target="_blank" rel="noopener">
+                        <span class="mail-client-name">FairEmail</span>
+                        <span class="mail-client-where">Android</span>
+                        <span class="mail-client-note">klein, snel, privacyvriendelijk</span>
+                    </a>
+                    <a class="mail-client" href="https://gitlab.gnome.org/GNOME/geary" target="_blank" rel="noopener">
+                        <span class="mail-client-name">Geary</span>
+                        <span class="mail-client-where">Linux</span>
+                        <span class="mail-client-note">eenvoudig, voor GNOME</span>
+                    </a>
+                </nav>
+
+                <a class="window-reload" href="mailto:dias.stas@pm.me">opnieuw proberen</a>
+                <nav class="window-links" aria-label="Site">
+                    <a class="window-chip" href="index.html">terug naar de site</a>
+                </nav>
+            </div>
+
+        </section>
+
+        <p class="window-footer">&copy;<span id="year">2026</span> - Dias Stas</p>
+
+    </main>
+
+</body>
+
+</html>

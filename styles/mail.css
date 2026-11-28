@@ -1,0 +1,96 @@
+/* mail.html: the "no mail app?" page, on top of the small window page's styles */
+
+/* the address, big and easy to select, with a copy button beside it */
+.mail-address {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    width: 100%;
+    padding: 0.5rem 0.5rem 0.5rem 1rem;
+    border: var(--line-width) solid var(--foreground);
+    border-radius: 3.125rem;
+    background: var(--surface);
+}
+
+/* the address itself: one line, selectable as a whole */
+.mail-address-text {
+    flex: 1 1 auto;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font: 700 clamp(0.9375rem, 4vw, 1.125rem) / 1.2 var(--font-mono);
+    user-select: all;
+}
+
+/* the copy button: a filled pill */
+.mail-copy {
+    flex: none;
+    height: 2.125rem;
+    padding: 0 1rem 0.125rem;
+    border: var(--line-width) solid var(--foreground);
+    border-radius: 3.125rem;
+    background: var(--foreground);
+    color: var(--background);
+    font: 700 0.8125rem / 1 var(--font-mono);
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+}
+
+/* hover: the other way round */
+.mail-copy:hover {
+    background: var(--surface);
+    color: var(--foreground);
+}
+
+/* the mail apps: a grid of small cards, one per app */
+.mail-clients {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+    gap: 0.5rem;
+    width: 100%;
+}
+
+/* one app: name, where it runs, a short note */
+.mail-client {
+    display: grid;
+    gap: 0.25rem;
+    padding: 0.75rem 0.9375rem 0.8125rem;
+    border: var(--line-width) solid var(--foreground);
+    border-radius: 1.25rem;
+    background: var(--surface);
+    color: inherit;
+    text-decoration: none;
+    transition: background 0.2s, color 0.2s;
+}
+
+/* hover: filled, like the other buttons */
+.mail-client:hover {
+    background: var(--foreground);
+    color: var(--background);
+}
+
+/* the app's name, with a little arrow: it opens in a new tab */
+.mail-client-name {
+    font: 900 1.125rem / 1.1 var(--font-display);
+}
+
+/* the arrow after the name */
+.mail-client-name::after {
+    content: " \2197";
+    font-size: 0.875em;
+}
+
+/* the platforms */
+.mail-client-where {
+    font: 700 0.6875rem / 1.3 var(--font-mono);
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+}
+
+/* the note, a little quieter */
+.mail-client-note {
+    font-size: 0.75rem;
+    line-height: 1.4;
+    opacity: 0.75;
+}

@@ -21,4 +21,6 @@ mailForm.addEventListener("submit", function (e) {
     if (body) mailLink += `&body=${encodeURIComponent(body)}`;
 
     window.location.href = mailLink;
+    // nothing opened (no mail app)? mailHint.js offers mail.html
+    if (window.watchMailOpen) window.watchMailOpen();
 });
