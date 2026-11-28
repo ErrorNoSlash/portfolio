@@ -3812,23 +3812,127 @@ body.cursor-on-link {
     animation-play-state: paused;
 }
 
-/* the light / dark toggle in the nav: a pill like the others, its word says what it switches to.
-   it only shows once the script is there (firstPaint.js adds can-theme), and stays on phones,
-   where the other pills fold into the menu */
+/* the light / dark toggle in the nav: a square pill with a phosphor icon, the sun in dark mode
+   (click for light) and the moon in light mode (click for dark). it only shows once the script is
+   there (firstPaint.js adds can-theme), and stays on phones, where the other pills fold into the menu */
 .theme-toggle {
     display: none;
 }
 
+/* square, the same height as the other pills; the two icons sit on top of each other */
 :root.can-theme .nav-tabs .pill.theme-toggle {
     display: inline-flex;
+    position: relative;
+    align-items: center;
+    justify-content: center;
+    width: 1.9375rem;
+    padding: 0;
+    overflow: hidden;
 }
 
-/* the word comes from the button's data attributes, so it is right before any script runs */
-.theme-toggle::after {
-    content: attr(data-to-light);
+/* the icons follow the pill's text colour, so they flip with it on hover */
+.theme-icon {
+    position: absolute;
+    width: 1.125rem;
+    height: 1.125rem;
+    transition: transform 0.45s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.3s ease;
 }
 
-/* in light mode it offers dark */
-:root[data-theme="light"] .theme-toggle::after {
-    content: attr(data-to-dark);
+/* dark mode: the sun is out, the moon waits below the edge */
+.theme-icon-moon {
+    opacity: 0;
+    transform: translateY(110%) rotate(-60deg);
+}
+
+/* light mode: the sun sets, the moon rises */
+:root[data-theme="light"] .theme-icon-sun {
+    opacity: 0;
+    transform: translateY(-110%) rotate(60deg);
+}
+
+/* and the moon takes its place */
+:root[data-theme="light"] .theme-icon-moon {
+    opacity: 1;
+    transform: none;
+}
+
+/* the warning before light mode: a small card under the toggle, asking first */
+.theme-warn {
+    position: fixed;
+    z-index: 9000;
+    width: min(21rem, calc(100vw - 1.5rem));
+    padding: 0.875rem 0.875rem 0.9375rem;
+    border: var(--line-width, 0.0625rem) solid var(--foreground);
+    background: var(--surface, var(--background));
+    color: var(--foreground);
+    box-shadow: 0.25rem 0.25rem 0 var(--foreground);
+    font-size: 0.8125rem;
+    line-height: 1.45;
+    opacity: 0;
+    transform: translateY(-0.375rem);
+    transition: opacity 0.2s ease, transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+    pointer-events: none;
+}
+
+/* shown */
+.theme-warn.is-shown {
+    opacity: 1;
+    transform: none;
+    pointer-events: auto;
+}
+
+/* its question, a little stronger */
+.theme-warn strong {
+    display: block;
+    margin-bottom: 0.375rem;
+    font-size: 0.875rem;
+    font-weight: 700;
+}
+
+/* the two answers, side by side under the text, the safe one on the right */
+.theme-warn-actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 0.375rem;
+    margin-top: 0.75rem;
+}
+
+/* staying dark is the suggested answer, so it is the filled one */
+.theme-warn-actions .theme-warn-no {
+    background: var(--foreground);
+    color: var(--background);
+}
+
+/* no turning icons or sliding card for people who asked for less motion */
+@media (prefers-reduced-motion: reduce) {
+    .theme-icon,
+    .theme-warn {
+        transition: none;
+    }
+}
+
+/* a full-height line between the nav's buttons and the theme toggle, like the lines between the
+   nav's boxes, so the toggle sits in a little box of its own and reads as a setting, not a page.
+   only there when the toggle is (firstPaint.js adds can-theme) */
+.theme-divider {
+    display: none;
+}
+
+/* it runs from the top of the nav to the bottom (through the box's padding), with as much room on
+   each side as the toggle has to the nav's right edge */
+:root.can-theme .nav-tabs .theme-divider {
+    display: block;
+    align-self: stretch;
+    flex: none;
+    width: var(--line-width, 0.0625rem);
+    margin: calc(-1 * 0rem) 0.25rem;
+    background: var(--line-color, var(--foreground));
+}
+
+/* phones: the nav box is a little tighter */
+@media (max-width: 760px) {
+    :root.can-theme .nav-tabs .theme-divider {
+        margin-inline: 0.125rem;
+    }
 }
