@@ -12,8 +12,8 @@
     <meta name="description" content="Personal website — deze portfolio, in vanilla HTML, CSS en JavaScript.">
 
     <link rel="canonical" href="https://hello.errornoslash.be/pages/projects/personal-website.html">
-    <meta name="theme-color" content="#e4e4e4" media="(prefers-color-scheme: light)">
-    <meta name="theme-color" content="#040507" media="(prefers-color-scheme: dark)">
+    <meta name="color-scheme" content="dark">
+    <meta name="theme-color" content="#040507">
 
     <!-- Open Graph / Twitter (link preview) -->
     <meta property="og:type" content="website">
@@ -65,6 +65,7 @@
     <script src="../../scripts/pictureSymbols.js" defer></script>
     <script src="../../scripts/menu.js" defer></script>
     <script src="../../scripts/sitePreview.js" defer></script>
+    <script src="../../scripts/theme.js" defer></script>
 </head>
 
 <body>
@@ -112,6 +113,7 @@
                 <a class="pill" href="../../index.html#over">over?</a>
                 <a class="pill" href="../../index.html#contact">contact?</a>
                 <a class="pill nav-menu" href="#menu">menu</a>
+                <button class="pill theme-toggle" type="button" data-to-light="licht?" data-to-dark="donker?" data-title-light="Lichte modus" data-title-dark="Donkere modus"></button>
             </nav>
         </div>
 

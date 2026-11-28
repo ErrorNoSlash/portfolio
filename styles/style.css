@@ -4,15 +4,16 @@
     --grey: #AEB5B8;
     --border: #525252;
 
-    /* light theme (default) */
-    --background: #e4e4e4;
-    --foreground: #1a1a1a;
-    --surface: #f6f6f6;
-    --card-background: #cfcfcf;
-    --line-color: #6f6f6f;
-    --glow: rgb(255 255 255 / 0.55);
-    --curtain: var(--foreground);
-    --curtain-text: var(--background);
+    /* dark theme (default) */
+    --background: var(--black);
+    --foreground: #ececec;
+    --surface: #1c1c1c;
+    --card-background: #2a2a2a;
+    --line-color: #8a8a8a;
+    --glow: rgb(255 255 255 / 0.13);
+    --curtain: var(--surface);
+    --curtain-text: var(--foreground);
+    color-scheme: dark;
 
     /* the circle that fills a link on hover: soft and not too fast, so a big area never flips at once */
     --fill-time: 0.8s;
@@ -25,18 +26,17 @@
     --font-mono: "Space Mono", ui-monospace, Menlo, Consolas, monospace;
 }
 
-/* dark theme: follows the system */
-@media (prefers-color-scheme: dark) {
-    :root {
-        --background: var(--black);
-        --foreground: #ececec;
-        --surface: #1c1c1c;
-        --card-background: #2a2a2a;
-        --line-color: #8a8a8a;
-        --glow: rgb(255 255 255 / 0.13);
-        --curtain: var(--surface);
-        --curtain-text: var(--foreground);
-    }
+/* light theme: only when picked with the toggle in the nav (theme.js) */
+:root[data-theme="light"] {
+    --background: #e4e4e4;
+    --foreground: #1a1a1a;
+    --surface: #f6f6f6;
+    --card-background: #cfcfcf;
+    --line-color: #6f6f6f;
+    --glow: rgb(255 255 255 / 0.55);
+    --curtain: var(--foreground);
+    --curtain-text: var(--background);
+    color-scheme: light;
 }
 
 /* every element counts padding and border inside its width */
@@ -3810,4 +3810,25 @@ body.cursor-on-link {
    (asciiDonut.js adds is-preview when the page is shown in that preview) */
 .is-preview :is(.marquee span, .caret) {
     animation-play-state: paused;
+}
+
+/* the light / dark toggle in the nav: a pill like the others, its word says what it switches to.
+   it only shows once the script is there (firstPaint.js adds can-theme), and stays on phones,
+   where the other pills fold into the menu */
+.theme-toggle {
+    display: none;
+}
+
+:root.can-theme .nav-tabs .pill.theme-toggle {
+    display: inline-flex;
+}
+
+/* the word comes from the button's data attributes, so it is right before any script runs */
+.theme-toggle::after {
+    content: attr(data-to-light);
+}
+
+/* in light mode it offers dark */
+:root[data-theme="light"] .theme-toggle::after {
+    content: attr(data-to-dark);
 }

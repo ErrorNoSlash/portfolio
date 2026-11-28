@@ -24,3 +24,13 @@ try {
     if (sessionStorage.getItem("pageTransition")) html.classList.add("is-arriving");
     if (localStorage.getItem("preloaderSeen")) html.classList.add("has-loaded");
 } catch (error) { }
+
+// dark unless light was picked before (theme.js saves it); the toggle only shows when this ran
+document.documentElement.classList.add("can-theme");
+try {
+    if (localStorage.getItem("theme") === "light") {
+        document.documentElement.dataset.theme = "light";
+        const bar = document.querySelector('meta[name="theme-color"]');
+        if (bar) bar.content = "#e4e4e4";
+    }
+} catch (error) { }
