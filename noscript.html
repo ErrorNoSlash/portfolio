@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <!-- security: only load scripts, styles, fonts and pictures from this site and the few places named here,
          always over https; links to other sites only tell them which site you came from -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://stats.errornoslash.be; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://stats.errornoslash.be; frame-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self' mailto:; upgrade-insecure-requests">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://stats.errornoslash.be; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data:; connect-src 'self' https://stats.errornoslash.be; frame-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self' mailto:; upgrade-insecure-requests">
     <meta name="referrer" content="strict-origin-when-cross-origin">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Dias Stas - JavaScript staat uit</title>
@@ -23,11 +23,10 @@
     <link rel="stylesheet" href="styles/style.css">
     <link rel="stylesheet" href="styles/window.css">
 
-    <!--Google Fonts-->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800;900&family=Space+Mono:wght@400;700&display=swap"
-        rel="stylesheet">
+    <!-- fonts: served from this site, the stylesheet says which is which -->
+    <link rel="preload" href="fonts/space-mono-400.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="fonts/space-mono-700.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="fonts/outfit-900.woff2" as="font" type="font/woff2" crossorigin>
 
     <!-- footer year: updates itself when JavaScript runs, otherwise the year written in the footer shows -->
     <script src="scripts/getYear.js" defer></script>

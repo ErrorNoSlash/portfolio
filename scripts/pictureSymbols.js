@@ -1,4 +1,4 @@
-/*controls the possessed pictures (the portrait, the slashyos screenshot): moving the mouse (or a finger) over a [data-symbols] picture wakes the cells
+/*controls the possessed pictures (the portrait, and on the portfolio the slashyos screenshot): moving the mouse (or a finger) over a [data-symbols] picture wakes the cells
   under the pointer, they flicker through terminal symbols for a moment and then fade back into the picture.
   everything is drawn on one canvas over the photo, and only while a cell is awake, so it costs almost nothing
   (the old version faded hundreds of separate boxes, which lagged on windows)*/

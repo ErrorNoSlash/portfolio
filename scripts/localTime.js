@@ -4,24 +4,23 @@ const localTimeField = document.querySelector("#local-time");
 const dayNow = document.querySelector("#day-now");
 const dayParts = [...document.querySelectorAll(".day-parts span")];
 const localTimeZone = "Europe/Brussels";
-const localTickTime = 1000;
+
+// one clock for belgium, made once (making it is the slow part): it gives the hour and the minute
+const belgianClock = new Intl.DateTimeFormat("nl-BE", { timeZone: localTimeZone, hour: "2-digit", minute: "2-digit", hourCycle: "h23" });
 
 // writes the time in belgium, with the part of the day after it
 function showLocalTime() {
-    const now = new Date();
-    const time = now.toLocaleTimeString("nl-BE", { timeZone: localTimeZone, hour: "2-digit", minute: "2-digit" });
-    const hour = Number(now.toLocaleString("en-GB", { timeZone: localTimeZone, hour: "2-digit", hour12: false }));
-    const minute = Number(now.toLocaleString("en-GB", { timeZone: localTimeZone, minute: "2-digit" }));
+    const parts = belgianClock.formatToParts(new Date());
+    const hour = Number(parts.find(function (part) { return part.type === "hour"; }).value);
+    const minute = Number(parts.find(function (part) { return part.type === "minute"; }).value);
+    const time = `${String(hour).padStart(2, "0")}:${String(minute).padStart(2, "0")}`;
 
     let partOfDay = "nacht";
     if (hour >= 6) partOfDay = "ochtend";
     if (hour >= 12) partOfDay = "middag";
     if (hour >= 18) partOfDay = "avond";
 
-    // only touch the page when the minute changed, not every second
-    const text = `${time} (${partOfDay})`;
-    if (localTimeField.textContent === text) return;
-    localTimeField.textContent = text;
+    localTimeField.textContent = `${time} (${partOfDay})`;
 
     // the dot slides along the day, and the part of the day it is in is marked
     dayNow.style.left = `${((hour * 60 + minute) / 1440) * 100}%`;
@@ -30,6 +29,11 @@ function showLocalTime() {
     });
 }
 
-/* show it once, then keep the clock running */
-showLocalTime();
-setInterval(showLocalTime, localTickTime);
+// the time only changes once a minute, so it waits until the next minute starts instead of checking every second
+function tickLocalTime() {
+    showLocalTime();
+    setTimeout(tickLocalTime, 60000 - (Date.now() % 60000) + 50);
+}
+
+/* show it now, then keep the clock running */
+tickLocalTime();

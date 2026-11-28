@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <!-- security: only load scripts, styles, fonts and pictures from this site and the few places named here,
          always over https; links to other sites only tell them which site you came from -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://stats.errornoslash.be; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://stats.errornoslash.be; frame-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self' mailto:; upgrade-insecure-requests">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://stats.errornoslash.be; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data:; connect-src 'self' https://stats.errornoslash.be; frame-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self' mailto:; upgrade-insecure-requests">
     <meta name="referrer" content="strict-origin-when-cross-origin">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Dias Stas - 404</title>
@@ -14,6 +14,9 @@
 
     <meta name="color-scheme" content="dark">
     <meta name="theme-color" content="#040507">
+
+    <!-- runs first: sends a plain http visit to https (firstPaint.js) -->
+    <script src="/scripts/firstPaint.js"></script>
 
     <!-- GitHub Pages shows this page for any missing address, even a deep one like /a/b/c, so every file starts from the root -->
     <link rel="icon" href="/favicon.ico" sizes="48x48">
@@ -24,19 +27,15 @@
     <link rel="stylesheet" href="/styles/style.css">
     <link rel="stylesheet" href="/styles/window.css">
 
-    <!--Google Fonts-->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800;900&family=Space+Mono:wght@400;700&display=swap"
-        rel="stylesheet">
+    <!-- fonts: served from this site, the stylesheet says which is which -->
+    <link rel="preload" href="/fonts/space-mono-400.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="/fonts/space-mono-700.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="/fonts/outfit-900.woff2" as="font" type="font/woff2" crossorigin>
 
-    <!-- runs first: sends a plain http visit to https (firstPaint.js) -->
-    <script src="/scripts/firstPaint.js"></script>
+    <!-- visitor counts (umami, no cookies), only on the real site, not when testing locally -->
+    <script defer src="https://stats.errornoslash.be/script.js" data-website-id="be928998-99b4-4bfb-baf1-b84b52186ba8" data-domains="hello.errornoslash.be"></script>
 
-    <!--Umami analytics-->
-    <script defer src="https://stats.errornoslash.be/script.js" data-website-id="be928998-99b4-4bfb-baf1-b84b52186ba8"></script>
-
-    <!-- JS scripts -->
+    <!-- scripts -->
     <script src="/scripts/cursor.js" defer></script>
     <script src="/scripts/getYear.js" defer></script>
     <script src="/scripts/notFound.js" defer></script>
@@ -135,7 +134,6 @@
                     <a class="window-chip" href="https://gitlab.com/ErrorN0Slash/" target="_blank" rel="noopener">GitLab</a>
                     <a class="window-chip" href="https://mastodon.social/@slashy" target="_blank" rel="me noopener">Mastodon</a>
                     <a class="window-chip" href="mailto:dias.stas@pm.me">Mail</a>
-                    <a class="window-chip" href="mail.html">Geen mail-app?</a>
                 </nav>
             </div>
 

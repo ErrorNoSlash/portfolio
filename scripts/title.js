@@ -34,6 +34,19 @@ titles.forEach(function (title, titleIndex) {
     });
 });
 
+/* once every letter of a title has risen, its animations are taken off (has-risen): a finished animation
+   still keeps each letter on its own layer, which makes every scroll frame heavier for nothing */
+titles.forEach(function (title) {
+    let lettersRisen = 0;
+    title.addEventListener("animationend", function (e) {
+        if (e.animationName !== "letter-rise") return;
+        lettersRisen++;
+        if (lettersRisen < title.querySelectorAll(":is(h1, h2, .echo) span").length) return;
+        title.classList.add("has-risen");
+        lettersRisen = 0;
+    });
+});
+
 /* start a title's animation once a quarter of it is on screen */
 const titleObserver = new IntersectionObserver(function (entries) {
     entries.forEach(function (entry) {
@@ -53,7 +66,7 @@ window.addEventListener("pageshow", function (e) {
     if (!e.persisted) return;
 
     titles.forEach(function (title) {
-        title.classList.remove("is-visible");
+        title.classList.remove("is-visible", "has-risen");
         title.querySelectorAll("span").forEach(function (span) {
             span.style.animation = "none";
             span.getBoundingClientRect();

@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <!-- security: only load scripts, styles, fonts and pictures from this site and the few places named here,
          always over https; links to other sites only tell them which site you came from -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://stats.errornoslash.be; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://stats.errornoslash.be; frame-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self' mailto:; upgrade-insecure-requests">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://stats.errornoslash.be; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data:; connect-src 'self' https://stats.errornoslash.be; frame-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self' mailto:; upgrade-insecure-requests">
     <meta name="referrer" content="strict-origin-when-cross-origin">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>dias@stas:~/projecten/slashyos</title>
@@ -41,21 +41,20 @@
     <link rel="stylesheet" href="../../styles/normalize.css">
     <link rel="stylesheet" href="../../styles/style.css">
 
-    <!--Google Fonts-->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800;900&family=Space+Mono:wght@400;700&display=swap"
-        rel="stylesheet">
+    <!-- fonts: served from this site, the stylesheet says which is which -->
+    <link rel="preload" href="../../fonts/space-mono-400.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="../../fonts/space-mono-700.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="../../fonts/outfit-900.woff2" as="font" type="font/woff2" crossorigin>
 
     <noscript>
         <meta http-equiv="refresh" content="0; url=../../noscript.html">
         <style>.preloader { display: none; }</style>
     </noscript>
 
-    <!--Umami analytics-->
-    <script defer src="https://stats.errornoslash.be/script.js" data-website-id="be928998-99b4-4bfb-baf1-b84b52186ba8"></script>
+    <!-- visitor counts (umami, no cookies), only on the real site, not when testing locally -->
+    <script defer src="https://stats.errornoslash.be/script.js" data-website-id="be928998-99b4-4bfb-baf1-b84b52186ba8" data-domains="hello.errornoslash.be"></script>
 
-    <!-- JS scripts -->
+    <!-- scripts -->
     <script src="../../scripts/preloader.js" defer></script>
     <script src="../../scripts/pageTransition.js" defer></script>
     <script src="../../scripts/cursor.js" defer></script>
@@ -105,7 +104,7 @@
 
         <!-- nav: logo, the prompt (types the command of the screen you are on) and the pills -->
         <div class="row nav">
-            <a class="cell nav-logo" href="../../index.html" aria-label="Naar het begin">ds/</a>
+            <a class="cell nav-logo" href="../../index.html" aria-label="ds/ (naar het begin)">ds/</a>
             <div class="cell nav-prompt"><span class="nav-line"><span class="nav-user">dias@stas:</span>~$&nbsp;cat slashyos.md</span><span class="caret"></span></div>
             <nav class="cell nav-tabs" aria-label="Secties">
                 <a class="pill" href="../../index.html#projecten">projecten?</a>
@@ -152,8 +151,8 @@
                     </div>
                     <!-- the desktop, with the possessed symbols on top (pictureSymbols.js) -->
                     <figure class="project-window-body project-screenshot" data-symbols>
-                        <img src="../../images/slashyos.jpg" alt="SlashyOS-desktop: niri op Wayland met kitty, fastfetch en btop, blauw kleurenschema" width="1600" height="1066" decoding="async">
-                        <img class="project-screenshot-colour" src="../../images/slashyos.jpg" alt="" width="1600" height="1066" decoding="async">
+                        <img src="../../images/slashyos-1600.webp" srcset="../../images/slashyos-480.webp 480w, ../../images/slashyos-960.webp 960w, ../../images/slashyos-1600.webp 1600w" sizes="(max-width: 760px) 90vw, 41vw" alt="SlashyOS-desktop: niri op Wayland met kitty, fastfetch en btop, blauw kleurenschema" width="1600" height="1066" decoding="async">
+                        <img class="project-screenshot-colour" src="../../images/slashyos-1600.webp" srcset="../../images/slashyos-480.webp 480w, ../../images/slashyos-960.webp 960w, ../../images/slashyos-1600.webp 1600w" sizes="(max-width: 760px) 90vw, 41vw" alt="" width="1600" height="1066" decoding="async">
                         <canvas class="symbol-grid" aria-hidden="true"></canvas>
                     </figure>
                     <span class="sticker">/1 flake, 2 machines/</span>
@@ -181,7 +180,7 @@
     </main>
 
     <!-- menu panel for phones (opened by menu.js) -->
-    <div class="veil" id="veil" aria-hidden="true">
+    <div class="veil" id="veil" inert>
         <section class="panel" id="panel-menu" role="dialog" aria-modal="true" aria-label="Menu">
             <div class="panel-head">
                 <span>dias@stas:~$ ls</span>

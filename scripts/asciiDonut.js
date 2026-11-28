@@ -28,10 +28,17 @@ for (let phi = 0; phi < 6.28; phi += phiStep) {
     phiSin.push(Math.sin(phi));
 }
 
+// the donut never reaches the outer edges of the 60 x 30 grid (columns 13-46 and rows 6-23, at any angle),
+// so only the middle 36 x 20 is written: less than half the text to lay out every frame, centered the same
+const firstColumn = 12;
+const lastColumn = 48;
+const firstRow = 5;
+const lastRow = 25;
+
 // the buffers of one frame, reused every frame instead of making new ones
 const donutCharacters = new Array(donutColumns * donutRows);
 const closestDepth = new Float32Array(donutColumns * donutRows);
-const donutLines = new Array(donutRows);
+const donutLines = new Array(lastRow - firstRow);
 
 // draws one frame: every point of the donut is turned, lit and written as a character, closest ones win
 function drawDonut() {
@@ -74,8 +81,9 @@ function drawDonut() {
         }
     }
 
-    for (let line = 0; line < donutRows; line++) {
-        donutLines[line] = donutCharacters.slice(line * donutColumns, (line + 1) * donutColumns).join("");
+    for (let line = firstRow; line < lastRow; line++) {
+        const start = line * donutColumns;
+        donutLines[line - firstRow] = donutCharacters.slice(start + firstColumn, start + lastColumn).join("");
     }
     donutElement.textContent = donutLines.join("\n");
 }
@@ -92,9 +100,12 @@ function spinDonut() {
 let isDonutInView = true;
 let donutTimer = null;
 
+// people who asked for less motion get a donut that stands still
+const lessMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+
 // spins only while the donut can be seen: not when it is scrolled away or the tab is hidden
 function updateDonutSpin() {
-    const shouldSpin = isDonutInView && !document.hidden && !isInsidePreview;
+    const shouldSpin = isDonutInView && !document.hidden && !isInsidePreview && !lessMotion.matches;
     if (shouldSpin && donutTimer === null) donutTimer = setInterval(spinDonut, donutFrameTime);
     if (!shouldSpin && donutTimer !== null) {
         clearInterval(donutTimer);
@@ -113,8 +124,9 @@ new IntersectionObserver(function (entries) {
     updateDonutSpin();
 }).observe(donutElement);
 
-/* switching to another tab and back stops and starts the spin */
+/* switching to another tab and back stops and starts the spin, and so does the motion setting */
 document.addEventListener("visibilitychange", updateDonutSpin);
+lessMotion.addEventListener("change", updateDonutSpin);
 
 /* the mouse position, from -0.5 to 0.5 over the window, tilts the donut */
 window.addEventListener("pointermove", function (e) {

@@ -1,6 +1,7 @@
-/*controls the typed line in the lead: types the text letter by letter in front of the caret*/
+/*controls the typed line in the lead: types the text letter by letter in front of the caret.
+  screen readers get the whole line at once (the hidden copy in the html), not the letters as they come*/
 const introLine = document.querySelector("#typed-line");
-const introCaret = introLine.querySelector(".caret");
+const introTyped = introLine.querySelector(".typed-text");
 const introText = introLine.dataset.text;
 
 const typeDelay = 70;
@@ -14,7 +15,7 @@ let lettersTyped = 0;
 function typeNextLetter() {
     if (lettersTyped >= introText.length) return;
 
-    introLine.insertBefore(document.createTextNode(introText[lettersTyped]), introCaret);
+    introTyped.append(introText[lettersTyped]);
     lettersTyped++;
     setTimeout(typeNextLetter, typeDelay + Math.random() * typeDelayRandom);
 }

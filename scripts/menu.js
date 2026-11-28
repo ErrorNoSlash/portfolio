@@ -10,7 +10,7 @@ function showMenu(isOpen) {
     veil.classList.toggle("is-open", isOpen);
     // the page behind holds still while the menu is open, so no work is spent on what nobody can see
     document.body.classList.toggle("overlay-open", isOpen);
-    veil.setAttribute("aria-hidden", String(!isOpen));
+    veil.inert = !isOpen;
     sheet.toggleAttribute("inert", isOpen);
     menuPill.classList.toggle("is-active", isOpen);
 

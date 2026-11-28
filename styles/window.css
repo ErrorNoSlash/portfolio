@@ -1,4 +1,5 @@
-/* noscript.html and 404.html: one centered terminal window, not the full-page sheet. Variables, fonts and the base come from style.css */
+/* noscript.html, 404.html and mail.html: one centered terminal window, not the full-page sheet.
+   the same file on the contact site and the portfolio. variables, fonts and the base come from style.css */
 .window-page {
     flex: 1;
     display: flex;

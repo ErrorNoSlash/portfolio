@@ -1,3 +1,53 @@
+/* FONTS: Outfit for the big words and Space Mono for everything else, both free (SIL OFL,
+   fonts/Outfit-OFL.txt and fonts/SpaceMono-OFL.txt). served from this site instead of Google Fonts:
+   no extra connections before the text can show, and visitors are not sent to Google */
+@font-face {
+    font-family: "Outfit";
+    src: url("../fonts/outfit-400.woff2") format("woff2");
+    font-weight: 400;
+    font-display: swap;
+}
+
+/* the next weight */
+@font-face {
+    font-family: "Outfit";
+    src: url("../fonts/outfit-600.woff2") format("woff2");
+    font-weight: 600;
+    font-display: swap;
+}
+
+/* the next weight */
+@font-face {
+    font-family: "Outfit";
+    src: url("../fonts/outfit-800.woff2") format("woff2");
+    font-weight: 800;
+    font-display: swap;
+}
+
+/* the next weight */
+@font-face {
+    font-family: "Outfit";
+    src: url("../fonts/outfit-900.woff2") format("woff2");
+    font-weight: 900;
+    font-display: swap;
+}
+
+/* the next weight */
+@font-face {
+    font-family: "Space Mono";
+    src: url("../fonts/space-mono-400.woff2") format("woff2");
+    font-weight: 400;
+    font-display: swap;
+}
+
+/* the next weight */
+@font-face {
+    font-family: "Space Mono";
+    src: url("../fonts/space-mono-700.woff2") format("woff2");
+    font-weight: 700;
+    font-display: swap;
+}
+
 /* COLORS (same palette as contact.errornoslash.be) */
 :root {
     --black: #040507;
@@ -37,6 +87,16 @@
     --curtain: var(--foreground);
     --curtain-text: var(--background);
     color-scheme: light;
+}
+
+/* text only for screen readers: read out, but not shown */
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
 }
 
 /* every element counts padding and border inside its width */
@@ -169,7 +229,7 @@ a {
         place-items: center;
         font: 900 1.75rem var(--font-display);
         letter-spacing: -0.04em;
-        transition: 0.3s;
+        transition: background-color 0.3s, color 0.3s, border-color 0.3s, box-shadow 0.3s;
     }
 
     & a.nav-logo:hover {
@@ -228,7 +288,7 @@ a {
     color: inherit;
     font: 700 0.875rem/1 var(--font-mono);
     cursor: pointer;
-    transition: 0.3s;
+    transition: background-color 0.3s, color 0.3s, border-color 0.3s, box-shadow 0.3s;
 
     /* hover only where there is a mouse, so a tap beside the button does not leave it filled on a phone */
     &.is-active {
@@ -314,8 +374,8 @@ a {
     }
 }
 
-/* the spinning ascii donut: asciiDonut.js draws 60 x 30 characters but the donut only uses about 30 x 16 of them,
-   so the font is sized to that middle part and the empty edges are cut off */
+/* the spinning ascii donut: asciiDonut.js writes the middle 36 x 20 characters of its grid and the donut uses
+   about 30 x 16 of them, so the font is sized to that part and the empty edges are cut off */
 .ascii {
     position: relative;
     display: grid;
@@ -2805,6 +2865,11 @@ body.cursor-on-link {
     animation-delay: calc(var(--start, 0.9s) + var(--i, 0) * 0.045s);
 }
 
+/* done rising: no animation left on the letters, so they stop being separate layers (title.js adds has-risen) */
+.title.has-risen :is(h1, h2, .echo) span {
+    animation: none;
+}
+
 /* titles further down wait until they scroll into view (title.js adds is-visible) */
 .title:not(.is-visible) :is(h1, h2, .echo) span {
     animation-play-state: paused;
@@ -3856,58 +3921,81 @@ body.cursor-on-link {
     transform: none;
 }
 
-/* the warning before light mode: a small card under the toggle, asking first */
-.theme-warn {
+/* the warning before light mode and the "nothing opened?" mail card: small rounded windows in the
+   site's own style, the question in the big-word font and the rest in the terminal font */
+.theme-warn,
+.mail-hint {
     position: fixed;
     z-index: 9000;
-    width: min(21rem, calc(100vw - 1.5rem));
-    padding: 0.875rem 0.875rem 0.9375rem;
+    padding: 1rem 1rem 1rem 1.125rem;
     border: var(--line-width, 0.0625rem) solid var(--foreground);
+    border-radius: 1.25rem;
     background: var(--surface, var(--background));
     color: var(--foreground);
-    box-shadow: 0.25rem 0.25rem 0 var(--foreground);
-    font-size: 0.8125rem;
-    line-height: 1.45;
+    box-shadow: 0 1rem 2.5rem rgb(0 0 0 / 0.45);
+    font: 400 0.8125rem / 1.5 var(--font-mono);
     opacity: 0;
-    transform: translateY(-0.375rem);
     transition: opacity 0.2s ease, transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
     pointer-events: none;
 }
 
+/* the warning: under the toggle (theme.js places it), sliding down a little as it shows */
+.theme-warn {
+    width: min(21rem, calc(100vw - 1.5rem));
+    transform: translateY(-0.375rem);
+}
+
+/* the mail card: bottom right, sliding up a little as it shows */
+.mail-hint {
+    right: 0.75rem;
+    bottom: 0.75rem;
+    width: min(20rem, calc(100vw - 1.5rem));
+    transform: translateY(0.5rem);
+}
+
 /* shown */
-.theme-warn.is-shown {
+.theme-warn.is-shown,
+.mail-hint.is-shown {
     opacity: 1;
     transform: none;
     pointer-events: auto;
 }
 
-/* its question, a little stronger */
-.theme-warn strong {
+/* the question, in the same font as the site's titles */
+.theme-warn strong,
+.mail-hint strong {
     display: block;
     margin-bottom: 0.375rem;
-    font-size: 0.875rem;
-    font-weight: 700;
+    font: 800 1.125rem / 1.15 var(--font-display);
 }
 
-/* the two answers, side by side under the text, the safe one on the right */
-.theme-warn-actions {
+/* the answers, side by side under the text, the suggested one on the right */
+.theme-warn-actions,
+.mail-hint-actions {
     display: flex;
     flex-wrap: wrap;
     justify-content: flex-end;
     gap: 0.375rem;
-    margin-top: 0.75rem;
+    margin-top: 0.875rem;
 }
 
-/* staying dark is the suggested answer, so it is the filled one */
-.theme-warn-actions .theme-warn-no {
+/* the suggested answer (stay dark, or the way to the mail page) is the filled one */
+.theme-warn-actions .theme-warn-no,
+.mail-hint-actions .mail-hint-go {
     background: var(--foreground);
     color: var(--background);
 }
 
-/* no turning icons or sliding card for people who asked for less motion */
+/* a softer shadow on the light theme, black looks heavy there */
+:root[data-theme="light"] :is(.theme-warn, .mail-hint) {
+    box-shadow: 0 1rem 2.5rem rgb(0 0 0 / 0.18);
+}
+
+/* no turning icons or sliding cards for people who asked for less motion */
 @media (prefers-reduced-motion: reduce) {
     .theme-icon,
-    .theme-warn {
+    .theme-warn,
+    .mail-hint {
         transition: none;
     }
 }
@@ -3934,62 +4022,5 @@ body.cursor-on-link {
 @media (max-width: 760px) {
     :root.can-theme .nav-tabs .theme-divider {
         margin-inline: 0.125rem;
-    }
-}
-
-/* the card when a mail link opened nothing: bottom right, the same look as the theme warning */
-.mail-hint {
-    position: fixed;
-    right: 0.75rem;
-    bottom: 0.75rem;
-    z-index: 9000;
-    width: min(20rem, calc(100vw - 1.5rem));
-    padding: 0.875rem 0.875rem 0.9375rem;
-    border: var(--line-width, 0.0625rem) solid var(--foreground);
-    background: var(--surface, var(--background));
-    color: var(--foreground);
-    box-shadow: 0.25rem 0.25rem 0 var(--foreground);
-    font-size: 0.8125rem;
-    line-height: 1.45;
-    opacity: 0;
-    transform: translateY(0.5rem);
-    transition: opacity 0.2s ease, transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
-    pointer-events: none;
-}
-
-/* shown */
-.mail-hint.is-shown {
-    opacity: 1;
-    transform: none;
-    pointer-events: auto;
-}
-
-/* its first line, a little stronger */
-.mail-hint strong {
-    display: block;
-    margin-bottom: 0.25rem;
-    font-size: 0.875rem;
-    font-weight: 700;
-}
-
-/* close and the way to the page, under the text */
-.mail-hint-actions {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: flex-end;
-    gap: 0.375rem;
-    margin-top: 0.75rem;
-}
-
-/* the way to the page is the suggested one, so it is filled */
-.mail-hint-actions .mail-hint-go {
-    background: var(--foreground);
-    color: var(--background);
-}
-
-/* no sliding card for people who asked for less motion */
-@media (prefers-reduced-motion: reduce) {
-    .mail-hint {
-        transition: none;
     }
 }

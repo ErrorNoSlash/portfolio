@@ -7,12 +7,12 @@
   Live at <a href="https://hello.errornoslash.be">hello.errornoslash.be</a> · same style as my <a href="https://contact.errornoslash.be">contact page</a>
 </p>
 
-|            |                                                         |
-| ---------- | ------------------------------------------------------- |
-| **Stack**  | vanilla HTML, CSS and JavaScript                        |
-| **Build**  | none — open `index.html` and it runs                    |
-| **Look**   | one big grid of lines, two fonts, black and white       |
-| **Hosted** | GitHub Pages, on a subdomain                            |
+|            |                                                   |
+| ---------- | ------------------------------------------------- |
+| **Stack**  | vanilla HTML, CSS and JavaScript                  |
+| **Build**  | none — open `index.html` and it runs              |
+| **Look**   | one big grid of lines, two fonts, black and white |
+| **Hosted** | GitHub Pages, on a subdomain                      |
 
 ---
 
@@ -20,22 +20,22 @@
 
 The home page is one page of four full screens. You land on the intro and scroll on from there.
 
-| #  | screen        | what is on it                                                                 |
-| -- | ------------- | ----------------------------------------------------------------------------- |
-| 01 | **landing**   | big title, typed intro, the spinning ASCII donut and three "doors"            |
-| 02 | **projecten** | the projects as folders with a picture of each                               |
-| 03 | **over**      | the portrait on a pass, the story, skills, a `now.txt` note and the socials   |
-| 04 | **contact**   | `ZEG HALLO`, a mail window, the address, a status window and the socials      |
+| #  | screen        | what is on it                                                               |
+| -- | ------------- | --------------------------------------------------------------------------- |
+| 01 | **landing**   | big title, typed intro, the spinning ASCII donut and three "doors"          |
+| 02 | **projecten** | the projects as folders with a picture of each                              |
+| 03 | **over**      | the portrait on a pass, the story, skills, a `now.txt` note and the socials |
+| 04 | **contact**   | `ZEG HALLO`, a mail window, the address, a status window and the socials    |
 
 Plus a page per project, a 404 page and a page for visitors without JavaScript.
 
 ## Projects
 
-| project          | page                                                                       | on the page                                       |
-| ---------------- | -------------------------------------------------------------------------- | ------------------------------------------------- |
-| personal-website | [personal-website.html](pages/projects/personal-website.html)             | a live, scaled-down preview that tours the site  |
-| SlashyOS         | [slashyos.html](pages/projects/slashyos.html)                             | the desktop screenshot, possessed by symbols      |
-| blog             | [blog.html](pages/projects/blog.html)                                     | a markdown file turning into a page              |
+| project          | page                                                          | on the page                                     |
+| ---------------- | ------------------------------------------------------------- | ----------------------------------------------- |
+| personal-website | [personal-website.html](pages/projects/personal-website.html) | a live, scaled-down preview that tours the site |
+| SlashyOS         | [slashyos.html](pages/projects/slashyos.html)                 | the desktop screenshot, possessed by symbols    |
+| blog             | [blog.html](pages/projects/blog.html)                         | a markdown file turning into a page             |
 
 Every project page fits one screen: the story and numbered features on the left, a window with the project on the right, and the links as cards at the bottom.
 
@@ -61,14 +61,14 @@ Every project page fits one screen: the story and numbered features on the left,
 
 ### ✨ Small details
 
-| where        | detail                                                                         |
-| ------------ | ------------------------------------------------------------------------------ |
-| landing      | the ASCII donut is drawn live in JavaScript and tilts towards your mouse       |
-| projecten    | a folder lifts, pulls its paper out and fills in its big number on hover      |
-| over         | the pass swings, a spotlight follows the pointer and the asterisk spins        |
-| contact      | the mail window builds the `$ mail -s "…"` command as you type                 |
-| contact      | a `$ dias --status` window shows my local time in Belgium                      |
-| contact      | a button copies the mail address                                               |
+| where     | detail                                                                   |
+| --------- | ------------------------------------------------------------------------ |
+| landing   | the ASCII donut is drawn live in JavaScript and tilts towards your mouse |
+| projecten | a folder lifts, pulls its paper out and fills in its big number on hover |
+| over      | the pass swings, a spotlight follows the pointer and the asterisk spins  |
+| contact   | the mail window builds the `$ mail -s "…"` command as you type           |
+| contact   | a `$ dias --status` window shows my local time in Belgium                |
+| contact   | a button copies the mail address                                         |
 
 ### 📱 Every screen
 
@@ -106,17 +106,17 @@ Served with GitHub Pages on a subdomain:
 
 ## Customize
 
-| to change           | edit                                                                                      |
-| ------------------- | ----------------------------------------------------------------------------------------- |
-| a project           | its `<a class="project-card">` in the `#projecten` screen, and its page in `pages/projects/` |
-| the landing intro   | the `.intro` block in the `#home` screen (the typed line is `data-text` on `#typed-line`) |
-| the story / skills  | the `.about` block in the `#over` screen                                                  |
-| the tab title       | the `tabCommands` list at the top of `scripts/tabTitle.js`                                |
-| the donut           | the constants at the top of `scripts/asciiDonut.js`                                       |
-| the hover speed     | `--fill-time` at the top of `styles/style.css`                                            |
-| the profile picture | replace `images/pfp.jpg`                                                                  |
-| the link preview    | the Open Graph tags in every page, and `assets/og-image.svg` → `images/og-image.png`     |
-| the colours         | the CSS variables at the top of `styles/style.css`                                        |
+| to change           | edit                                                                                              |
+| ------------------- | ------------------------------------------------------------------------------------------------- |
+| a project           | its `<a class="project-card">` in the `#projecten` screen, and its page in `pages/projects/`      |
+| the landing intro   | the `.intro` block in the `#home` screen (the typed line is `data-text` on `#typed-line`)         |
+| the story / skills  | the `.about` block in the `#over` screen                                                          |
+| the tab title       | the `tabCommands` list at the top of `scripts/tabTitle.js`                                        |
+| the donut           | the constants at the top of `scripts/asciiDonut.js`                                               |
+| the hover speed     | `--fill-time` at the top of `styles/style.css`                                                    |
+| the profile picture | replace `images/pfp-480.webp` and `images/pfp-1020.webp` (the same picture, 480 and 1020 px wide) |
+| the link preview    | the Open Graph tags in every page, and `assets/og-image.svg` → `images/og-image.png`              |
+| the colours         | the CSS variables at the top of `styles/style.css`                                                |
 
 The main colours, the same as the contact page:
 
@@ -138,6 +138,7 @@ The main colours, the same as the contact page:
 ├── index.html          # the one page: landing, projecten, over and contact
 ├── 404.html            # shown by GitHub Pages for a missing address (paths start at / so it works on any url)
 ├── noscript.html       # shown when JavaScript is turned off
+├── mail.html           # for visitors without a mail app: the address and a few open-source mail apps
 ├── pages/projects/     # one page per project
 ├── CNAME               # custom domain for GitHub Pages
 ├── robots.txt
@@ -147,19 +148,22 @@ The main colours, the same as the contact page:
 │   ├── banner.svg      # banner at the top of this README
 │   ├── og-image.svg    # source of the link preview image
 │   └── homelab-logo.*  # artwork, not used on the site yet
-├── images/
-│   ├── pfp.jpg              # profile picture
-│   ├── slashyos.jpg         # screenshot on the SlashyOS page and its folder
+├── fonts/              # Outfit and Space Mono, served from this site (SIL OFL, licences next to them)
+├── images/                  # the photos come in a few widths (-480, -960 ...), the browser picks the one it needs
+│   ├── pfp-*.webp           # profile picture
+│   ├── slashyos-*.webp      # screenshot on the SlashyOS page and its folder
 │   ├── slashyos-blur.jpg    # tiny blurred copy, behind the screenshot on its folder
-│   ├── blog.jpg             # screenshot of the blog home page, on its folder
+│   ├── blog-*.webp          # screenshot of the blog home page, on its folder
 │   ├── favicon.svg          # tab icon (dot-matrix DS)
 │   ├── apple-touch-icon.png
 │   └── og-image.png         # link preview image (1200×630)
 ├── styles/
 │   ├── normalize.css
-│   ├── window.css      # the single window of noscript.html and 404.html
-│   └── style.css       # colours, layout, transitions
+│   ├── window.css      # the single window of noscript.html, 404.html and mail.html (same as the contact site)
+│   ├── mail.css        # the mail apps on mail.html
+│   └── style.css       # fonts, colours, layout, transitions
 └── scripts/
+    ├── firstPaint.js     # runs first: https, preloader or curtain, saved theme
     ├── preloader.js      # preloader with progress bar
     ├── pageTransition.js # curtain wipe between the pages
     ├── cursor.js         # custom cursor
@@ -179,6 +183,9 @@ The main colours, the same as the contact page:
     ├── cardSpotlight.js  # spotlight on the pass
     ├── pictureSymbols.js # possessed pictures (portrait, SlashyOS screenshot)
     ├── sitePreview.js    # live preview on the personal-website page
+    ├── theme.js          # the light / dark toggle and its warning
+    ├── mailHint.js       # offers mail.html when a mail link opens nothing
+    ├── mailPage.js       # the copy button on mail.html
     └── notFound.js       # shows the missing address on 404.html
 ```
 
@@ -186,7 +193,7 @@ The main colours, the same as the contact page:
 
 ## Credits
 
-Icons are from [Phosphor Icons](https://phosphoricons.com).
+Icons are from [Phosphor Icons](https://phosphoricons.com). Fonts: [Outfit](https://github.com/Outfitio/Outfit-Fonts) and [Space Mono](https://github.com/googlefonts/spacemono), both SIL Open Font License 1.1 (licences in `fonts/`).
 
 ---
 
